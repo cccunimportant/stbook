@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+  <meta name="author" content="陳鍾誠" />
+<script>
+function checkRadio(name, i) {
+  if (document.getElementsByName(name)[i].checked) alert('恭喜你，答對了！'); else alert('答錯了，請重選！');
+}
+</script>
+  <title>機率法則</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+<style>
+  html { background-color: black; }
+  body { background-color: #ffffcc; border-radius: 12px; }
+  
+  /* A section is a slide. It's size is 800x600, and this will never change */
+  a { color: #3366FF; text-decoration:none; }
+  section {
+      font-family: Arial, serif;
+      font-size: 20pt;
+	  font-family:'Tahoma', '標楷體';  
+  }
+
+  figure>img {  }
+  
+  img {
+	width:auto;
+    height: 1em;
+	max-width:90%;
+	min-height:1cm;
+  }
+
+  input {
+      font-size: 20pt;
+	  font-family:'Tahoma', '標楷體';  
+	  margin:10pt 10pt 10pt 10pt;
+  }
+  address, blockquote, dl, fieldset, form, h1, h2, h3, h4, h5, h6, hr, ol, p, pre, table, ul, dl { padding: 10px 20px 10px 20px; }
+  h1, h2, h3 {
+    font-family:'Tahoma', '標楷體'; 
+    text-align: center;
+    margin: 10pt 10pt 20pt 10pt;
+  }
+  ul, ol {
+    margin: 10px 20px 10px 20px;
+  }
+  li { 
+    font-family:'Tahoma', '標楷體';   
+    color: #333333;
+	margin: 10px 20px 10px 20px;
+  }
+  section.titleslide h1 { margin-top: 200px; }
+  h1.title { margin-top: 150px; }
+  h1 { font-size: 150%; }
+  h2 { font-size: 120%; }
+  h3 { font-size: 100%; }
+  q { quotes: "“" "”" "‘" "’"; }
+  blockquote { font-style: normal }
+  /* Figures are displayed full-page, with the caption on
+     top of the image/video */
+  figure {  }
+
+  figcaption {
+    display:none;
+//  margin: 70px;
+  }
+  footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 40px;
+    text-align: right;
+    background-color: #F3F4F8;
+    border-top: 1px solid #CCC;
+  }
+
+  /* Transition effect */
+  /* Feel free to change the transition effect for original
+     animations. See here:
+     https://developer.mozilla.org/en/CSS/CSS_transitions
+     How to use CSS3 Transitions: */
+  section {
+      -moz-transition: left 400ms linear 0s;
+      -webkit-transition: left 400ms linear 0s;
+      -ms-transition: left 400ms linear 0s;
+      transition: left 400ms linear 0s;
+  }
+
+  /* Before */
+  section { left: -150%; }
+  /* Now */
+  section[aria-selected] { left: 0; }
+  /* After */
+  section[aria-selected] ~ section { left: +150%; }
+
+  /* Incremental elements */
+
+  /* By default, visible */
+  .incremental > * { opacity: 1; }
+
+  /* The current item */
+  .incremental > *[aria-selected] { color: blue; opacity: 1; }
+
+  /* The items to-be-selected */
+  .incremental > *[aria-selected] ~ * { opacity: 0.2; }
+</style>
+</head>
+<body>
+<section class="title">
+  <h1 class="title">機率法則</h1>
+  <h2 class="author">陳鍾誠</h2>
+  <h3 class="date">2013 年 9 月 25 日</h3>
+</section>
+<section id="機率法則" class="slide level1">
+<h1>機率法則</h1>
+</section>
+<section id="機率統計架構圖" class="slide level1">
+<h1>機率統計架構圖</h1>
+<center>
+<img src="../img/ProbAndStatistics.png" width="600"/>
+</center>
+
+</section>
+<section id="什麼是機率" class="slide level1">
+<h1>什麼是機率</h1>
+</section>
+<section id="機率的概念" class="slide level1">
+<h1>機率的概念</h1>
+<ul class="incremental">
+<li>樣本空間</li>
+<li>樣本</li>
+<li>某樣本發生的機率</li>
+<li>事件</li>
+<li>某事件發生的機率</li>
+</ul>
+</section>
+<section id="樣本空間" class="slide level1">
+<h1>樣本空間</h1>
+<ul class="incremental">
+<li>機率論中，樣本空間是一個實驗或隨機試驗所有可能結果的集合</li>
+<li>而隨機試驗中的每個可能結果稱為樣本點。通常用 S、Ω 或 U 表示。</li>
+<li>例如，如果拋擲一枚硬幣，那麼樣本空間就是集合{正面，反面}。</li>
+<li>如果投擲一個骰子，那麼樣本空間就是 {1,2,3,4,5,6} 。</li>
+</ul>
+</section>
+<section id="事件" class="slide level1">
+<h1>事件</h1>
+<p>一個事件是由樣本空間中的一個子集合，例如令 A 為骰子的點數為 {1, 3, 5} 的事件，其機率可以寫為 P(A) = P({1,3,5})。</p>
+</section>
+<section id="機率事件的發生率" class="slide level1">
+<h1>機率：事件的發生率</h1>
+<ul class="incremental">
+<li>某個事件的發生率，機率很低代表該事件不太可能出現 (很罕見，但是並非不會出現)，機率很高代表該事件非常可能發生。</li>
+</ul>
+</section>
+<section id="機率的詮釋方式" class="slide level1">
+<h1>機率的詮釋方式</h1>
+<ul class="incremental">
+<li>詮釋 1. 個人方式：(Personal Approach)</li>
+<li>詮釋 2. 相對頻率方式 (Relative Frequency Approach) ：
+<ul class="incremental">
+<li><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%5BA%5D%20%3D%20%5Cfrac%7Bf%7D%7Bn%7D" alt="P[A] = \frac{f}{n}" title="P[A] = \frac{f}{n}" /></li>
+</ul></li>
+<li>詮釋 3. 古典方式 (Classical Approach) ：
+<ul class="incremental">
+<li><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%5BA%5D%20%3D%20%5Cfrac%7Bn%28A%29%7D%7Bn%28S%29%7D" alt="P[A] = \frac{n(A)}{n(S)}" title="P[A] = \frac{n(A)}{n(S)}" /></li>
+</ul></li>
+</ul>
+</section>
+<section id="詮釋-1.-個人方式" class="slide level1">
+<h1>詮釋 1. 個人方式</h1>
+<ul class="incremental">
+<li>Personal Approach
+<ul class="incremental">
+<li>完全按照個人直覺的解釋方式</li>
+</ul></li>
+<li>說明：
+<ul class="incremental">
+<li>此方法不客觀</li>
+</ul></li>
+</ul>
+</section>
+<section id="詮釋-2.-相對頻率方式" class="slide level1">
+<h1>詮釋 2. 相對頻率方式</h1>
+<ul class="incremental">
+<li>Relative Frequency Approach
+<ul class="incremental">
+<li><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%5BA%5D%20%3D%20%5Cfrac%7Bf%7D%7Bn%7D" alt="P[A] = \frac{f}{n}" title="P[A] = \frac{f}{n}" /></li>
+</ul></li>
+<li>說明：
+<ul class="incremental">
+<li>f 為實驗中事件 A 出現的次數，n 為實驗進行的次數。</li>
+<li>此方法乃是基於實驗觀察的結果的方式。</li>
+</ul></li>
+</ul>
+</section>
+<section id="詮釋-3.-古典方式" class="slide level1">
+<h1>詮釋 3. 古典方式</h1>
+<ul class="incremental">
+<li>Classical Approach
+<ul class="incremental">
+<li><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%5BA%5D%20%3D%20%5Cfrac%7Bn%28A%29%7D%7Bn%28S%29%7D" alt="P[A] = \frac{n(A)}{n(S)}" title="P[A] = \frac{n(A)}{n(S)}" /></li>
+</ul></li>
+<li>說明：
+<ul class="incremental">
+<li>n(A) 為事件 A 可能出現的次數 N(S) 為實驗可能進行的次數。</li>
+<li>此方法乃是將將實驗的可能出像 (outcome) 假設為等可能發生 (equaly likely)。</li>
+</ul></li>
+</ul>
+</section>
+<section id="一般人對數學的想法" class="slide level1">
+<h1>一般人對數學的想法</h1>
+<ul class="incremental">
+<li>一般人學習數學的時候都是從直覺概念開始的</li>
+<li>例如我們小學的時候透過算幾個蘋果學到加法</li>
+<li>然後用好幾排的蘋果學到乘法</li>
+<li>接著就會背誦九九乘法表</li>
+<li>然後在中學的時候導入變數的觀念，於是學會了聯立方程式的解法。</li>
+</ul>
+</section>
+<section id="公理系統" class="slide level1">
+<h1>公理系統</h1>
+<ul class="incremental">
+<li>但是數學家們看數學往往是從公理系統開始的</li>
+<li>透過公理系統進行推論以建立定理、然後推論出整個數學體系。</li>
+<li>讓我們學習一下數學家的想法，先來看看機率的公理系統有何特色。</li>
+</ul>
+</section>
+<section id="機率公理" class="slide level1">
+<h1>機率公理</h1>
+<p>以下三條法則是機率的基本公理：</p>
+<ul class="incremental">
+<li><p>公理 (1). <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28S%29%20%3D%201" alt="P(S) = 1" title="P(S) = 1" /></p></li>
+<li><p>公理 (2). <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%29%20%5Cge%200" alt="P(A) \ge 0" title="P(A) \ge 0" /></p></li>
+<li><p>公理 (3). <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A1%20%5Ccup%20A2%29%20%3D%20P%28A1%29%20%2B%20P%28A2%29%20%5C%3B%20%3B%20%5C%3B%20if%20%5C%3B%20A1%20%5Ccap%20A2%20%3D%20%5Cemptyset" alt="P(A1 \cup A2) = P(A1) + P(A2) \; ; \; if \; A1 \cap A2 = \emptyset" title="P(A1 \cup A2) = P(A1) + P(A2) \; ; \; if \; A1 \cap A2 = \emptyset" /></p></li>
+</ul>
+</section>
+<section id="公理1" class="slide level1">
+<h1>公理(1)</h1>
+<ul class="incremental">
+<li><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28S%29%20%3D%201" alt="P(S) = 1" title="P(S) = 1" />
+<ul class="incremental">
+<li>S 代表機率的樣本空間，也就是所有可能發生的事件所形成的集合，這個集合的發生機率為 1，意義是沒有任何事件落在樣本空間之外。</li>
+</ul></li>
+</ul>
+</section>
+<section id="公理-2" class="slide level1">
+<h1>公理 (2)</h1>
+<ul class="incremental">
+<li><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%29%20%5Cge%200" alt="P(A) \ge 0" title="P(A) \ge 0" />
+<ul class="incremental">
+<li>A 代表任一事件，而 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%29%20%5Cge%200" alt="P(A) \ge 0" title="P(A) \ge 0" /> 則代表任何事件的發生機率必須是正的，沒有負的機率值。</li>
+</ul></li>
+</ul>
+</section>
+<section id="公理-3" class="slide level1">
+<h1>公理 (3)</h1>
+<ul class="incremental">
+<li><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A1%20%5Ccup%20A2%29%20%3D%20P%28A1%29%20%2B%20P%28A2%29%20%5C%3B%20%3B%20%5C%3B%20if%20%5C%3B%20A1%20%5Ccap%20A2%20%3D%20%5Cemptyset" alt="P(A1 \cup A2) = P(A1) + P(A2) \; ; \; if \; A1 \cap A2 = \emptyset" title="P(A1 \cup A2) = P(A1) + P(A2) \; ; \; if \; A1 \cap A2 = \emptyset" />
+<ul class="incremental">
+<li>A1, A2 代表任兩個事件，如果 A1 與 A2 沒有交集，那麼其聯集發生的機率將會是其機率的總和，也就是 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A1%20%5Ccup%20A2%29%20%3D%20P%28A1%29%20%2B%20P%28A2%29" alt="P(A1 \cup A2) = P(A1) + P(A2)" title="P(A1 \cup A2) = P(A1) + P(A2)" /> 。</li>
+</ul></li>
+</ul>
+</section>
+<section id="機率定理" class="slide level1">
+<h1>機率定理</h1>
+<p>當這個公理系統確定下來之後，我們就可以透過這些法則進行一些基本的推論，舉例而言，我們應該可以很容易的證明以下這些定理。</p>
+<ul class="incremental">
+<li>定理 1. <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28%5Cemptyset%29%20%3D%200" alt="P(\emptyset) = 0" title="P(\emptyset) = 0" /></li>
+<li>定理 2. <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%27%29%20%3D%201-P%28A%29" alt="P(A&#39;) = 1-P(A)" title="P(A&#39;) = 1-P(A)" /></li>
+<li>定理 3. <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A1%20%5Ccup%20A2%29%20%3D%20P%28A1%29%20%2B%20P%28A2%29%20-%20P%28A1%20%5Ccap%20A2%29" alt="P(A1 \cup A2) = P(A1) + P(A2) - P(A1 \cap A2)" title="P(A1 \cup A2) = P(A1) + P(A2) - P(A1 \cap A2)" /></li>
+</ul>
+</section>
+<section id="習題" class="slide level1">
+<h1>習題</h1>
+<ul class="incremental">
+<li>請證明以上定理</li>
+</ul>
+</section>
+<section id="機率定理的意義" class="slide level1">
+<h1>機率定理的意義</h1>
+<ul class="incremental">
+<li>但是，這些定理又代表甚麼意義呢？</li>
+<li>其實從凡氏圖上可以很清楚的看得出來這些定理的直覺意義。</li>
+</ul>
+</section>
+<section id="兩個集合的凡氏圖" class="slide level1">
+<h1>兩個集合的凡氏圖</h1>
+<figure>
+<img src="../img/VennsDiagramAB.jpg" alt="圖、兩個集合 A, B 的凡氏圖" /><figcaption>圖、兩個集合 A, B 的凡氏圖</figcaption>
+</figure>
+</section>
+<section id="三個個集合的凡氏圖" class="slide level1">
+<h1>三個個集合的凡氏圖</h1>
+<figure>
+<img src="../img/VennsDiagram.png" alt="圖、三個集合 A, B, C 的凡氏圖" /><figcaption>圖、三個集合 A, B, C 的凡氏圖</figcaption>
+</figure>
+</section>
+<section id="習題-1機率定理的證明" class="slide level1">
+<h1>習題 1：機率定理的證明</h1>
+<blockquote>
+<p>定理：證明 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28%5Cemptyset%29%20%3D%200" alt="P(\emptyset) = 0" title="P(\emptyset) = 0" /></p>
+<p>證明：</p>
+<p><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28S%5Ccup%5Cemptyset%29%20%3D%20P%28S%29%2BP%28%5Cemptyset%29" alt="P(S\cup\emptyset) = P(S)+P(\emptyset)" title="P(S\cup\emptyset) = P(S)+P(\emptyset)" /> ; 根據公理 (3)</p>
+<p><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=S%20%3D%20S%5Ccup%5Cemptyset" alt="S = S\cup\emptyset" title="S = S\cup\emptyset" /> ; 根據集合論</p>
+<p><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28S%29%20%3D%201" alt="P(S) = 1" title="P(S) = 1" /> ; 根據公理 1</p>
+<p><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=1%20%3D%20P%28S%29%20%3D%20P%28S%5Ccup%5Cemptyset%29%20%3D%20P%28S%29%2BP%28%5Cemptyset%29" alt="1 = P(S) = P(S\cup\emptyset) = P(S)+P(\emptyset)" title="1 = P(S) = P(S\cup\emptyset) = P(S)+P(\emptyset)" /> ; 根據集合論與公理 (3)</p>
+<p>所以 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28%5Cemptyset%29%20%3D%201-P%28S%29%20%3D%201-1%20%3D%200" alt="P(\emptyset) = 1-P(S) = 1-1 = 0" title="P(\emptyset) = 1-P(S) = 1-1 = 0" /></p>
+</blockquote>
+</section>
+<section id="習題-2機率定理的證明" class="slide level1">
+<h1>習題 2：機率定理的證明</h1>
+<blockquote>
+<p>定理：證明 P(A') = 1-P(A) ; 其中的 A' 代表 A 的補集，也就是 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=A%5Ccup%20A%27%20%3D%20S%20%3B%20A%5Ccap%20A%27%20%3D%20%5Cemptyset" alt="A\cup A&#39; = S ; A\cap A&#39; = \emptyset" title="A\cup A&#39; = S ; A\cap A&#39; = \emptyset" /></p>
+<p>證明：</p>
+<p>因為 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=A%5Ccup%20A%27%20%3D%20S%20%3B%20A%5Ccap%20A%27%20%3D%20%5Cemptyset" alt="A\cup A&#39; = S ; A\cap A&#39; = \emptyset" title="A\cup A&#39; = S ; A\cap A&#39; = \emptyset" /> ; 根據 A' 的定義</p>
+<p><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%27%20%5Ccup%20A%29%20%3D%20P%28A%27%29%20%2B%20P%28A%29" alt="P(A&#39; \cup A) = P(A&#39;) + P(A)" title="P(A&#39; \cup A) = P(A&#39;) + P(A)" /> ; 根據公理 3</p>
+<p><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%27%29%20%2B%20P%28A%29%20%3D%20P%28A%27%20%5Ccup%20A%29%20%3D%20P%28S%29%20%3D%201" alt="P(A&#39;) + P(A) = P(A&#39; \cup A) = P(S) = 1" title="P(A&#39;) + P(A) = P(A&#39; \cup A) = P(S) = 1" /> ; 根據公理 3 與公理1</p>
+<p>所以 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%27%29%20%3D%201-P%28A%29" alt="P(A&#39;) = 1-P(A)" title="P(A&#39;) = 1-P(A)" /></p>
+</blockquote>
+</section>
+<section id="習題-3機率定理的證明" class="slide level1">
+<h1>習題 3：機率定理的證明</h1>
+<blockquote>
+<p>定理：證明 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A1%20%5Ccup%20A2%29%20%3D%20P%28A1%29%20%2B%20P%28A2%29%20-%20P%28A1%20%5Ccap%20A2%29" alt="P(A1 \cup A2) = P(A1) + P(A2) - P(A1 \cap A2)" title="P(A1 \cup A2) = P(A1) + P(A2) - P(A1 \cap A2)" /></p>
+<p>證明：</p>
+<p>因為 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=A1%20%5Ccup%20A2%20%3D%20%28A1-%28A1%20%5Ccap%20A2%29%29%20%5Ccup%20A2" alt="A1 \cup A2 = (A1-(A1 \cap A2)) \cup A2" title="A1 \cup A2 = (A1-(A1 \cap A2)) \cup A2" /> ; 根據集合論 (用文氏圖可以理解其直覺意義)</p>
+<p><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%28A1-%28A1%20%5Ccap%20A2%29%29%20%5Ccap%20A2%20%3D%20%20%5Cemptyset" alt="(A1-(A1 \cap A2)) \cap A2 =  \emptyset" title="(A1-(A1 \cap A2)) \cap A2 =  \emptyset" /> ; 根據集合論 (用文氏圖理解，只是為了方便)</p>
+<p><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A1%29%20%3D%20P%28%28A1-%28A1%20%5Ccap%20A2%29%29%5Ccup%20%28A1%20%5Ccap%20A2%29%20%29%20%3D%20P%28A1-%28A1%20%5Ccap%20%20A2%29%29%20%2B%20P%20%28A1%5Ccap%20A2%29" alt="P(A1) = P((A1-(A1 \cap A2))\cup (A1 \cap A2) ) = P(A1-(A1 \cap  A2)) + P (A1\cap A2)" title="P(A1) = P((A1-(A1 \cap A2))\cup (A1 \cap A2) ) = P(A1-(A1 \cap  A2)) + P (A1\cap A2)" /> ; 根據公理 3</p>
+<p>所以 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A1-%28A1%20%5Ccap%20%20A2%29%29%20%3D%20P%28A1%29%20-%20%20P%20%28A1%5Ccap%20A2%29" alt="P(A1-(A1 \cap  A2)) = P(A1) -  P (A1\cap A2)" title="P(A1-(A1 \cap  A2)) = P(A1) -  P (A1\cap A2)" /></p>
+<p>推論 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A1%20%5Ccup%20A2%29%20%3D%20P%28%28A1-%28A1%20%5Ccap%20%20A2%29%29%20%5Ccup%20A2%29%20%3D%20P%28A1-%28A1%20%5Ccap%20%20A2%29%29%20%2B%20P%28A2%29" alt="P(A1 \cup A2) = P((A1-(A1 \cap  A2)) \cup A2) = P(A1-(A1 \cap  A2)) + P(A2)" title="P(A1 \cup A2) = P((A1-(A1 \cap  A2)) \cup A2) = P(A1-(A1 \cap  A2)) + P(A2)" /></p>
+<p><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%3D%20%20P%28A1%29%20-%20%20P%20%28A1%5Ccap%20A2%29%20%2B%20P%28A2%29%20%3D%20P%28A1%29%20%2B%20P%28A2%29%20-%20%20P%20%28A1%5Ccap%20A2%29" alt="=  P(A1) -  P (A1\cap A2) + P(A2) = P(A1) + P(A2) -  P (A1\cap A2)" title="=  P(A1) -  P (A1\cap A2) + P(A2) = P(A1) + P(A2) -  P (A1\cap A2)" /> ;</p>
+<p>所以 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A1%20%5Ccup%20A2%29%3D%20P%28A1%29%20%2B%20P%28A2%29%20-%20%20P%20%28A1%5Ccap%20A2%29" alt="P(A1 \cup A2)= P(A1) + P(A2) -  P (A1\cap A2)" title="P(A1 \cup A2)= P(A1) + P(A2) -  P (A1\cap A2)" /></p>
+</blockquote>
+</section>
+<section id="機率模型" class="slide level1">
+<h1>機率模型</h1>
+<ul class="incremental">
+<li>因此、只要指定了所有可能事件的發生率，我們就可以完整的描述一個機率模型。</li>
+<li>舉例而言，日常生活中最常見的機率模型，大概就是丟銅板和擲骰子了</li>
+<li>以下是我們對這兩個機率系統的描述。</li>
+</ul>
+</section>
+<section id="範例-1丟銅板" class="slide level1">
+<h1>範例 1：丟銅板</h1>
+<blockquote>
+<p>在投擲銅板的機率過程中，其樣本空間 S={正, 反} ，</p>
+<p>而其中一個常見的隨機變數 X ，是用來計算銅板的正面數量，</p>
+<p>此時，P(正) = 0.5，而 P(反) = 0.5</p>
+</blockquote>
+</section>
+<section id="範例-2擲骰子" class="slide level1">
+<h1>範例 2：擲骰子</h1>
+<blockquote>
+<p>在投擲骰子的機率過程中，其樣本空間 S={1點,2點,3點,4點,5點,6點}，</p>
+<p>此時，P(1點) = P(2點) = ... = P(6點) = 1/6。</p>
+</blockquote>
+<p>所以，在一次擲骰子中，得到 5 點或者 6 點的機率，可以圖示如下。</p>
+<figure>
+<img src="../img/dice56prob.jpg" alt="圖、擲一次骰子 5 點或 6 點的機率" /><figcaption>圖、擲一次骰子 5 點或 6 點的機率</figcaption>
+</figure>
+</section>
+<section id="練習r-軟體與機率密度函數" class="slide level1">
+<h1>練習：R 軟體與機率密度函數</h1>
+<ul class="incremental">
+<li>我們可以透過 R 軟體進一步瞭解機率密度函數的意義</li>
+<li>舉例而言， R 當中有個 sample() 函數，</li>
+<li>我們只要使用該函數就可以模擬擲骰子或銅板的過程。</li>
+</ul>
+</section>
+<section id="r-軟體的-help-功能" class="slide level1">
+<h1>R 軟體的 ?Help 功能</h1>
+<ul class="incremental">
+<li>您可以用 「?函數」 的方式查詢某函數的功能</li>
+<li>因此當我們在 R 軟體中鍵入 ?sample 時</li>
+<li>R 軟體會輸出下列訊息：</li>
+</ul>
+<pre><code>&gt; ?sample
+starting httpd help server ... done</code></pre>
+</section>
+<section id="r-軟體-sample-的結果" class="slide level1">
+<h1>R 軟體 ?Sample 的結果</h1>
+<p>然後就開啟下列的網頁畫面</p>
+<figure>
+<img src="../img/sampleHelp.jpg" alt="圖、sample 函數的 Help 畫面" /><figcaption>圖、sample 函數的 Help 畫面</figcaption>
+</figure>
+<p>您可以看到 sample 函數的原型為 <code>sample(x, size, replace = FALSE, prob = NULL)</code>，於是可以用下列指令模擬投擲骰子十次的行為。</p>
+</section>
+<section id="r-sample-函數的用法" class="slide level1">
+<h1>R: Sample 函數的用法</h1>
+<pre><code>&gt; sample(1:6, 10)
+錯誤在sample(1:6, 10) : 
+  cannot take a sample larger than the population when &#39;replace = FALSE&#39;
+&gt; sample(1:6, 10, replace=TRUE)
+ [1] 3 2 4 4 4 2 6 3 3 3
+&gt; </code></pre>
+<ul class="incremental">
+<li>說明
+<ul class="incremental">
+<li>您可以看到當我們用 <code>sample(1:6, 10, replace=TRUE)</code> 的指令時</li>
+<li>可以正確的模擬出投擲骰子十次的隨機過程，得到 3 2 4 4 4 2 6 3 3 3 這個序列，</li>
+<li>但是若我們沒有指定 replace=T (TRUE)，的時候，代表要採用取樣後不放回的方式，</li>
+<li>但是這種方式最多只能做六次，所以就得到失敗的結果。</li>
+</ul></li>
+</ul>
+</section>
+<section id="r-取後不放回的-sample" class="slide level1">
+<h1>R: 取後不放回的 Sample()</h1>
+<ul class="incremental">
+<li>不過如果我們指定的樣本數 k 在六個以下</li>
+<li>那麼 sample(1:6, k) 是會成功的，以下是一個範例：</li>
+</ul>
+<pre><code>&gt; sample(1:6, 6)
+[1] 2 6 4 1 5 3</code></pre>
+</section>
+<section id="r-模擬投擲銅板的過程" class="slide level1">
+<h1>R: 模擬投擲銅板的過程</h1>
+<ul class="incremental">
+<li>同樣的，我們也可以用 sample 函數模擬投擲銅板的過程</li>
+<li>只是由於同板只有兩個面 (正面與反面)</li>
+<li>因此我們可以用以下的方式模擬：</li>
+</ul>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>face =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;正&quot;</span>, <span class="st">&quot;反&quot;</span>)
+&gt;<span class="st"> </span><span class="kw">sample</span>(face, <span class="dv">10</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>)
+ [<span class="dv">1</span>] <span class="st">&quot;正&quot;</span> <span class="st">&quot;反&quot;</span> <span class="st">&quot;正&quot;</span> <span class="st">&quot;反&quot;</span> <span class="st">&quot;反&quot;</span> <span class="st">&quot;正&quot;</span> <span class="st">&quot;反&quot;</span> <span class="st">&quot;正&quot;</span> <span class="st">&quot;正&quot;</span> <span class="st">&quot;反&quot;</span></code></pre>
+<ul class="incremental">
+<li>上述模擬中的第一個指令 <code>face = c(&quot;正&quot;, &quot;反&quot;)</code></li>
+<li>代表我們要建立一個有兩個字串元素 [ 正, 反] 的陣列。</li>
+<li>然後第二個指令 <code>sample(face, 10, replace=TRUE)</code> 就用這樣的陣列去產生 10 個樣本 (取後放回的方式)。</li>
+</ul>
+</section>
+<section id="機率不平均的取樣" class="slide level1">
+<h1>機率不平均的取樣</h1>
+<ul class="incremental">
+<li>有時候，我們希望模擬的事物，其機率並非平均的</li>
+<li>舉例而言，像是灌過鉛的骰子，或者是像台灣的廟裏面常見的「擲茭」</li>
+<li>其機率可能是不平均的</li>
+<li>對這種情況我們就可以指定
+<ul class="incremental">
+<li><code>sample(x, size, replace = FALSE, prob = NULL)</code></li>
+<li>這個函數的第四個參數，也就是 prob 來模擬。</li>
+</ul></li>
+</ul>
+</section>
+<section id="r-模擬擲茭的過程" class="slide level1">
+<h1>R: 模擬擲茭的過程</h1>
+<p>舉例而言，假如「擲茭」的正面機率是 0.6，而反面機率是 0.4，那麼我們就可以用下列方式模擬「擲茭」十次的過程。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">sample</span>(face, <span class="dv">10</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>, <span class="kw">c</span>(<span class="fl">0.6</span>, <span class="fl">0.4</span>))
+ [<span class="dv">1</span>] <span class="st">&quot;反&quot;</span> <span class="st">&quot;正&quot;</span> <span class="st">&quot;反&quot;</span> <span class="st">&quot;反&quot;</span> <span class="st">&quot;反&quot;</span> <span class="st">&quot;正&quot;</span> <span class="st">&quot;正&quot;</span> <span class="st">&quot;正&quot;</span> <span class="st">&quot;正&quot;</span> <span class="st">&quot;正&quot;</span></code></pre>
+</section>
+<section id="條件機率" class="slide level1">
+<h1>條件機率</h1>
+<blockquote>
+<p><em>條件機率的定義</em>：</p>
+<p>在 A 事件出現的情況下，B 事件出現的機率，稱為 P(B|A)。</p>
+<p><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28B%7CA%29%20%3D%20%5Cfrac%7BP%28A%20%5Ccap%20B%29%7D%7BP%28A%29%7D" alt="P(B|A) = \frac{P(A \cap B)}{P(A)}" title="P(B|A) = \frac{P(A \cap B)}{P(A)}" /></p>
+</blockquote>
+<p>範例 1：</p>
+<blockquote>
+<p>舉例而言，假如我們已知某投擲骰子的結果為偶數 (事件 A=偶數)，那麼結果為 3 點 (事件 B=3點) 的機率為多少？</p>
+<p>這個條件機率可以用下列算式表示。</p>
+<p>P(B|A) = P(3點|偶數)</p>
+</blockquote>
+<p>範例 2：</p>
+<blockquote>
+<p>當然、B 不一定要是 A 的子集合，舉例而言，假如 B 為「不大於 3 點」的事件，那麼我們就可以將條件機率表示如下：</p>
+<p>P(B|A) = P(不大於3點|偶數)</p>
+</blockquote>
+</section>
+<section id="獨立事件" class="slide level1">
+<h1>獨立事件</h1>
+<blockquote>
+<p><em>獨立事件的定義</em> :</p>
+<p>事件 A 與 B 彼此獨立，則 A, B 兩事件同時出現的機率為</p>
+<p><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%20%5Ccap%20B%29%20%3D%20P%28A%29%20P%28B%29" alt="P(A \cap B) = P(A) P(B)" title="P(A \cap B) = P(A) P(B)" /></p>
+</blockquote>
+<p>請注意數學中定義的意義，定義代表某種規定，是不需要證明的，只要不符合這種規定的，就不能用此一名詞描述，也就是不符合此定義。</p>
+<p>因此、並非所有的事件 A, B 都會是獨立的，但若事件 A, B 符合上述規定的話，我們就稱這兩個事件彼此獨立。</p>
+<p>舉例而言，假如對於一個公平的骰子而言，請問下列的 A,B 事件之間是否彼此獨立。</p>
+<p>範例 1. 兩事件不獨立的情況</p>
+<blockquote>
+<p>問題：請問 「A=偶數, B=3點」這兩個事件是否獨立</p>
+<p>解答：</p>
+<p>P(A) = 3/6 = 1/2</p>
+<p>P(B) = 1/6</p>
+<p>P(A ∩ B) = 0</p>
+<p>P(A) P(B) = 1/2 * 1/6 =1/12</p>
+<p>由於 P(A B) P(A) P(B) ，所以這兩個事件彼此不獨立。</p>
+</blockquote>
+<p>範例 2. 兩事件獨立的情況</p>
+<blockquote>
+<p>問題：請問 「A=偶數, B=不大於 4 點」這兩個事件是否獨立</p>
+<p>解答：</p>
+<p>P(A) = 3/6 = 1/2</p>
+<p>P(B) = 4/6 = 2/3</p>
+<p>P(A ∩ B) = P({2點, 4點}) = 2/6 = 1/3</p>
+<p>P(A) P(B) = 1/2 * 2/3 = 1/3</p>
+<p>由於 P(A ∩ B) = P(A) P(B) ，所以這兩個事件彼此獨立。</p>
+</blockquote>
+<p>習題：請證明以下定理：</p>
+<blockquote>
+<p>定理 1. 若 A , B 彼此獨立，則 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%7CB%29%20%3D%20P%28B%7CA%29%20%2A%20%5Cfrac%7BP%28A%29%7D%7BP%28B%29%7D" alt="P(A|B) = P(B|A) * \frac{P(A)}{P(B)}" title="P(A|B) = P(B|A) * \frac{P(A)}{P(B)}" /></p>
+<p>定理 2. <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=A_1%2C%20A_2%2C%20...%20%2C%20A_k" alt="A_1, A_2, ... , A_k" title="A_1, A_2, ... , A_k" /> 彼此獨立 &lt;=&gt; <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A_1%20%5Ccap%20A_2%20...%20%5Ccap%20A_k%29%20%3D%20P%28A_1%29%20P%28A_2%29%20...%20P%28A_k%29" alt="P(A_1 \cap A_2 ... \cap A_k) = P(A_1) P(A_2) ... P(A_k)" title="P(A_1 \cap A_2 ... \cap A_k) = P(A_1) P(A_2) ... P(A_k)" /></p>
+<p>定理 3. 乘法規則：<img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%20%5Ccap%20B%29%20%3D%20P%28B%7CA%29%20P%28A%29" alt="P(A \cap B) = P(B|A) P(A)" title="P(A \cap B) = P(B|A) P(A)" /></p>
+</blockquote>
+</section>
+<section id="貝氏定理" class="slide level1">
+<h1>貝氏定理</h1>
+<blockquote>
+<p><em>貝氏定理</em>：<img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%20%7C%20B%29%20%3D%20P%28B%20%7C%20A%29%20%20%5Cfrac%7BP%28A%29%7D%7BP%28B%29%7D" alt="P(A | B) = P(B | A)  \frac{P(A)}{P(B)}" title="P(A | B) = P(B | A)  \frac{P(A)}{P(B)}" /></p>
+<p>證明：</p>
+<p>由條件機率的定義可得 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28B%20%7C%20A%29%20%3D%20%5Cfrac%7BP%28A%20%5Ccap%20B%29%7D%7BP%28A%29%7D" alt="P(B | A) = \frac{P(A \cap B)}{P(A)}" title="P(B | A) = \frac{P(A \cap B)}{P(A)}" />，也可以得到 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%20%7C%20B%29%20%3D%20%5Cfrac%7BP%28A%20%5Ccap%20B%29%7D%7BP%28B%29%7D" alt="P(A | B) = \frac{P(A \cap B)}{P(B)}" title="P(A | B) = \frac{P(A \cap B)}{P(B)}" /></p>
+<p>所以 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%20%5Ccap%20B%29%20%3D%20P%28B%7CA%29%20P%28A%29%20%3D%20P%28A%7CB%29%20P%28B%29" alt="P(A \cap B) = P(B|A) P(A) = P(A|B) P(B)" title="P(A \cap B) = P(B|A) P(A) = P(A|B) P(B)" /></p>
+<p>於是得到 <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%20%7C%20B%29%20%3D%20P%28B%20%7C%20A%29%20%20%5Cfrac%7BP%28A%29%7D%7BP%28B%29%7D" alt="P(A | B) = P(B | A)  \frac{P(A)}{P(B)}" title="P(A | B) = P(B | A)  \frac{P(A)}{P(B)}" /></p>
+</blockquote>
+<p>習題：</p>
+<blockquote>
+<p>習題 1. 請驗證 「A=偶數, B=3點」這兩個事件是否符合貝氏定理</p>
+<p>習題 2. 請驗證 「A=偶數, B=不大於 4 點」這兩個事件是否符合貝氏定理</p>
+</blockquote>
+</section>
+<section id="條件獨立" class="slide level1">
+<h1>條件獨立</h1>
+<blockquote>
+<p><em>條件獨立的定義</em>：</p>
+<p>假如 A 與 B 在給定 C 的情況下條件獨立，那麼以下算式成立：</p>
+<p><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%2CB%7CC%29%20%3D%20P%28A%7CC%29%20%2A%20P%28B%7CC%29" alt="P(A,B|C) = P(A|C) * P(B|C)" title="P(A,B|C) = P(A|C) * P(B|C)" /> ;</p>
+</blockquote>
+<p>習題：請證明以下定理：</p>
+<blockquote>
+<p>定理： <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%2CB%7CC%29%20%3D%20P%28C%7CA%29%2A%20P%28C%7CB%29%2A%5Cfrac%7BP%28A%29%20P%28B%29%7D%7BP%28C%29%5E2%7D" alt="P(A,B|C) = P(C|A)* P(C|B)*\frac{P(A) P(B)}{P(C)^2}" title="P(A,B|C) = P(C|A)* P(C|B)*\frac{P(A) P(B)}{P(C)^2}" /></p>
+</blockquote>
+</section>
+<section id="習題牙疼的診斷問題" class="slide level1">
+<h1>習題：牙疼的診斷問題</h1>
+<p>本問題來自人工智慧的經典教科書 「Artificial Intelligence: A Modern Approach」第三版，475 頁。</p>
+<p>問題描述：當病人來看牙醫時，該病人可能有蛀牙或沒蛀牙，也可能有牙痛或沒有牙痛，而牙醫可能會找到牙痛的原因或找不到。</p>
+<p>因此有下列三個隨機變數</p>
+<p>X:(蛀) 蛀牙與否 (Cavity) Y:(痛) 牙痛與否 (Toothache) Z:(找) 是否找到痛的牙 (Catch)</p>
+<p>假如這個問題個統計機率都已經知道了，如下表所示。</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">牙痛 (Y=1)</th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">不牙痛 (Y=0)</th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">找到 (Z=1)</td>
+<td style="text-align: left;">找不到 (Z=0)</td>
+<td style="text-align: left;">找到 (Z=1)</td>
+<td style="text-align: left;">找不到 (Z=0)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">蛀牙(X=1)</td>
+<td style="text-align: left;">0.108</td>
+<td style="text-align: left;">0.012</td>
+<td style="text-align: left;">0.072</td>
+<td style="text-align: left;">0.008</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">沒蛀牙 (X=0)</td>
+<td style="text-align: left;">0.016</td>
+<td style="text-align: left;">0.064</td>
+<td style="text-align: left;">0.144</td>
+<td style="text-align: left;">0.576</td>
+</tr>
+</tbody>
+</table>
+<p>請回答下列問題</p>
+<ul class="incremental">
+<li>問題 1：請計算 P(沒痛) = ?</li>
+<li>問題 2：請計算 P(找到 | 牙痛) = ?</li>
+<li>問題 3：請問這是一個合理的機率分布嗎？</li>
+<li>問題 4：請計算 P(找到 | 蛀牙) = ?</li>
+<li>問題 5：請計算 P(找到, 牙痛) = ?</li>
+<li>問題 6：請計算 P(蛀 | 找到), P(蛀), P(找到), P(找到 | 蛀) ，然後驗證下列貝氏定理是否成立。
+<ul class="incremental">
+<li>P(找到|蛀) = P(蛀|找到) P(找到)/P(蛀)</li>
+</ul></li>
+</ul>
+<p>解答</p>
+<p>R 的 陣列是用以行為主的順序 (Column Major Order)，請看下列檔案中的說明：</p>
+<ul class="incremental">
+<li><a href="http://cran.r-project.org/doc/manuals/R-lang.pdf">http://cran.r-project.org/doc/manuals/R-lang.pdf</a></li>
+</ul>
+<blockquote>
+<p>2.2.2 The dim attribute is used to implement arrays. The content of the array is stored in a vector in column-major order and the dim attribute is a vector of integers specifying the respective extents of the array. R ensures that the length of the vector is the product of the lengths of the dimensions. The length of one or more dimensions may be zero.</p>
+</blockquote>
+<p>所以我們必須用以行為主的順序 (Column Major Order) 將機率列舉出來，如下表所示：</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">蛀 X</th>
+<th style="text-align: left;">痛 Y</th>
+<th style="text-align: left;">找 Z</th>
+<th style="text-align: left;">P(X,Y,Z)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0.576</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0.008</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0.064</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0.012</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0.144</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0.072</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0.016</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0.108</td>
+</tr>
+</tbody>
+</table>
+<p>而且 R 的陣列是從 1 開始算的，不像 C 語言是從 0 開始算的，因此還必須將上表修改如下：</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">蛀 X</th>
+<th style="text-align: left;">痛 Y</th>
+<th style="text-align: left;">找 Z</th>
+<th style="text-align: left;">P(X,Y,Z)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0.576</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0.008</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0.064</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0.012</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">0.144</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">0.072</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">0.016</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">0.108</td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>p &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="kw">c</span>(<span class="fl">0.576</span>, <span class="fl">0.008</span>, <span class="fl">0.064</span>, <span class="fl">0.012</span>, <span class="fl">0.144</span>, <span class="fl">0.072</span>, <span class="fl">0.016</span>, <span class="fl">0.108</span>),<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))
+&gt;<span class="st"> </span>p
+, , <span class="dv">1</span>
+
+      [,<span class="dv">1</span>]  [,<span class="dv">2</span>]
+[<span class="dv">1</span>,] <span class="fl">0.576</span> <span class="fl">0.064</span>
+[<span class="dv">2</span>,] <span class="fl">0.008</span> <span class="fl">0.012</span>
+
+, , <span class="dv">2</span>
+
+      [,<span class="dv">1</span>]  [,<span class="dv">2</span>]
+[<span class="dv">1</span>,] <span class="fl">0.144</span> <span class="fl">0.016</span>
+[<span class="dv">2</span>,] <span class="fl">0.072</span> <span class="fl">0.108</span>
+
+&gt;<span class="st"> </span>p[<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>]
+[<span class="dv">1</span>] <span class="fl">0.576</span>
+&gt;<span class="st"> </span>p[<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>]
+[<span class="dv">1</span>] <span class="fl">0.008</span>
+&gt;<span class="st"> </span>p[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>]
+[<span class="dv">1</span>] <span class="fl">0.064</span>
+&gt;<span class="st"> </span>p[<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>]
+[<span class="dv">1</span>] <span class="fl">0.012</span>
+&gt;<span class="st"> </span>p[<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>]
+[<span class="dv">1</span>] <span class="fl">0.144</span>
+&gt;<span class="st"> </span>p[<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">2</span>]
+[<span class="dv">1</span>] <span class="fl">0.072</span>
+&gt;<span class="st"> </span>p[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>]
+[<span class="dv">1</span>] <span class="fl">0.016</span>
+&gt;<span class="st"> </span>p[<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>]
+[<span class="dv">1</span>] <span class="fl">0.108</span>
+&gt;<span class="st"> </span><span class="kw">dimnames</span>(p)[[<span class="dv">1</span>]] =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;沒蛀&quot;</span>, <span class="st">&quot;蛀&quot;</span>)
+&gt;<span class="st"> </span><span class="kw">dimnames</span>(p)[[<span class="dv">2</span>]] =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;沒痛&quot;</span>, <span class="st">&quot;痛&quot;</span>)
+&gt;<span class="st"> </span><span class="kw">dimnames</span>(p)[[<span class="dv">3</span>]] =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;沒找&quot;</span>, <span class="st">&quot;找&quot;</span>)
+&gt;<span class="st"> </span>p
+, , 沒找
+
+<span class="st">      </span>沒痛    痛
+沒蛀 <span class="fl">0.576</span> <span class="fl">0.064</span>
+蛀   <span class="fl">0.008</span> <span class="fl">0.012</span>
+
+, , 找
+
+<span class="st">      </span>沒痛    痛
+沒蛀 <span class="fl">0.144</span> <span class="fl">0.016</span>
+蛀   <span class="fl">0.072</span> <span class="fl">0.108</span></code></pre>
+<p>解答1：P(沒痛) = 0.8 計算過程：</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>p[,<span class="st">&quot;沒痛&quot;</span>,]
+      沒找<span class="st">    </span><span class="er">找</span>
+沒蛀 <span class="fl">0.576</span> <span class="fl">0.144</span>
+蛀   <span class="fl">0.008</span> <span class="fl">0.072</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(p[,<span class="st">&quot;沒痛&quot;</span>,])
+[<span class="dv">1</span>] <span class="fl">0.8</span></code></pre>
+<p>解答2：P(找到 | 牙痛) = 0.62</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>p[,,<span class="st">&quot;找&quot;</span>]
+      沒痛    痛
+沒蛀 <span class="fl">0.144</span> <span class="fl">0.016</span>
+蛀   <span class="fl">0.072</span> <span class="fl">0.108</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(p[,,<span class="st">&quot;找&quot;</span>])
+[<span class="dv">1</span>] <span class="fl">0.34</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(p[,<span class="st">&quot;痛&quot;</span>,<span class="st">&quot;找&quot;</span>])
+[<span class="dv">1</span>] <span class="fl">0.124</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(p[,<span class="st">&quot;痛&quot;</span>,<span class="st">&quot;找&quot;</span>])/<span class="kw">sum</span>(<span class="kw">sum</span>(p[,<span class="st">&quot;痛&quot;</span>,]))
+[<span class="dv">1</span>] <span class="fl">0.62</span></code></pre>
+<p>解答3：請問這是一個合理的機率分布嗎？ (是的，因為總和為 1，而且每個機率直都介於 0 到1之間)</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">sum</span>(p)
+[<span class="dv">1</span>] <span class="dv">1</span>
+&gt;<span class="st"> </span><span class="dv">0</span>&lt;=p &amp;<span class="st"> </span>p &lt;=<span class="dv">1</span>
+, , 沒找
+
+<span class="st">     </span>沒痛   痛
+沒蛀 <span class="ot">TRUE</span> <span class="ot">TRUE</span>
+蛀   <span class="ot">TRUE</span> <span class="ot">TRUE</span>
+
+, , 找
+
+<span class="st">     </span>沒痛   痛
+沒蛀 <span class="ot">TRUE</span> <span class="ot">TRUE</span>
+蛀   <span class="ot">TRUE</span> <span class="ot">TRUE</span></code></pre>
+<p>問題 4：請計算 P(找到 | 蛀牙) = ?</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st">  </span><span class="kw">sum</span>(p[<span class="st">&quot;蛀&quot;</span>,,<span class="st">&quot;找&quot;</span>])/<span class="kw">sum</span>(p[<span class="st">&quot;蛀&quot;</span>,,])
+[<span class="dv">1</span>] <span class="fl">0.9</span></code></pre>
+<p>問題 5：請計算 P(找到, 牙痛) = ?</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">sum</span>(p[,<span class="st">&quot;痛&quot;</span>,<span class="st">&quot;找&quot;</span>])
+[<span class="dv">1</span>] <span class="fl">0.124</span></code></pre>
+<p>解答6：請計算 P(蛀 | 找到), P(蛀), P(找到), P(找到 | 蛀) ，然後驗證下列貝氏定理是否成立。</p>
+<blockquote>
+<p>P(蛀 | 找到) = p(找到|蛀) * p(蛀)/p(找到)</p>
+</blockquote>
+<p>說明：</p>
+<p>P(蛀 | 找到) = 0.5294118, P(蛀)=0.2, P(找到)=0.34, P(找到 | 蛀)=0.9</p>
+<p>P(蛀 | 找到) = 0.5294118 = 0.9 * 0.2/0.34 = = p(找到|蛀) * p(蛀)/p(找到)</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>pab =<span class="st"> </span><span class="kw">sum</span>(p[<span class="st">&quot;蛀&quot;</span>,,<span class="st">&quot;找&quot;</span>])/<span class="kw">sum</span>(p[,,<span class="st">&quot;找&quot;</span>]) <span class="co"># pab = P(蛀 | 找到)</span>
+&gt;<span class="st"> </span>pba =<span class="st"> </span><span class="kw">sum</span>(p[<span class="st">&quot;蛀&quot;</span>,,<span class="st">&quot;找&quot;</span>])/<span class="kw">sum</span>(p[<span class="st">&quot;蛀&quot;</span>,,]) <span class="co"># pba = P(找到 | 蛀)</span>
+&gt;<span class="st"> </span>pa =<span class="st"> </span><span class="kw">sum</span>(p[<span class="st">&quot;蛀&quot;</span>,,]) <span class="co"># pa = P(蛀)</span>
+&gt;<span class="st"> </span>pb =<span class="st"> </span><span class="kw">sum</span>(p[,,<span class="st">&quot;找&quot;</span>]) <span class="co"># pb = P(找到)</span>
+&gt;<span class="st"> </span>pab
+[<span class="dv">1</span>] <span class="fl">0.5294118</span>
+&gt;<span class="st"> </span>pba
+[<span class="dv">1</span>] <span class="fl">0.9</span>
+&gt;<span class="st"> </span>pa
+[<span class="dv">1</span>] <span class="fl">0.2</span>
+&gt;<span class="st"> </span>pb
+[<span class="dv">1</span>] <span class="fl">0.34</span>
+&gt;<span class="st"> </span>pba*pa/pb
+[<span class="dv">1</span>] <span class="fl">0.5294118</span>
+&gt;<span class="st"> </span>pab-pba*pa/pb
+[<span class="dv">1</span>] <span class="dv">0</span></code></pre>
+<p>所以</p>
+<pre class="sourceCode R"><code class="sourceCode r"><span class="kw">p</span>(蛀|<span class="er">找</span>) 
+=<span class="st"> </span><span class="kw">sum</span>(p[<span class="st">&quot;蛀&quot;</span>,,<span class="st">&quot;找&quot;</span>])/<span class="kw">sum</span>(p[,,<span class="st">&quot;找&quot;</span>]) 
+=<span class="st"> </span>pab 
+=<span class="st"> </span>pba *<span class="st"> </span>pa /<span class="st"> </span>pb 
+=<span class="st"> </span><span class="kw">p</span>(找<span class="er">|</span>蛀) *<span class="st"> </span><span class="kw">p</span>(蛀)/<span class="kw">p</span>(找) 
+=<span class="st"> </span><span class="kw">sum</span>(p[<span class="st">&quot;蛀&quot;</span>,,<span class="st">&quot;找&quot;</span>])/<span class="kw">sum</span>(p[,,<span class="st">&quot;蛀&quot;</span>])*<span class="st"> </span><span class="kw">sum</span>(p[,,<span class="st">&quot;蛀&quot;</span>])/<span class="st"> </span><span class="kw">sum</span>(p[<span class="st">&quot;找&quot;</span>,,])</code></pre>
+<p>完整的操作過程</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>p &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="kw">c</span>(<span class="fl">0.576</span>, <span class="fl">0.008</span>, <span class="fl">0.064</span>, <span class="fl">0.012</span>, <span class="fl">0.144</span>, <span class="fl">0.072</span>, <span class="fl">0.016</span>, <span class="fl">0.108</span>),<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))
+&gt;<span class="st"> </span>p
+, , <span class="dv">1</span>
+
+      [,<span class="dv">1</span>]  [,<span class="dv">2</span>]
+[<span class="dv">1</span>,] <span class="fl">0.576</span> <span class="fl">0.064</span>
+[<span class="dv">2</span>,] <span class="fl">0.008</span> <span class="fl">0.012</span>
+
+, , <span class="dv">2</span>
+
+      [,<span class="dv">1</span>]  [,<span class="dv">2</span>]
+[<span class="dv">1</span>,] <span class="fl">0.144</span> <span class="fl">0.016</span>
+[<span class="dv">2</span>,] <span class="fl">0.072</span> <span class="fl">0.108</span>
+
+&gt;<span class="st"> </span>p[<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>]
+[<span class="dv">1</span>] <span class="fl">0.576</span>
+&gt;<span class="st"> </span>p[<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>]
+[<span class="dv">1</span>] <span class="fl">0.008</span>
+&gt;<span class="st"> </span>p[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>]
+[<span class="dv">1</span>] <span class="fl">0.064</span>
+&gt;<span class="st"> </span>p[<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>]
+[<span class="dv">1</span>] <span class="fl">0.012</span>
+&gt;<span class="st"> </span>p[<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>]
+[<span class="dv">1</span>] <span class="fl">0.144</span>
+&gt;<span class="st"> </span>p[<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">2</span>]
+[<span class="dv">1</span>] <span class="fl">0.072</span>
+&gt;<span class="st"> </span>p[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>]
+[<span class="dv">1</span>] <span class="fl">0.016</span>
+&gt;<span class="st"> </span>p[<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>]
+[<span class="dv">1</span>] <span class="fl">0.108</span>
+&gt;<span class="st"> </span><span class="kw">dimnames</span>(p)[[<span class="dv">1</span>]] =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;沒蛀&quot;</span>, <span class="st">&quot;蛀&quot;</span>)
+&gt;<span class="st"> </span><span class="kw">dimnames</span>(p)[[<span class="dv">2</span>]] =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;沒痛&quot;</span>, <span class="st">&quot;痛&quot;</span>)
+&gt;<span class="st"> </span><span class="kw">dimnames</span>(p)[[<span class="dv">3</span>]] =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;沒找&quot;</span>, <span class="st">&quot;找&quot;</span>)
+&gt;<span class="st"> </span>p
+, , 沒找
+
+<span class="st">      </span>沒痛    痛
+沒蛀 <span class="fl">0.576</span> <span class="fl">0.064</span>
+蛀   <span class="fl">0.008</span> <span class="fl">0.012</span>
+
+, , 找
+
+<span class="st">      </span>沒痛    痛
+沒蛀 <span class="fl">0.144</span> <span class="fl">0.016</span>
+蛀   <span class="fl">0.072</span> <span class="fl">0.108</span>
+
+&gt;<span class="st"> </span>p[,<span class="st">&quot;沒痛&quot;</span>,]
+      沒找<span class="st">    </span><span class="er">找</span>
+沒蛀 <span class="fl">0.576</span> <span class="fl">0.144</span>
+蛀   <span class="fl">0.008</span> <span class="fl">0.072</span>
+&gt;<span class="st"> </span>p[,,<span class="st">&quot;找&quot;</span>]
+      沒痛    痛
+沒蛀 <span class="fl">0.144</span> <span class="fl">0.016</span>
+蛀   <span class="fl">0.072</span> <span class="fl">0.108</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(p[,,<span class="st">&quot;找&quot;</span>])
+[<span class="dv">1</span>] <span class="fl">0.34</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(p[,<span class="st">&quot;痛&quot;</span>,<span class="st">&quot;找&quot;</span>])
+[<span class="dv">1</span>] <span class="fl">0.124</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(p[,<span class="st">&quot;痛&quot;</span>,<span class="st">&quot;找&quot;</span>])/<span class="kw">sum</span>(<span class="kw">sum</span>(p[,<span class="st">&quot;痛&quot;</span>,]))
+[<span class="dv">1</span>] <span class="fl">0.62</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(p)
+[<span class="dv">1</span>] <span class="dv">1</span>
+&gt;<span class="st"> </span><span class="dv">0</span>&lt;=p &amp;<span class="st"> </span>p &lt;=<span class="dv">1</span>
+, , 沒找
+
+<span class="st">     </span>沒痛   痛
+沒蛀 <span class="ot">TRUE</span> <span class="ot">TRUE</span>
+蛀   <span class="ot">TRUE</span> <span class="ot">TRUE</span>
+
+, , 找
+
+<span class="st">     </span>沒痛   痛
+沒蛀 <span class="ot">TRUE</span> <span class="ot">TRUE</span>
+蛀   <span class="ot">TRUE</span> <span class="ot">TRUE</span>
+
+&gt;<span class="st"> </span><span class="kw">sum</span>(p[<span class="st">&quot;蛀&quot;</span>,,<span class="st">&quot;找&quot;</span>])/<span class="kw">sum</span>(p[<span class="st">&quot;蛀&quot;</span>,,])
+[<span class="dv">1</span>] <span class="fl">0.9</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(p[<span class="st">&quot;蛀&quot;</span>,,<span class="st">&quot;找&quot;</span>])/<span class="kw">sum</span>(p[<span class="st">&quot;蛀&quot;</span>,,])
+[<span class="dv">1</span>] <span class="fl">0.9</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(p[,<span class="st">&quot;痛&quot;</span>,<span class="st">&quot;找&quot;</span>])/<span class="kw">sum</span>(p[,<span class="st">&quot;痛&quot;</span>,])
+[<span class="dv">1</span>] <span class="fl">0.62</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(p[,<span class="st">&quot;痛&quot;</span>,<span class="st">&quot;找&quot;</span>])
+[<span class="dv">1</span>] <span class="fl">0.124</span>
+&gt;<span class="st"> </span>pab =<span class="st"> </span><span class="kw">sum</span>(p[<span class="st">&quot;蛀&quot;</span>,,<span class="st">&quot;找&quot;</span>])/<span class="kw">sum</span>(p[,,<span class="st">&quot;找&quot;</span>]) <span class="co"># pab = P(蛀 | 找到)</span>
+&gt;<span class="st"> </span>pba =<span class="st"> </span><span class="kw">sum</span>(p[<span class="st">&quot;蛀&quot;</span>,,<span class="st">&quot;找&quot;</span>])/<span class="kw">sum</span>(p[<span class="st">&quot;蛀&quot;</span>,,]) <span class="co"># pba = P(找到 | 蛀)</span>
+&gt;<span class="st"> </span>pa =<span class="st"> </span><span class="kw">sum</span>(p[<span class="st">&quot;蛀&quot;</span>,,]) <span class="co"># pa = P(蛀)</span>
+&gt;<span class="st"> </span>pb =<span class="st"> </span><span class="kw">sum</span>(p[,,<span class="st">&quot;找&quot;</span>]) <span class="co"># pb = P(找到)</span>
+&gt;<span class="st"> </span>pab
+[<span class="dv">1</span>] <span class="fl">0.5294118</span>
+&gt;<span class="st"> </span>pba
+[<span class="dv">1</span>] <span class="fl">0.9</span>
+&gt;<span class="st"> </span>pa
+[<span class="dv">1</span>] <span class="fl">0.2</span>
+&gt;<span class="st"> </span>pb
+[<span class="dv">1</span>] <span class="fl">0.34</span>
+&gt;<span class="st"> </span>pba*pa/pb
+[<span class="dv">1</span>] <span class="fl">0.5294118</span>
+&gt;<span class="st"> </span>pab-pba*pa/pb
+[<span class="dv">1</span>] <span class="dv">0</span>
+&gt;<span class="st"> </span></code></pre>
+</section>
+<!-- {{{{ dzslides core
+#
+#
+#     __  __  __       .  __   ___  __
+#    |  \  / /__` |    | |  \ |__  /__`
+#    |__/ /_ .__/ |___ | |__/ |___ .__/ core :€
+#
+#
+# The following block of code is not supposed to be edited.
+# But if you want to change the behavior of these slides,
+# feel free to hack it!
+#
+-->
+
+<div id="progress-bar"></div>
+
+<!-- Default Style -->
+<style>
+  * { margin: 0; padding: 0; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+  details { display: none; }
+  body {
+    width: 800px; height: 600px;
+    margin-left: -400px; margin-top: -300px;
+    position: absolute; top: 50%; left: 50%;
+    overflow: hidden;
+  }
+  section {
+    position: absolute;
+    pointer-events: none;
+    width: 100%; height: 100%;
+  }
+  section[aria-selected] { pointer-events: auto; }
+  html { overflow: hidden; }
+  body { display: none; }
+  body.loaded { display: block; }
+  .incremental {visibility: hidden; }
+  .incremental[active] {visibility: visible; }
+  #progress-bar{
+    bottom: 0;
+    position: absolute;
+    -moz-transition: width 400ms linear 0s;
+    -webkit-transition: width 400ms linear 0s;
+    -ms-transition: width 400ms linear 0s;
+    transition: width 400ms linear 0s;
+  }
+  figure {
+    width: 100%;
+    height: 100%;
+  }
+  figure > * {
+    position: absolute;
+  }
+  figure > img, figure > video {
+    width: 100%; height: 100%;
+  }
+</style>
+
+<script>
+  var Dz = {
+    remoteWindows: [],
+    idx: -1,
+    step: 0,
+    slides: null,
+    progressBar : null,
+    params: {
+      autoplay: "1"
+    }
+  };
+
+  Dz.init = function() {
+    document.body.className = "loaded";
+    this.slides = $$("body > section");
+    this.progressBar = $("#progress-bar");
+    this.setupParams();
+    this.onhashchange();
+    this.setupTouchEvents();
+    this.onresize();
+  }
+  
+  Dz.setupParams = function() {
+    var p = window.location.search.substr(1).split('&');
+    p.forEach(function(e, i, a) {
+      var keyVal = e.split('=');
+      Dz.params[keyVal[0]] = decodeURIComponent(keyVal[1]);
+    });
+  // Specific params handling
+    if (!+this.params.autoplay)
+      $$.forEach($$("video"), function(v){ v.controls = true });
+  }
+
+  Dz.onkeydown = function(aEvent) {
+    // Don't intercept keyboard shortcuts
+    if (aEvent.altKey
+      || aEvent.ctrlKey
+      || aEvent.metaKey
+      || aEvent.shiftKey) {
+      return;
+    }
+    if ( aEvent.keyCode == 37 // left arrow
+      || aEvent.keyCode == 38 // up arrow
+      || aEvent.keyCode == 33 // page up
+    ) {
+      aEvent.preventDefault();
+      this.back();
+    }
+    if ( aEvent.keyCode == 39 // right arrow
+      || aEvent.keyCode == 40 // down arrow
+      || aEvent.keyCode == 34 // page down
+    ) {
+      aEvent.preventDefault();
+      this.forward();
+    }
+    if (aEvent.keyCode == 35) { // end
+      aEvent.preventDefault();
+      this.goEnd();
+    }
+    if (aEvent.keyCode == 36) { // home
+      aEvent.preventDefault();
+      this.goStart();
+    }
+    if (aEvent.keyCode == 32) { // space
+      aEvent.preventDefault();
+      this.toggleContent();
+    }
+    if (aEvent.keyCode == 70) { // f
+      aEvent.preventDefault();
+      this.goFullscreen();
+    }
+  }
+
+  /* Touch Events */
+
+  Dz.setupTouchEvents = function() {
+    var orgX, newX;
+    var tracking = false;
+
+    var db = document.body;
+    db.addEventListener("touchstart", start.bind(this), false);
+    db.addEventListener("touchmove", move.bind(this), false);
+
+    function start(aEvent) {
+      aEvent.preventDefault();
+      tracking = true;
+      orgX = aEvent.changedTouches[0].pageX;
+    }
+
+    function move(aEvent) {
+      if (!tracking) return;
+      newX = aEvent.changedTouches[0].pageX;
+      if (orgX - newX > 100) {
+        tracking = false;
+        this.forward();
+      } else {
+        if (orgX - newX < -100) {
+          tracking = false;
+          this.back();
+        }
+      }
+    }
+  }
+
+  /* Adapt the size of the slides to the window */
+
+  Dz.onresize = function() {
+    var db = document.body;
+    var sx = db.clientWidth / window.innerWidth;
+    var sy = db.clientHeight / window.innerHeight;
+    var transform = "scale(" + (1/Math.max(sx, sy)) + ")";
+
+    db.style.MozTransform = transform;
+    db.style.WebkitTransform = transform;
+    db.style.OTransform = transform;
+    db.style.msTransform = transform;
+    db.style.transform = transform;
+  }
+
+
+  Dz.getDetails = function(aIdx) {
+    var s = $("section:nth-of-type(" + aIdx + ")");
+    var d = s.$("details");
+    return d ? d.innerHTML : "";
+  }
+
+  Dz.onmessage = function(aEvent) {
+    var argv = aEvent.data.split(" "), argc = argv.length;
+    argv.forEach(function(e, i, a) { a[i] = decodeURIComponent(e) });
+    var win = aEvent.source;
+    if (argv[0] === "REGISTER" && argc === 1) {
+      this.remoteWindows.push(win);
+      this.postMsg(win, "REGISTERED", document.title, this.slides.length);
+      this.postMsg(win, "CURSOR", this.idx + "." + this.step);
+      return;
+    }
+    if (argv[0] === "BACK" && argc === 1)
+      this.back();
+    if (argv[0] === "FORWARD" && argc === 1)
+      this.forward();
+    if (argv[0] === "START" && argc === 1)
+      this.goStart();
+    if (argv[0] === "END" && argc === 1)
+      this.goEnd();
+    if (argv[0] === "TOGGLE_CONTENT" && argc === 1)
+      this.toggleContent();
+    if (argv[0] === "SET_CURSOR" && argc === 2)
+      window.location.hash = "#" + argv[1];
+    if (argv[0] === "GET_CURSOR" && argc === 1)
+      this.postMsg(win, "CURSOR", this.idx + "." + this.step);
+    if (argv[0] === "GET_NOTES" && argc === 1)
+      this.postMsg(win, "NOTES", this.getDetails(this.idx));
+  }
+
+  Dz.toggleContent = function() {
+    // If a Video is present in this new slide, play it.
+    // If a Video is present in the previous slide, stop it.
+    var s = $("section[aria-selected]");
+    if (s) {
+      var video = s.$("video");
+      if (video) {
+        if (video.ended || video.paused) {
+          video.play();
+        } else {
+          video.pause();
+        }
+      }
+    }
+  }
+
+  Dz.setCursor = function(aIdx, aStep) {
+    // If the user change the slide number in the URL bar, jump
+    // to this slide.
+    aStep = (aStep != 0 && typeof aStep !== "undefined") ? "." + aStep : ".0";
+    window.location.hash = "#" + aIdx + aStep;
+  }
+
+  Dz.onhashchange = function() {
+    var cursor = window.location.hash.split("#"),
+        newidx = 1,
+        newstep = 0;
+    if (cursor.length == 2) {
+      newidx = ~~cursor[1].split(".")[0];
+      newstep = ~~cursor[1].split(".")[1];
+      if (newstep > Dz.slides[newidx - 1].$$('.incremental > *').length) {
+        newstep = 0;
+        newidx++;
+      }
+    }
+    this.setProgress(newidx, newstep);
+    if (newidx != this.idx) {
+      this.setSlide(newidx);
+    }
+    if (newstep != this.step) {
+      this.setIncremental(newstep);
+    }
+    for (var i = 0; i < this.remoteWindows.length; i++) {
+      this.postMsg(this.remoteWindows[i], "CURSOR", this.idx + "." + this.step);
+    }
+  }
+
+  Dz.back = function() {
+    if (this.idx == 1 && this.step == 0) {
+      return;
+    }
+    if (this.step == 0) {
+      this.setCursor(this.idx - 1,
+                     this.slides[this.idx - 2].$$('.incremental > *').length);
+    } else {
+      this.setCursor(this.idx, this.step - 1);
+    }
+  }
+
+  Dz.forward = function() {
+    if (this.idx >= this.slides.length &&
+        this.step >= this.slides[this.idx - 1].$$('.incremental > *').length) {
+        return;
+    }
+    if (this.step >= this.slides[this.idx - 1].$$('.incremental > *').length) {
+      this.setCursor(this.idx + 1, 0);
+    } else {
+      this.setCursor(this.idx, this.step + 1);
+    }
+  }
+
+  Dz.goStart = function() {
+    this.setCursor(1, 0);
+  }
+
+  Dz.goEnd = function() {
+    var lastIdx = this.slides.length;
+    var lastStep = this.slides[lastIdx - 1].$$('.incremental > *').length;
+    this.setCursor(lastIdx, lastStep);
+  }
+
+  Dz.setSlide = function(aIdx) {
+    this.idx = aIdx;
+    var old = $("section[aria-selected]");
+    var next = $("section:nth-of-type("+ this.idx +")");
+    if (old) {
+      old.removeAttribute("aria-selected");
+      var video = old.$("video");
+      if (video) {
+        video.pause();
+      }
+    }
+    if (next) {
+      next.setAttribute("aria-selected", "true");
+      var video = next.$("video");
+      if (video && !!+this.params.autoplay) {
+        video.play();
+      }
+    } else {
+      // That should not happen
+      this.idx = -1;
+      // console.warn("Slide doesn't exist.");
+    }
+  }
+
+  Dz.setIncremental = function(aStep) {
+    this.step = aStep;
+    var old = this.slides[this.idx - 1].$('.incremental > *[aria-selected]');
+    if (old) {
+      old.removeAttribute('aria-selected');
+    }
+    var incrementals = $$('.incremental');
+    if (this.step <= 0) {
+      $$.forEach(incrementals, function(aNode) {
+        aNode.removeAttribute('active');
+      });
+      return;
+    }
+    var next = this.slides[this.idx - 1].$$('.incremental > *')[this.step - 1];
+    if (next) {
+      next.setAttribute('aria-selected', true);
+      next.parentNode.setAttribute('active', true);
+      var found = false;
+      $$.forEach(incrementals, function(aNode) {
+        if (aNode != next.parentNode)
+          if (found)
+            aNode.removeAttribute('active');
+          else
+            aNode.setAttribute('active', true);
+        else
+          found = true;
+      });
+    } else {
+      setCursor(this.idx, 0);
+    }
+    return next;
+  }
+
+  Dz.goFullscreen = function() {
+    var html = $('html'),
+        requestFullscreen = html.requestFullscreen || html.requestFullScreen || html.mozRequestFullScreen || html.webkitRequestFullScreen;
+    if (requestFullscreen) {
+      requestFullscreen.apply(html);
+    }
+  }
+  
+  Dz.setProgress = function(aIdx, aStep) {
+    var slide = $("section:nth-of-type("+ aIdx +")");
+    if (!slide)
+      return;
+    var steps = slide.$$('.incremental > *').length + 1,
+        slideSize = 100 / (this.slides.length - 1),
+        stepSize = slideSize / steps;
+    this.progressBar.style.width = ((aIdx - 1) * slideSize + aStep * stepSize) + '%';
+  }
+  
+  Dz.postMsg = function(aWin, aMsg) { // [arg0, [arg1...]]
+    aMsg = [aMsg];
+    for (var i = 2; i < arguments.length; i++)
+      aMsg.push(encodeURIComponent(arguments[i]));
+    aWin.postMessage(aMsg.join(" "), "*");
+  }
+  
+  function init() {
+    Dz.init();
+    window.onkeydown = Dz.onkeydown.bind(Dz);
+    window.onresize = Dz.onresize.bind(Dz);
+    window.onhashchange = Dz.onhashchange.bind(Dz);
+    window.onmessage = Dz.onmessage.bind(Dz);
+  }
+
+  window.onload = init;
+</script>
+
+
+<script> // Helpers
+  if (!Function.prototype.bind) {
+    Function.prototype.bind = function (oThis) {
+
+      // closest thing possible to the ECMAScript 5 internal IsCallable
+      // function 
+      if (typeof this !== "function")
+      throw new TypeError(
+        "Function.prototype.bind - what is trying to be fBound is not callable"
+      );
+
+      var aArgs = Array.prototype.slice.call(arguments, 1),
+          fToBind = this,
+          fNOP = function () {},
+          fBound = function () {
+            return fToBind.apply( this instanceof fNOP ? this : oThis || window,
+                   aArgs.concat(Array.prototype.slice.call(arguments)));
+          };
+
+      fNOP.prototype = this.prototype;
+      fBound.prototype = new fNOP();
+
+      return fBound;
+    };
+  }
+
+  var $ = (HTMLElement.prototype.$ = function(aQuery) {
+    return this.querySelector(aQuery);
+  }).bind(document);
+
+  var $$ = (HTMLElement.prototype.$$ = function(aQuery) {
+    return this.querySelectorAll(aQuery);
+  }).bind(document);
+
+  $$.forEach = function(nodeList, fun) {
+    Array.prototype.forEach.call(nodeList, fun);
+  }
+
+</script>
+<!-- vim: set fdm=marker: }}} -->
+</body>
+</html>

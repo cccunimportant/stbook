@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#因子實驗-factorial-experiment">因子實驗 (Factorial experiment)</a><ul>
+<li><a href="#隨機完全區集設計-randomized-complete-block-design">隨機完全區集設計 (Randomized Complete Block Design)</a></li>
+<li><a href="#二因子變異數分析-two-factor-analysis-of-variance">二因子變異數分析 (Two-Factor Analysis of Variance)</a></li>
+<li><a href="#三因子變異數分析-three-factor-analysis-of-variance">三因子變異數分析 (Three-Factor Analysis of Variance)</a></li>
+<li><a href="#k-因子變異數分析-three-factor-analysis-of-variance">2^k 因子變異數分析 (Three-Factor Analysis of Variance)</a></li>
+<li><a href="#部分因子實驗">部分因子實驗</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="因子實驗-factorial-experiment"><a href="#因子實驗-factorial-experiment">因子實驗 (Factorial experiment)</a></h1>
+<p>問題：實驗時有兩個以上的因子，實驗者同時關心兩個以上的因子。</p>
+<p>因子：(factor)</p>
+<p>水準：(level) 因子的可能選項 (與 R 軟體中的 factor 一樣具有 level) * 如果每個因子有兩個水準，則 k 個因子就有 [[ <img src="../timg/ad08fba6765e.jpg" /> ]] 個水準 * 如果每個因子有三個水準，則 k 個因子就有 [[ <img src="../timg/9cc5af69534a.jpg" /> ]] 個水準</p>
+<ul>
+<li>問題：仍然是平均數是否相等的問題，但是有兩個以上的變因同時存在。</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th align="left">假設</th>
+<th align="left">公式</th>
+<th align="left">說明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">H0</td>
+<td align="left"><img src="../timg/9a5ce3e19b96.jpg" /></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">H1</td>
+<td align="left"><img src="../timg/9fc3a0e9fb44.jpg" /></td>
+<td align="left">對於某些 i 與 j 而言</td>
+</tr>
+</tbody>
+</table>
+<p>完全區集 v.s. 不完全區集</p>
+<ul>
+<li>完全區集：實驗可以在完全相同的條件下進行每一種處理組合。</li>
+<li>不完全區集：某些實驗不可能在完全相同的實驗條件之下進行每一種處理組合，</li>
+</ul>
+<h2 id="隨機完全區集設計-randomized-complete-block-design"><a href="#隨機完全區集設計-randomized-complete-block-design">隨機完全區集設計 (Randomized Complete Block Design)</a></h2>
+<p>目的：有兩個以上的變因，但是我們一次只想研究一種變因是否有統計上的意義，此時可以加入某種隨機程序，以消除掉非研究變因的影響。</p>
+<p>設計方法：</p>
+<p>區集的有效性：</p>
+<h2 id="二因子變異數分析-two-factor-analysis-of-variance"><a href="#二因子變異數分析-two-factor-analysis-of-variance">二因子變異數分析 (Two-Factor Analysis of Variance)</a></h2>
+<p>方法：雙向分類完全隨機設計 (Two-way classification completely randomize design)</p>
+<p>結果：稱為完全隨機設計 (Completely randomized design)</p>
+<h2 id="三因子變異數分析-three-factor-analysis-of-variance"><a href="#三因子變異數分析-three-factor-analysis-of-variance">三因子變異數分析 (Three-Factor Analysis of Variance)</a></h2>
+<h2 id="k-因子變異數分析-three-factor-analysis-of-variance"><a href="#k-因子變異數分析-three-factor-analysis-of-variance">2^k 因子變異數分析 (Three-Factor Analysis of Variance)</a></h2>
+<h2 id="部分因子實驗"><a href="#部分因子實驗">部分因子實驗</a></h2>
+<ul>
+<li>問題：當 k 很大時，排列組合會爆增，完全因子實驗變得不太可行，此時可採用「部分因子實驗」。 *</li>
+</ul>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

@@ -1,0 +1,39 @@
++ 機率統計：課程錄影
+* 第一週：數學的基礎、機率統計與 R 軟體 -- 2011/9/14
+ * [http://www.youtube.com/user/ccckmit#p/u/12/DDgER1Wznc0 數學符號的念法 (希臘字母)]
+ * [http://www.youtube.com/user/ccckmit#p/u/12/CNlU-MUGo5E 鍵盤符號的念法]
+ * [http://www.youtube.com/user/ccckmit#p/u/10/alDp18hsA7w 機率統計簡介]
+ * [http://www.youtube.com/user/ccckmit#p/u/12/hhkBbZM_AYY 排列組合]
+ * [http://www.youtube.com/user/ccckmit#p/u/12/xHLqh9wsgFE 機率統計：笑杯與哭杯 (蒙第卡羅法)]
+ * [http://www.youtube.com/user/ccckmit#p/u/12/P1JgLk3t2bg R 軟體的安裝與基本使用方法]
+* 第二週：工業與數學的歷史 (2011/9/21)
+ * [http://www.youtube.com/watch?v=Br-9nnmJz_c 工業與數學的歷史 (1/3)]
+ * [http://www.youtube.com/watch?v=d-ZW1QvSOUo 工業與數學的歷史 (2/3)]
+ * [http://www.youtube.com/watch?v=kB2AMvzrfnk 工業與數學的歷史 (3/3)]
+* 第四週：機率的公理與定理 (2011/10/5)
+ * [http://www.youtube.com/watch?v=FlYggOClFtI 如何用機率公理來證明機率定理]
+ * [http://www.youtube.com/watch?v=rjiIv0Pevf0 條件機率與貝氏定理]
+ * [http://www.youtube.com/watch?v=3jaKpl2iADs 貝氏網路：蛀牙、牙痛、找到痛牙的真值表 (1/2)]
+ * [http://www.youtube.com/watch?v=mEgv2_w_CLQ 貝氏網路：蛀牙、牙痛、找到痛牙的真值表 (2/2)]
+* 第五週：R 軟體與機率統計 (2011/10/12)
+ * [http://www.youtube.com/watch?v=ofcuwUmSf0A R 軟體的操作與 S 語言]
+ * [http://www.youtube.com/watch?v=Rf-3UPbHmFk 機率：離散分配、連續分配、期望值、變異數]
+ * [http://www.youtube.com/watch?v=XzCQNO8mrHM 機率：(習題) 請證明期望值、變異數的三個定理]
+ * [http://www.youtube.com/watch?v=iLoHJaUROXQ 機率統計：母體變異數與樣本變異數]
+ * [http://www.youtube.com/watch?v=9kj5bV17E_4 機率統計：使用 R 軟體計算牙醫判斷牙痛的練習題]
+* 第六週：R 軟體與機率統計 (2011/10/19)
+ * [http://www.youtube.com/watch?v=Zmh9d--Dsv4 機率統計：離散隨機分配 (1/3)] -- 1. 柏努力試驗 2. 幾何分配 3. 二項分配 (未完)
+ * [http://www.youtube.com/watch?v=K2XiULcjap4 機率統計：離散隨機分配 (2/3) ] -- 1. 二項分配 (接續) 2. 負二項分配
+ * [http://www.youtube.com/watch?v=wAgRhDdfQVw 機率統計：離散隨機分配 (3/3) ] -- 1. 超幾何分配 2. 布瓦松分配
+* 第七週：R 軟體與機率統計 (2011/10/26)
+ * [http://www.youtube.com/watch?v=ZD_lE_zL3s0 機率統計：二項分布與 R 軟體 (1/2) ]
+ * [http://www.youtube.com/watch?v=gGtFI_Rw_r0 機率統計：二項分布與 R 軟體 (2/2) ]
+ * [http://www.youtube.com/watch?v=kSlKkEVRuPo 機率統計：以R實作多項分配與負二項分配]
+ * [http://www.youtube.com/watch?v=nceBUkHwLD4 機率統計：以R實作幾何分配與超幾何分配]
+ * [http://www.youtube.com/watch?v=JJQpgRxXYog 機率統計：以R實作布瓦松分配]
+ * [http://www.youtube.com/watch?v=Qg6dzMYZ99o 機率統計：以R實作常態分布與均等分布]
+ * [http://www.youtube.com/watch?v=NilMFf1neEk 機率統計：聯合分布]
+* 第11週：統計簡介 (2011/11/16)
+ * [http://www.youtube.com/watch?v=hAQ3qBT7JeM 統計簡介：抽樣與 R 軟體]
+ * [http://www.youtube.com/watch?v=dfYBrYRicfo 敘述統計與 R 軟體]
+ * [http://www.youtube.com/watch?v=NjWfFBlYQlY 機率統計：不偏估計式]

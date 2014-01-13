@@ -1,0 +1,7 @@
+# [[[st:coin | 擲銅板]]]
+# [[[st:dice | 擲骰子]]]
+# [[[st:poker | 撲克牌]]]
+# [[[st:choose | 排列組合]]]
+# [[[st:bayesexai | 牙痛問題]]]
+# [[[r:dataset | R 的資料庫]]]
+# [[[r:IRIS | 曳尾花]]]

@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#多項分布-multinomial-distribution">多項分布 (Multinomial Distribution)</a></li>
+</ul>
+</div>
+<h2 id="多項分布-multinomial-distribution"><a href="#多項分布-multinomial-distribution">多項分布 (Multinomial Distribution)</a></h2>
+<div class="figure">
+<img src="../timg/ffcfc83a10ec.jpg" />
+</div>
+<ul>
+<li>意義：n 次試驗中各種情況分別出現 x1, x2, ..., xk 次的機率</li>
+<li>範圍：x1, x2, ..., xk=0,1,2,...,n ; 0&lt;p[i]&lt;1</li>
+<li>R 函數：multinom(size, prob) ; n:size:樣本數, p:prob:各種情況的機率
+<ul>
+<li>http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Multinom.html</li>
+</ul></li>
+</ul>
+<h3 id="r-函數範例"><a href="#r-函數範例">R 函數範例</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r"><span class="kw">rmultinom</span>(<span class="dv">10</span>, <span class="dt">size =</span> <span class="dv">12</span>, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.1</span>,<span class="fl">0.2</span>,<span class="fl">0.8</span>))
+
+pr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">6</span>,<span class="dv">10</span>) <span class="co"># normalization not necessary for generation</span>
+<span class="kw">rmultinom</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dt">prob =</span> pr)
+
+## all possible outcomes of Multinom(N = 3, K = 3)
+X &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">as.matrix</span>(<span class="kw">expand.grid</span>(<span class="dv">0</span>:<span class="dv">3</span>, <span class="dv">0</span>:<span class="dv">3</span>))); X &lt;-<span class="st"> </span>X[, <span class="kw">colSums</span>(X) &lt;=<span class="st"> </span><span class="dv">3</span>]
+X &lt;-<span class="st"> </span><span class="kw">rbind</span>(X, <span class="dv">3</span>:<span class="dv">3</span> -<span class="st"> </span><span class="kw">colSums</span>(X)); <span class="kw">dimnames</span>(X) &lt;-<span class="st"> </span><span class="kw">list</span>(letters[<span class="dv">1</span>:<span class="dv">3</span>], <span class="ot">NULL</span>)
+X
+<span class="kw">round</span>(<span class="kw">apply</span>(X, <span class="dv">2</span>, function(x) <span class="kw">dmultinom</span>(x, <span class="dt">prob =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>))), <span class="dv">3</span>)</code></pre>
+<p>執行結果：</p>
+<pre><code>&gt; rmultinom(10, size = 12, prob=c(0.1,0.2,0.8))
+     [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+[1,]    1    1    1    0    2    0    1    1    0     2
+[2,]    1    2    3    0    3    0    2    1    1     2
+[3,]   10    9    8   12    7   12    9   10   11     8
+&gt; 
+&gt; pr &lt;- c(1,3,6,10) # normalization not necessary for generation
+&gt; rmultinom(10, 20, prob = pr)
+     [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+[1,]    1    1    2    2    1    1    2    1    1     2
+[2,]    2    2    2    2    6    7    3    5    4     4
+[3,]    9    4    8    4    8    8    4    7    3     6
+[4,]    8   13    8   12    5    4   11    7   12     8
+&gt; 
+&gt; ## all possible outcomes of Multinom(N = 3, K = 3)
+&gt; X &lt;- t(as.matrix(expand.grid(0:3, 0:3))); X &lt;- X[, colSums(X) &lt;= 3]
+&gt; X &lt;- rbind(X, 3:3 - colSums(X)); dimnames(X) &lt;- list(letters[1:3], NULL)
+&gt; X
+  [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+a    0    1    2    3    0    1    2    0    1     0
+b    0    0    0    0    1    1    1    2    2     3
+c    3    2    1    0    2    1    0    1    0     0
+&gt; round(apply(X, 2, function(x) dmultinom(x, prob = c(1,2,5))), 3)
+ [1] 0.244 0.146 0.029 0.002 0.293 0.117 0.012 0.117 0.023 0.016
+&gt; </code></pre>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

@@ -1,0 +1,25 @@
++ 多維均勻分布
+
+[[math]]
+p(x_1, x_2, ..., x_k) = A \quad ; \quad (x_1, x_2, ..., x_k) \in G
+[[/math]]
+
+其中的 G 不一定要是矩形，也可以是圓形或任意型狀。
+
++ 多維常態分布
+
+[[math]]
+p(x) = \frac{1}{(2 \pi)^{2/n} |B|^{1/2}} e^{-\frac{1}{2} (x-a)^t B^{-1} (x-a)}
+[[/math]]
+
+其中[[$ x = (x_1, x_2, ..., x_k)', a = (a_1, a_2, ..., a_n)' $]]，B 為 k 階正定對稱矩陣，|B| 為其行列式，[[$ B^{-1} $]] 為其逆矩陣。
+
+範例：n=2 時
+
+[[math]]
+B = 
+\begin{bmatrix}
+  \sigma_1^2 & r \sigma_1 \sigma_2  \\
+  r \sigma_1 \sigma_2 & \sigma_2^2  \\
+ \end{bmatrix}
+[[/math]]

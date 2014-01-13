@@ -1,0 +1,15 @@
++ 期望值
+
+* 定義：
+
+[[math]]
+E[H(X)] = \sum_{\forall x} H(x) p(x)
+[[/math]]
+
+* 定理：
+
+[[math type="eqnarray"]]
+1. && E[c] = c \\
+2. && E[c X] = c E[X] \\
+3. && E[X + Y] = E[X] + E[Y]
+[[/math]]

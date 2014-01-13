@@ -1,0 +1,444 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#再論估計與檢定">再論估計與檢定</a><ul>
+<li><a href="#檢定的分類">檢定的分類</a></li>
+<li><a href="#右尾檢定左尾檢定與雙尾檢定">右尾檢定、左尾檢定與雙尾檢定</a></li>
+<li><a href="#比例-p-的檢定">比例 p 的檢定</a></li>
+<li><a href="#中位數-m-的檢定">中位數 M 的檢定</a></li>
+<li><a href="#兩組樣本的平均值檢定">兩組樣本的平均值檢定</a></li>
+<li><a href="#變異數服從甚麼分布">變異數服從甚麼分布？</a></li>
+<li><a href="#兩組樣本的變異數檢定">兩組樣本的變異數檢定</a></li>
+<li><a href="#兩組樣本的比例檢定">兩組樣本的比例檢定</a></li>
+<li><a href="#兩組樣本的中位數檢定">兩組樣本的中位數檢定</a></li>
+<li><a href="#結語">結語</a></li>
+<li><a href="#參考文獻">參考文獻</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="再論估計與檢定"><a href="#再論估計與檢定">再論估計與檢定</a></h1>
+<p>在上一章當中，我們說明了如何計算單一組樣本「平均值」的「信賴區間」與「檢定」等問題。在這一章當中，我們將進一步探索 如何用 R 軟體進行其他的檢定，像是「變異數」的檢定，兩組樣本的檢定等問題，我們將不會花太多力氣在數學說明上，而是採用 直接操作的範例導向方法，用範例說明這些檢定的實作方法。</p>
+<h2 id="檢定的分類"><a href="#檢定的分類">檢定的分類</a></h2>
+<p>大致上來說，檢定可以分為「單組樣本、兩組樣本或多組樣本」的檢定，在上期當中，我們所檢定的對象是單組樣本的平均值 <span class="math"><em>μ</em></span>， 當然我們也可以檢定兩組樣本的平均值是否相等，也就是 <img src="../timg/4e60474e0f60.jpg" /> 是否為真。</p>
+<p>如果想檢定的關係並非「等號」關係，那麼檢定還可以分為「右尾檢定、左尾檢定、雙尾檢定」等三種，以平均值 <img src="../timg/c9faf6ead2cd.jpg" /> 的檢定而言， 其檢定假設如下表所示：</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">右尾檢定</th>
+<th align="left">左尾檢定</th>
+<th align="left">雙尾檢定</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">H0</td>
+<td align="left"><img src="../timg/acb57c5744a8.jpg" /></td>
+<td align="left"><img src="../timg/d8c59401e540.jpg" /></td>
+<td align="left"><img src="../timg/83065df9f3ee.jpg" /></td>
+</tr>
+<tr class="even">
+<td align="left">H1</td>
+<td align="left"><img src="../timg/1619b0265515.jpg" /></td>
+<td align="left"><img src="../timg/8dd164dce5fe.jpg" /></td>
+<td align="left"><img src="../timg/9b4f164b4cc6.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>另外、檢定的對象如果不是平均數 <img src="../timg/c9faf6ead2cd.jpg" /> ，而是變異數 <img src="../timg/a2ab7d71a0f0.jpg" /> ，或者某個比例 p，或者是中位數 M ，那就得改用對應的分布進行檢定，讓我們將檢定的種類與方法整理一下，列表如下：</p>
+<ul>
+<li>單組樣本的檢定
+<ul>
+<li>平均值的檢定？ ( <img src="../timg/8d5c16be7d8a.jpg" /> ) -- 學生 T 檢定</li>
+<li>變異數的檢定？ ( <img src="../timg/915e4f07551f.jpg" /> ) -- 卡方 <img src="../timg/9ca61f458c78.jpg" /> 檢定</li>
+<li>比例 p 的檢定？ ( <img src="../timg/6e4083e02d67.jpg" /> ) -- 常態 Z 檢定</li>
+<li>中位數 M 的檢定？ ( <img src="../timg/6ed558249dd0.jpg" /> ) -- 無母數方法 Wilcoxon Sign-Rank 檢定</li>
+</ul></li>
+<li>兩組樣本的檢定
+<ul>
+<li>比較兩平均數 <img src="../timg/52ba63e20126.jpg" /> 的差值 ( <img src="../timg/e18314955b8b.jpg" /> ) 的檢定</li>
+<li>比較兩變異數 <img src="../timg/112884011abb.jpg" /> 的差值 ( <img src="../timg/1848b72fa807.jpg" /> ) 的檢定</li>
+<li>比較兩機率 <img src="../timg/ae8fd5980cf4.jpg" /> 的差值 ( <img src="../timg/dbdccad11fb3.jpg" /> ) 的檢定</li>
+<li>比較兩組中位數 M 的差值 ( <img src="../timg/a6a7779ec296.jpg" /> ) 的檢定 (無母數方法)</li>
+</ul></li>
+</ul>
+<h2 id="右尾檢定左尾檢定與雙尾檢定"><a href="#右尾檢定左尾檢定與雙尾檢定">右尾檢定、左尾檢定與雙尾檢定</a></h2>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">2</span>)
+&gt;<span class="st"> </span>x
+ [<span class="dv">1</span>] <span class="fl">6.6148290</span> <span class="fl">8.4660415</span> <span class="fl">4.7084610</span> <span class="fl">8.0959357</span> <span class="fl">5.0618158</span> <span class="fl">3.6971976</span> <span class="fl">7.7887572</span>
+ [<span class="dv">8</span>] <span class="fl">5.2229378</span> <span class="fl">4.7763453</span> <span class="fl">4.3595627</span> <span class="fl">4.7674163</span> <span class="fl">2.8655986</span> <span class="fl">4.5051726</span> <span class="fl">1.2974370</span>
+[<span class="dv">15</span>] <span class="fl">6.9794643</span> <span class="fl">0.4042951</span> <span class="fl">8.0391053</span> <span class="fl">6.7884780</span> <span class="fl">6.5557084</span> <span class="fl">3.7146943</span> <span class="fl">0.3457576</span>
+[<span class="dv">22</span>] <span class="fl">7.4302876</span> <span class="fl">6.7216046</span> <span class="fl">9.1046976</span> <span class="fl">7.0879767</span>
+&gt;<span class="st"> </span><span class="kw">sd</span>(x)
+[<span class="dv">1</span>] <span class="fl">2.430731</span>
+&gt;<span class="st"> </span><span class="kw">mean</span>(x)
+[<span class="dv">1</span>] <span class="fl">5.415983</span>
+&gt;<span class="st"> </span><span class="kw">t.test</span>(x, <span class="dt">alternative=</span><span class="st">&quot;greater&quot;</span>, <span class="dt">mu=</span><span class="fl">4.8</span>)
+
+        One Sample t-test
+
+data:<span class="st">  </span>x 
+t =<span class="st"> </span><span class="fl">1.2671</span>, df =<span class="st"> </span><span class="dv">24</span>, p-value =<span class="st"> </span><span class="fl">0.1086</span>
+alternative hypothesis:<span class="st"> </span>true mean is greater than <span class="fl">4.8</span> 
+<span class="dv">95</span> percent confidence interval:
+<span class="st"> </span><span class="fl">4.584244</span>      <span class="ot">Inf</span> 
+sample estimates:
+mean of x 
+ <span class="fl">5.415983</span> 
+
+&gt;<span class="st"> </span><span class="kw">t.test</span>(x, <span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>, <span class="dt">mu=</span><span class="fl">4.8</span>)
+
+        One Sample t-test
+
+data:<span class="st">  </span>x 
+t =<span class="st"> </span><span class="fl">1.2671</span>, df =<span class="st"> </span><span class="dv">24</span>, p-value =<span class="st"> </span><span class="fl">0.8914</span>
+alternative hypothesis:<span class="st"> </span>true mean is less than <span class="fl">4.8</span> 
+<span class="dv">95</span> percent confidence interval:
+<span class="st">     </span>-<span class="ot">Inf</span> <span class="fl">6.247722</span> 
+sample estimates:
+mean of x 
+ <span class="fl">5.415983</span> 
+
+&gt;<span class="st"> </span><span class="kw">t.test</span>(x, <span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>, <span class="dt">mu=</span><span class="fl">4.8</span>)
+
+        One Sample t-test
+
+data:<span class="st">  </span>x 
+t =<span class="st"> </span><span class="fl">1.2671</span>, df =<span class="st"> </span><span class="dv">24</span>, p-value =<span class="st"> </span><span class="fl">0.2173</span>
+alternative hypothesis:<span class="st"> </span>true mean is not equal to <span class="fl">4.8</span> 
+<span class="dv">95</span> percent confidence interval:
+<span class="st"> </span><span class="fl">4.412627</span> <span class="fl">6.419339</span> 
+sample estimates:
+mean of x 
+ <span class="fl">5.415983</span> </code></pre>
+<p>註：以上的 <code>t.test(x, alternative=&quot;greater&quot;, mu=4.8)</code> 為右尾檢定，其中的 <code>t = 1.2671, df = 24, p-value = 0.1086</code> 這個 輸出中，p-value=0.1086 其實就是截掉左尾 <img src="../timg/e74a7ec38d99.jpg" /> 保留右尾 <img src="../timg/f6b317724b42.jpg" /> 的結果。如下所示：</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="dv">1</span>-<span class="kw">pt</span>(<span class="fl">1.2671</span>, <span class="dt">df=</span><span class="dv">24</span>)
+[<span class="dv">1</span>] <span class="fl">0.1086388</span></code></pre>
+<p>而 <code>t.test(x, alternative=&quot;less&quot;, mu=4.8)</code> 為左尾檢定，其中的 <code>t = 1.2671, df = 24, p-value = 0.8914</code> 這個 輸出中，p-value=0.8914 反過來就是截掉右尾 <img src="../timg/cc9a7ac8cd7d.jpg" /> 保留左尾 <img src="../timg/55984b56e603.jpg" /> 的結果。如下所示：</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">pt</span>(<span class="fl">1.2671</span>, <span class="dt">df=</span><span class="dv">24</span>)
+[<span class="dv">1</span>] <span class="fl">0.8913612</span></code></pre>
+<p>而最後的 <code>t.test(x, alternative=&quot;two.sided&quot;, mu=4.8)</code> 是雙尾檢定，其中的 <code>t = 1.2671, df = 24, p-value = 0.2173</code> 這個輸出中，p-value=0.2173 其實就是截掉兩尾的結果。如下所示：</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="dv">1</span>-(<span class="kw">pt</span>(<span class="fl">1.2671</span>, <span class="dt">df=</span><span class="dv">24</span>)-<span class="kw">pt</span>(-<span class="fl">1.2671</span>, <span class="dt">df=</span><span class="dv">24</span>))
+[<span class="dv">1</span>] <span class="fl">0.2172776</span>
+&gt;<span class="st"> </span></code></pre>
+<h2 id="比例-p-的檢定"><a href="#比例-p-的檢定">比例 p 的檢定</a></h2>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">prop.test</span>(<span class="dv">25</span>, <span class="dv">100</span>, <span class="dt">correct=</span>T, <span class="dt">p=</span><span class="fl">0.25</span>)
+
+        <span class="dv">1</span>-sample proportions test without continuity correction
+
+data:<span class="st">  </span><span class="dv">25</span> out of <span class="dv">100</span>, null probability <span class="fl">0.25</span> 
+X-squared =<span class="st"> </span><span class="dv">0</span>, df =<span class="st"> </span><span class="dv">1</span>, p-value =<span class="st"> </span><span class="dv">1</span>
+alternative hypothesis:<span class="st"> </span>true p is not equal to <span class="fl">0.25</span> 
+<span class="dv">95</span> percent confidence interval:
+<span class="st"> </span><span class="fl">0.1754521</span> <span class="fl">0.3430446</span> 
+sample estimates:
+<span class="st">   </span>p 
+<span class="fl">0.25</span> 
+
+&gt;<span class="st"> </span><span class="kw">prop.test</span>(<span class="dv">25</span>, <span class="dv">100</span>, <span class="dt">correct=</span>T, <span class="dt">p=</span><span class="fl">0.01</span>)
+
+        <span class="dv">1</span>-sample proportions test with continuity correction
+
+data:<span class="st">  </span><span class="dv">25</span> out of <span class="dv">100</span>, null probability <span class="fl">0.01</span> 
+X-squared =<span class="st"> </span><span class="fl">557.8283</span>, df =<span class="st"> </span><span class="dv">1</span>, p-value &lt;<span class="st"> </span><span class="fl">2.2e-16</span>
+alternative hypothesis:<span class="st"> </span>true p is not equal to <span class="fl">0.01</span> 
+<span class="dv">95</span> percent confidence interval:
+<span class="st"> </span><span class="fl">0.1711755</span> <span class="fl">0.3483841</span> 
+sample estimates:
+<span class="st">   </span>p 
+<span class="fl">0.25</span> 
+
+Warning message:
+In <span class="kw">prop.test</span>(<span class="dv">25</span>, <span class="dv">100</span>, <span class="dt">correct =</span> T, <span class="dt">p =</span> <span class="fl">0.01</span>) :
+<span class="st">  </span>Chi-squared approximation may be incorrect
+&gt;<span class="st"> </span><span class="kw">prop.test</span>(<span class="dv">25</span>, <span class="dv">100</span>, <span class="dt">correct=</span>T, <span class="dt">p=</span><span class="fl">0.2</span>)
+
+        <span class="dv">1</span>-sample proportions test with continuity correction
+
+data:<span class="st">  </span><span class="dv">25</span> out of <span class="dv">100</span>, null probability <span class="fl">0.2</span> 
+X-squared =<span class="st"> </span><span class="fl">1.2656</span>, df =<span class="st"> </span><span class="dv">1</span>, p-value =<span class="st"> </span><span class="fl">0.2606</span>
+alternative hypothesis:<span class="st"> </span>true p is not equal to <span class="fl">0.2</span> 
+<span class="dv">95</span> percent confidence interval:
+<span class="st"> </span><span class="fl">0.1711755</span> <span class="fl">0.3483841</span> 
+sample estimates:
+<span class="st">   </span>p 
+<span class="fl">0.25</span> </code></pre>
+<h2 id="中位數-m-的檢定"><a href="#中位數-m-的檢定">中位數 M 的檢定</a></h2>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">wilcox.test</span>(x, <span class="dt">mu=</span><span class="fl">4.8</span>)
+
+        Wilcoxon signed rank test
+
+data:<span class="st">  </span>x 
+V =<span class="st"> </span><span class="dv">207</span>, p-value =<span class="st"> </span><span class="fl">0.2411</span>
+alternative hypothesis:<span class="st"> </span>true location is not equal to <span class="fl">4.8</span> </code></pre>
+<h2 id="兩組樣本的平均值檢定"><a href="#兩組樣本的平均值檢定">兩組樣本的平均值檢定</a></h2>
+<p>(方法一)：合併 T 檢定 (pooled T test) -- 又被稱為：「獨立 T 檢定」或「不相關 T 檢定」</p>
+<ul>
+<li>前提條件：兩組樣本必須互相獨立才能使用合併 T 檢定，沒有理相信 (常態分布) 兩組樣本的母體變異數不相等的情況之下，想比較 <img src="../timg/20cd69035be5.jpg" /> 時，可用「合併 T 檢定」。</li>
+</ul>
+<p>合併 T 檢定的數學原理，式考慮下列兩組分佈公式：</p>
+<div class="figure">
+<img src="../timg/853ff86b4d58.jpg" />
+</div>
+<div class="figure">
+<img src="../timg/40087470020f.jpg" />
+</div>
+<p>當 <img src="../timg/9f15cdedd8d7.jpg" /> 與 <img src="../timg/a3de00c15976.jpg" /> 相互獨立時，會有下列性質：</p>
+<div class="figure">
+<img src="../timg/94b18634e7ab.jpg" />
+</div>
+<p>於是可以得到：</p>
+<div class="figure">
+<img src="../timg/6479496aba68.jpg" />
+</div>
+<p>也就是 <img src="../timg/858b18acf22f.jpg" /> 服從自由度為 <img src="../timg/3cf0ed345ff1.jpg" /> 的 T 分布。</p>
+<p>其中的 S 定義如下：</p>
+<div class="figure">
+<img src="../timg/efd32b9d4f51.jpg" />
+</div>
+<p>接著讓我們來看看如何用 R 進行這類的合併 T 檢定。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x=<span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="fl">3.0</span>, <span class="dt">sd=</span><span class="dv">2</span>)
+&gt;<span class="st"> </span>y=<span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="fl">3.2</span>, <span class="dt">sd=</span><span class="dv">2</span>)
+&gt;<span class="st"> </span>x
+ [<span class="dv">1</span>]  <span class="fl">5.12770813</span> -<span class="fl">0.69201841</span>  <span class="fl">3.11359532</span>  <span class="fl">1.93715093</span>  <span class="fl">7.76880172</span>  <span class="fl">3.54159714</span>
+ [<span class="dv">7</span>]  <span class="fl">1.47159331</span>  <span class="fl">4.27555975</span>  <span class="fl">3.48421232</span>  <span class="fl">2.25191442</span>  <span class="fl">3.46742988</span>  <span class="fl">7.85327689</span>
+[<span class="dv">13</span>]  <span class="fl">3.52493667</span>  <span class="fl">5.41072190</span>  <span class="fl">4.39668469</span>  <span class="fl">0.29868134</span> -<span class="fl">0.19521005</span>  <span class="fl">1.30992501</span>
+[<span class="dv">19</span>]  <span class="fl">2.55471568</span>  <span class="fl">3.89214393</span>  <span class="fl">6.01076126</span> -<span class="fl">0.02217834</span>  <span class="fl">1.03681457</span>  <span class="fl">5.68719430</span>
+[<span class="dv">25</span>]  <span class="fl">4.15852190</span>
+&gt;<span class="st"> </span>y
+ [<span class="dv">1</span>]  <span class="fl">4.0565581</span>  <span class="fl">3.9617962</span>  <span class="fl">6.3513376</span>  <span class="fl">4.9998217</span>  <span class="fl">4.4419258</span>  <span class="fl">6.3198375</span>
+ [<span class="dv">7</span>] -<span class="fl">1.0483622</span>  <span class="fl">5.1809845</span>  <span class="fl">7.5435307</span>  <span class="fl">2.6048084</span>  <span class="fl">5.6764663</span>  <span class="fl">2.6687181</span>
+[<span class="dv">13</span>]  <span class="fl">2.7981462</span> -<span class="fl">0.3564332</span>  <span class="fl">0.8637199</span>  <span class="fl">4.2032371</span>  <span class="fl">4.5879745</span>  <span class="fl">3.1428764</span>
+[<span class="dv">19</span>] -<span class="fl">0.3657162</span>  <span class="fl">4.0400208</span>  <span class="fl">5.9577457</span>  <span class="fl">2.3334531</span>  <span class="fl">3.2662193</span>  <span class="fl">1.6285190</span>
+[<span class="dv">25</span>]  <span class="fl">2.2731483</span>
+&gt;<span class="st"> </span><span class="kw">t.test</span>(x, y, <span class="dt">var.equal=</span>T) ## (方法一)：合併 T 檢定 (pooled T test) -- 又被稱為：「獨立 T 檢定」或「不相關 T 檢定」
+## 前提條件：兩組樣本必須互相獨立才能使用合併 T 檢定，沒有理相信 (常態分布) 兩組樣本的母體變異數不相等的情況之下使用
+
+        Two Sample t-test
+
+data:<span class="st">  </span>x and y 
+t =<span class="st"> </span>-<span class="fl">0.3409</span>, df =<span class="st"> </span><span class="dv">48</span>, p-value =<span class="st"> </span><span class="fl">0.7346</span>
+alternative hypothesis:<span class="st"> </span>true difference in means is not equal to <span class="dv">0</span> 
+<span class="dv">95</span> percent confidence interval:
+<span class="st"> </span>-<span class="fl">1.508021</span>  <span class="fl">1.070757</span> 
+sample estimates:
+mean of x mean of y 
+ <span class="fl">3.266581</span>  <span class="fl">3.485213</span> 
+
+&gt;<span class="st"> </span><span class="kw">t.test</span>(x,y, <span class="dt">pair=</span>T)   ## (方法二)：成對 T 檢定 (Paired T Test)
+## 前提條件：(1) 2個或以上的連續變項皆呈常態分配 (normally distributed) 
+##           (2) 變項與觀察值之間互相獨立 (mutually independently) 
+
+        Paired t-test
+
+data:<span class="st">  </span>x and y 
+t =<span class="st"> </span>-<span class="fl">0.3438</span>, df =<span class="st"> </span><span class="dv">24</span>, p-value =<span class="st"> </span><span class="fl">0.734</span>
+alternative hypothesis:<span class="st"> </span>true difference in means is not equal to <span class="dv">0</span> 
+<span class="dv">95</span> percent confidence interval:
+<span class="st"> </span>-<span class="fl">1.531134</span>  <span class="fl">1.093870</span> 
+sample estimates:
+mean of the differences 
+              -<span class="fl">0.218632</span> </code></pre>
+<h2 id="變異數服從甚麼分布"><a href="#變異數服從甚麼分布">變異數服從甚麼分布？</a></h2>
+<h2 id="兩組樣本的變異數檢定"><a href="#兩組樣本的變異數檢定">兩組樣本的變異數檢定</a></h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">右尾檢定</th>
+<th align="left">左尾檢定</th>
+<th align="left">雙尾檢定</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">H0</td>
+<td align="left"><img src="../timg/34c80b93a3c9.jpg" /></td>
+<td align="left"><img src="../timg/34c80b93a3c9.jpg" /></td>
+<td align="left"><img src="../timg/34c80b93a3c9.jpg" /></td>
+</tr>
+<tr class="even">
+<td align="left">H1</td>
+<td align="left"><img src="../timg/ab8f008e71da.jpg" /></td>
+<td align="left"><img src="../timg/b072d9c94544.jpg" /></td>
+<td align="left"><img src="../timg/2a34a897a281.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>那麼、對於變異數而言應該怎麼檢定才好呢？</p>
+<p>由於單一樣本群的變異數服從卡方分布，因此在兩組樣本群時，會服從以下的分布：</p>
+<div class="figure">
+<img src="../timg/543e880d3841.jpg" />
+</div>
+<p>這種由兩個卡方分布相除的分布稱為 F 分布。</p>
+<p>定理：</p>
+<blockquote>
+<p>令 X, Y 分別是來自常態分配 <img src="../timg/75f8b8c674ce.jpg" /> 與 <img src="../timg/aee1291dc099.jpg" /> 的樣本群，<span class="math"><em>S</em><sub><em>X</em></sub><sup>2</sup></span> 與 <img src="../timg/ed7429166c2f.jpg" /> 為 X , Y 兩群樣本的變異數，若 <img src="../timg/80693bc38e92.jpg" /> ，則統計量 <img src="../timg/948cfc859f52.jpg" /> 服從自由度為 <img src="../timg/8a0d8372e483.jpg" /> 的 F 分布。</p>
+</blockquote>
+<p>在 R 函數中，進行「兩組樣本變異數檢定」的函數是 var.test()，該函數即是採用 F 分布去進行檢定的，以下是一個用 var.test() 進行檢定的範例。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">var.test</span>(x,y)
+
+        F test to compare two variances
+
+data:<span class="st">  </span>x and y 
+F =<span class="st"> </span><span class="fl">1.0973</span>, num df =<span class="st"> </span><span class="dv">24</span>, denom df =<span class="st"> </span><span class="dv">24</span>, p-value =<span class="st"> </span><span class="fl">0.8219</span>
+alternative hypothesis:<span class="st"> </span>true ratio of variances is not equal to <span class="dv">1</span> 
+<span class="dv">95</span> percent confidence interval:
+<span class="st"> </span><span class="fl">0.4835609</span> <span class="fl">2.4901548</span> 
+sample estimates:
+ratio of variances 
+          <span class="fl">1.097334</span> </code></pre>
+<h2 id="兩組樣本的比例檢定"><a href="#兩組樣本的比例檢定">兩組樣本的比例檢定</a></h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">右尾檢定</th>
+<th align="left">左尾檢定</th>
+<th align="left">雙尾檢定</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">H0</td>
+<td align="left"><img src="../timg/1c8791660c5b.jpg" /></td>
+<td align="left"><img src="../timg/1c8791660c5b.jpg" /></td>
+<td align="left"><img src="../timg/1c8791660c5b.jpg" /></td>
+</tr>
+<tr class="even">
+<td align="left">H1</td>
+<td align="left"><img src="../timg/90fb0c8949ef.jpg" /></td>
+<td align="left"><img src="../timg/34974593894f.jpg" /></td>
+<td align="left"><img src="../timg/93de3b3c344d.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x=<span class="kw">c</span>(<span class="dv">100</span>, <span class="dv">200</span>)
+&gt;<span class="st"> </span>y=<span class="kw">c</span>(<span class="dv">300</span>, <span class="dv">400</span>)
+&gt;<span class="st"> </span><span class="kw">prop.test</span>(x,y)
+
+        <span class="dv">2</span>-sample test for equality of proportions with continuity
+        correction
+
+data:<span class="st">  </span>x out of y 
+X-squared =<span class="st"> </span><span class="fl">18.7698</span>, df =<span class="st"> </span><span class="dv">1</span>, p-value =<span class="st"> </span><span class="fl">1.475e-05</span>
+alternative hypothesis:<span class="st"> </span>two.sided 
+<span class="dv">95</span> percent confidence interval:
+<span class="st"> </span>-<span class="fl">0.24201562</span> -<span class="fl">0.09131771</span> 
+sample estimates:
+<span class="st">   </span>prop <span class="dv">1</span>    prop <span class="dv">2</span> 
+<span class="fl">0.3333333</span> <span class="fl">0.5000000</span> </code></pre>
+<h2 id="兩組樣本的中位數檢定"><a href="#兩組樣本的中位數檢定">兩組樣本的中位數檢定</a></h2>
+<p>(方法一)：Wilcoxon Rank-Sum 檢定：兩組獨立觀察值 X, Y 適用</p>
+<ul>
+<li>統計量： <img src="../timg/1514cbaa258a.jpg" /></li>
+<li>其中的： <img src="../timg/2c5ac6f5bd5d.jpg" /></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">右尾檢定</th>
+<th align="left">左尾檢定</th>
+<th align="left">雙尾檢定</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">H0</td>
+<td align="left"><img src="../timg/0da28b8e6c63.jpg" /></td>
+<td align="left"><img src="../timg/0da28b8e6c63.jpg" /></td>
+<td align="left"><img src="../timg/0da28b8e6c63.jpg" /></td>
+</tr>
+<tr class="even">
+<td align="left">H1</td>
+<td align="left"><img src="../timg/4ada02222cdb.jpg" /></td>
+<td align="left"><img src="../timg/09d107aa1f45.jpg" /></td>
+<td align="left"><img src="../timg/7facb5808f1d.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">2</span>)
+&gt;<span class="st"> </span>y =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="fl">5.5</span>, <span class="dt">sd=</span><span class="dv">2</span>)
+&gt;<span class="st"> </span>x
+ [<span class="dv">1</span>] <span class="fl">3.962665</span> <span class="fl">4.592900</span> <span class="fl">2.708658</span> <span class="fl">4.302144</span> <span class="fl">9.140617</span> <span class="fl">6.579571</span> <span class="fl">4.711547</span> <span class="fl">4.842238</span>
+ [<span class="dv">9</span>] <span class="fl">5.634979</span> <span class="fl">8.826325</span> <span class="fl">7.492737</span> <span class="fl">5.349967</span> <span class="fl">6.028533</span> <span class="fl">5.326150</span> <span class="fl">3.280819</span> <span class="fl">2.589442</span>
+[<span class="dv">17</span>] <span class="fl">6.391175</span> <span class="fl">3.299716</span> <span class="fl">5.681381</span> <span class="fl">3.188571</span>
+&gt;<span class="st"> </span>y
+ [<span class="dv">1</span>] <span class="fl">7.537479</span> <span class="fl">5.810962</span> <span class="fl">7.340678</span> <span class="fl">4.048306</span> <span class="fl">6.179672</span> <span class="fl">5.152021</span> <span class="fl">6.780724</span> <span class="fl">3.354434</span>
+ [<span class="dv">9</span>] <span class="fl">6.484613</span> <span class="fl">8.752706</span> <span class="fl">4.116139</span> <span class="fl">4.939286</span> <span class="fl">4.074703</span> <span class="fl">2.954187</span> <span class="fl">4.489012</span> <span class="fl">5.697258</span>
+[<span class="dv">17</span>] <span class="fl">5.260137</span> <span class="fl">6.299990</span> <span class="fl">8.188696</span> <span class="fl">5.743851</span>
+&gt;<span class="st"> </span><span class="kw">wilcox.test</span>(x, y, <span class="dt">exact=</span>F, <span class="dt">correct=</span>F)
+
+        Wilcoxon rank sum test
+
+data:<span class="st">  </span>x and y 
+W =<span class="st"> </span><span class="dv">162</span>, p-value =<span class="st"> </span><span class="fl">0.304</span>
+alternative hypothesis:<span class="st"> </span>true location shift is not equal to <span class="dv">0</span> </code></pre>
+<p>(方法二)：Wilcoxon Signed-Rank 檢定：兩組成對觀察值 (X, Y) 適用</p>
+<ul>
+<li>樣本：兩組成對觀察值 <img src="../timg/4864fdb1c6c6.jpg" /></li>
+<li>方法：將差距絕對值 <img src="../timg/d4e3f9cf91e8.jpg" /> 由小到大排序，並給予 1..n 的名次。</li>
+<li>檢定統計量：看看 <img src="../timg/1204e1d9099e.jpg" /> 是否夠接近 <span class="math"><em>M</em><sub><em>Y</em></sub></span>，如果差很多那麼 W 應該會很大。</li>
+<li>正排名權重：<span class="math"><em>W</em><sub> + </sub> = ∑ <sub><em>R</em><sub><em>i</em></sub> &gt; 0</sub><em>R</em><sub><em>i</em></sub></span></li>
+<li>負排名權重：<span class="math">∣<em>W</em><sub> − </sub>∣ = ∑ <sub><em>R</em><sub><em>i</em></sub> &lt; 0</sub>∣<em>R</em><sub><em>i</em></sub>∣; </span></li>
+<li>W = min(W_+, |W_-|)</li>
+</ul>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">wilcox.test</span>(x,y, <span class="dt">exact=</span>F, <span class="dt">correct=</span>F, <span class="dt">paired=</span>T)
+
+        Wilcoxon signed rank test
+
+data:<span class="st">  </span>x and y 
+V =<span class="st"> </span><span class="dv">83</span>, p-value =<span class="st"> </span><span class="fl">0.4115</span>
+alternative hypothesis:<span class="st"> </span>true location shift is not equal to <span class="dv">0</span> </code></pre>
+<h2 id="結語"><a href="#結語">結語</a></h2>
+<p>在本文中，我們討論了各種「單組樣本」與「兩組樣本」檢定方法，並用 R 軟體進行示範操作，希望透過這樣的方式讓 讀者感受到「檢定」這一個統計工具的用途。</p>
+<p>但是、我們還漏掉了一個部分，那就是「三組以上的樣本」之檢定方法，用來檢定這些樣本是否來自同一母體，這種 「多組樣本檢定」的問題，通常必須使用「變異數分析」(ANOVA, Analysis Of Variance) 的方法處理，這將是我們 下一章所要討論的主題！</p>
+<h2 id="參考文獻"><a href="#參考文獻">參考文獻</a></h2>
+<ul>
+<li>陳鍾誠的網站/免費電子書/R 統計軟體 -- <a href="http://ccckmit.wikidot.com/r:main">http://ccckmit.wikidot.com/r:main</a></li>
+<li>陳鍾誠的網站/免費電子書/機率與統計 (使用 R 軟體) -- <a href="http://ccckmit.wikidot.com/st:main">http://ccckmit.wikidot.com/st:main</a></li>
+</ul>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

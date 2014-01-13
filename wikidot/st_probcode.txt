@@ -1,0 +1,133 @@
++ 統計 (Statistics) 物件
+
+統計物件根據樣本的統計值，計算每個樣本的出現機率。
+
+程式實作
+
+[[code]]
+    public class Statistics : ProbDistribution
+    {
+        public Bag bag = new Bag();
+        public int total = 0;
+
+    	public virtual double p(String exp)
+        {
+    	 return (double)bag[exp] / total;
+    	}
+
+        public Statistics addSample(String sample, String spliter)
+        {
+    	 sample = PR.normalize(sample);
+            bag.add(sample, 1);
+            foreach (String v in sample.split(spliter))
+                bag.add(v, 1);
+            total++;
+    	 return this;
+    	}
+
+    	public Statistics addSampleList(SampleList list, String spliter)
+    	{
+    	 foreach (var sample in list) 
+    	 addSample(sample, spliter);
+    	 return this;
+    	}
+
+    	public override String ToString()
+    	{
+    	 var rzStr = new StringBuilder();
+    	 foreach (var pair in bag.sort()) 
+    	 {
+    	 String s = pair.Key as String;
+    	 rzStr.Append(String.Format("{0:F4}:{1}\n", this.p(s), s));
+    	 }
+    	 return rzStr.ToString();
+    	}
+    }
+[[/code]]
+
++ 機率表
+
+機率表根據預設的機率值，直接透過查詢的方法，查詢樣本的出現機率。
+
+**程式實作**
+
+[[code]]
+    public class ProbMap : Map<Object, double>, ProbDistribution
+    {
+    	public ProbMap() {}
+        public virtual double p(String exp) { return this[PR.normalize(exp)]; }
+        public virtual ProbMap p(String exp, double value) { 
+                this[PR.normalize(exp)] = value; return this; 
+        }
+        public virtual ProbMap d(params object[] args)
+        {
+            double psum = 0.0;
+            for (int i = 0; i < args.Length; i += 2)
+            {
+                String exp = (String) args[i];
+                double pi;
+                if (i == args.Length - 1)
+                    pi = 1.0 - psum;
+                else
+                    pi = (double)args[i + 1];
+                p(exp, pi);
+                psum += pi;
+            }
+            Trace.Assert(psum < 1.00001);
+            return this;
+        }
+
+    	public virtual ProbMap normalize()
+    	{
+    	 double psum = this.Sum(pair => pair.Value);
+    	 var keys = this.Keys.ToList();
+    	 foreach (var o in keys)
+    	 this[o] = this[o] / psum;
+    	 return this;
+    	}
+
+    	public void log()
+    	{
+    	 foreach (var pair in this)
+    	 {
+    	 Log.log("{0:F4}:{1}", pair.Value, pair.Key);
+    	 }
+    	}
+    }
+
+[[/code]]
+
++ 機率模型
+機率模型會利用基本的機率分布，推斷聯合機率分布 (或運算式) 的機率
+
+[[code]]
+    public class ProbModel : ProbDistribution
+    {
+    	public ProbDistribution d = null;
+
+    	public virtual double p(String exp)	
+    	{
+    	 exp = PR.normalize(exp);
+    	 if (exp == "") return 1.0;
+    	 return d.p(exp);
+    	}
+    }
+[[/code]]
+
++ 機率問題
+
+一個機率問題經由測試可以觀察並驗證我們的模型有多接近真實的機率源模型，如此就可以檢驗機率模型預測的正確性。
+
+**程式實作**
+[[code]]
+    public class ProbProblem : ProbMap, RandomSource
+    {
+        public virtual String generate() { return ""; }
+
+        public virtual void test(ProbModel model, String expList)
+        {
+            model.d = this;
+            PR.dump(expList, model);
+        }
+    }
+[[/code]]

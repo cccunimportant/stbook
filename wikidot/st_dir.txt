@@ -1,0 +1,19 @@
+* [[[ST:Basics | 計算統計學簡介]]]
+ * [[[ST:Introduction | 計算統計學簡介]]]
+ * [[[ST:history | 計算統計學歷史]]]
+* [[[ST:probability | 機率理論]]]
+ * [[[ST:ProbabilityBasics| 機率理論的基礎]]] -- (Probability Theory)。
+ * [[[ST:MonteCarlo | 蒙地卡羅算法]]] -- (Monte Carlo Algorithm) 
+* [[[ST:BayesNet | 貝氏網路]]]
+* [[[ST:MarkovChain | 馬可夫鏈]]]
+ * [[[ST:HMM | 隱藏式馬可夫模型]]] -- (Hidden Markov Model, HMM)
+* [[[ST:Learning | 模型學習]]]
+ * [[[ST:MaximumLikelihood | 最大似然法則]]] -- (Maximum Likelihood) 找尋最適當的機率模型。
+ * [[[ST:MCMC | 蒙地卡羅馬可夫算法]]] -- (Markov Chain Monte Carlo, MCMC) 
+ * [[[ST:GibbsSampling | Gibbs 取樣程序]]] -- 用 Gibbs Sampling 進行蒙地卡羅式的取樣模擬。
+ * [[[ST:MetropolisHasting | Metropolis-Hasting 疊代法]]] -- 用 Metropolis-Hasting 程序學習馬可夫鏈的狀態轉換矩陣。
+ * [[[ST:EM | EM 算法]]] --  (Expectation-Maximization Algorithm) 。
+ * [[[ST:LagrangeMultiplier | 拉格朗日乘數]]] -- (Lagrange Multiplier) 將最大似然法與最大熵法則連接成對偶問題的數學工* [[[ST:entropy | 熵與互資訊]]] -- 最大化整個系統熵，相當於使用最大似然法則。
+ * [[[ST:MutualInformation | 互資訊與條件熵]]]  -- (Mutual Information and Condictional Entropy)。
+ * [[[ST:MaximumEntropy | 最大熵法則]]] -- (Maximum Entropy) 找尋最大亂度的機率模型。
+* 程式實作：[[[ST:StatisticsCSharp | 計算統計學程式集 (採用 C# 實作)]]] -- 實作亂數源、機率模型、貝氏網路等，以驗證統計學習法。

@@ -1,0 +1,70 @@
+[[code]]
+
+> num=1:13
+> type=c("a","b","c","d")
+> num*type
+> type=c("space", "heart", "diamond", "club")
+> interaction(num, type)
+ [1] 1.space    2.heart    3.diamond  4.club     5.space    6.heart   
+ [7] 7.diamond  8.club     9.space    10.heart   11.diamond 12.club   
+[13] 13.space  
+52 Levels: 1.club 2.club 3.club 4.club 5.club 6.club 7.club ... 13.space
+Warning message:
+In ans * length(l) + if1 :
+  longer object length is not a multiple of shorter object length
+> expand.grid(num, type)
+   Var1    Var2
+1     1   space
+2     2   space
+3     3   space
+4     4   space
+5     5   space
+6     6   space
+7     7   space
+8     8   space
+9     9   space
+10   10   space
+11   11   space
+12   12   space
+13   13   space
+14    1   heart
+15    2   heart
+16    3   heart
+17    4   heart
+18    5   heart
+19    6   heart
+20    7   heart
+21    8   heart
+22    9   heart
+23   10   heart
+24   11   heart
+25   12   heart
+26   13   heart
+27    1 diamond
+28    2 diamond
+29    3 diamond
+30    4 diamond
+31    5 diamond
+32    6 diamond
+33    7 diamond
+34    8 diamond
+35    9 diamond
+36   10 diamond
+37   11 diamond
+38   12 diamond
+39   13 diamond
+40    1    club
+41    2    club
+42    3    club
+43    4    club
+44    5    club
+45    6    club
+46    7    club
+47    8    club
+48    9    club
+49   10    club
+50   11    club
+51   12    club
+52   13    club
+> poker = expand.grid(num, type)
+[[/code]]

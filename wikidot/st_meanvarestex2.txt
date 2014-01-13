@@ -1,0 +1,120 @@
+習題一：某樣本序列如下
+
+3.1 3.5 2.9 3.8 3.6 2.5 4.0 3.3 3.9 2.8
+
+請計算其樣本平均數 [[$ \bar{X} $]]， 樣本變異數 [[$ S^2 $]]。
+
+[[code]]
+> x = c(3.1, 3.5, 2.9, 3.8, 3.6, 2.5, 4.0, 3.3, 3.9, 2.8)
+> mean(x)
+[1] 3.34
+> var(x)
+[1] 0.256
+> 
+[[/code]]
+
+習題二：同上題，假設其母體變異數為 0.25，請計算其母體平均數 [[$ \mu $]] 的 95% 信賴區間。 (參考累積常態分布表)
+
+已知 [[$ \sigma^2 $]] 時，[[$ \mu $]] 的信賴區間公式如下。
+[[math]]
+P[\bar{X}+Z_{\alpha/2} \frac{\sigma}{\sqrt{n}} \le \mu \le \bar{X} + Z_{1-\alpha/2} \frac{\sigma}{\sqrt{n}}] = 1-\alpha
+[[/math]]
+
+[[code]]
+mean.range = function(x, alpha=0.05, sigma) {
+    n = length(x) # n = 樣本數
+    mx = mean(x) # mx 即為平均值 mu 的點估計
+    r1 = qnorm(alpha/2) # 信賴區間，下半截掉 alpha/2
+    r2 = qnorm(1-alpha/2) # 信賴區間，上半截掉 alpha/2
+    L1 = mx+r1*sigma/sqrt(n) # 信賴區間下限
+    L2 = mx+r2*sigma/sqrt(n) # 信賴區間上限
+    range = c(L1, mx, L2) # 信賴區間
+}
+
+[[/code]]
+
+[[code]]
+> r1 = qnorm(0.025)
+> r1
+[1] -1.959964
+> r2 = qnorm(0.975)
+> r2
+[1] 1.959964
+> r = mean.range(x, sigma=sqrt(0.25))
+> r
+[1] 3.030102 3.340000 3.649898
+
+[[/code]]
+
+習題三：同上題，但是假設我們不知道其母體變異數，請計算其其母體平均數 [[$ \mu $]] 的 95% 信賴區間。 (參考累積 T 分布表，注意自由度)
+
+未知 [[$ \sigma^2 $]] 時，[[$ \mu $]] 的信賴區間公式如下。
+[[math]]
+P[\bar{X}+T_{\alpha/2} \frac{S}{\sqrt{n}} \le \mu \le \bar{X} + T_{1-\alpha/2} \frac{S}{\sqrt{n}}] = 1-\alpha
+[[/math]]
+
+[[code]]
+mean.range2 = function(x, alpha=0.05) {
+    n = length(x) # n = 樣本數
+    mx = mean(x) # mx 即為平均值 mu 的點估計
+	S = sqrt(var(x)) # S 即為標準差的點估計
+    r1 = qt(alpha/2, df=n-1) # 信賴區間，下半截掉 alpha/2
+    r2 = qt(1-alpha/2, df=n-1) # 信賴區間，上半截掉 alpha/2
+    L1 = mx+r1*S/sqrt(n) # 信賴區間下限
+    L2 = mx+r2*S/sqrt(n) # 信賴區間上限
+    range = c(L1, mx, L2)
+}
+[[/code]]
+
+[[code]]
+> x
+ [1] 3.1 3.5 2.9 3.8 3.6 2.5 4.0 3.3 3.9 2.8
+> r1 = qt(0.025, df=9)
+> r1
+[1] -2.262157
+> r2 = qt(0.975, df=9)
+> r2
+[1] 2.262157
+> mean.range2(x)
+> r = mean.range2(x)
+> r
+[1] 2.978055 3.340000 3.701945
+> 
+
+[[/code]]
+
+習題四：同上題，請計算其變異數 [[$ \sigma^2 $]] 的 95% 信賴區間。(參考累積卡方分布表，注意自由度)
+
+變異數的信賴區間公式如下。
+
+[[math]]
+P[\frac{(n-1) S^2}{\chi_{1-\alpha/2}^2} \le \sigma^2 \le \frac{(n-1) S^2}{\chi_{\alpha/2}^2}] = 1-\alpha
+[[/math]]
+
+
+[[code]]
+var.range = function(x, alpha=0.05) {
+    n  = length(x) # n = 樣本數
+    r1 = qchisq(alpha/2, df=n-1) # 信賴區間，下半截掉 alpha/2
+    r2 = qchisq(1-alpha/2, df=n-1) # 信賴區間，上半截掉 alpha/2
+    S2  = var(x) # 樣本變異數
+    L1 = (n-1)*S2/r2 # 信賴區間下限
+    L2 = (n-1)*S2/r1 # 信賴區間上限
+    range = c(L1, S2, L2) # 信賴區間
+}
+[[/code]]
+
+[[code]]
+> x
+ [1] 3.1 3.5 2.9 3.8 3.6 2.5 4.0 3.3 3.9 2.8
+> r1 = qchisq(0.025, df=9)
+> r1
+[1] 2.700389
+> r2 = qchisq(0.975, df=9)
+> r2
+[1] 19.02277
+> r = var.range(x)
+> r
+[1] 0.1211180 0.2560000 0.8532102
+> 
+[[/code]]

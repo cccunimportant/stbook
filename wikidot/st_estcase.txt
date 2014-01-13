@@ -1,0 +1,42 @@
++ 估計
+
+||~ 被估計參數 ||~ 推論分布公式 ||~ 相關分配 ||~ 上下界限 ||
+|| [[$ \mu $]] ([[$ \sigma^2$]] 已知) || [[$ \frac{\bar{X}-\mu}{\sigma/\sqrt{n}} \to  Z $]] || Z:標準常態 || [[$ \bar{X}\pm Z_{\alpha/2} \sigma/\sqrt{n} $]] ||
+|| [[$ \mu $]] ([[$ \sigma^2$]] 未知) || [[$ \frac{\bar{X}-\mu}{S/\sqrt{n}} \to T $]] || [[$ T = \frac{Z}{\sqrt{\chi^2/\gamma}} $]] || [[$ \bar{X}\pm Z_{\alpha/2} S/\sqrt{n} $]] ||
+|| [[$ \sigma^2 $]] || [[$ (n-1) S^2/\sigma^2 = \sum_{i=1}^n (X_i-\bar{X})^2/\sigma^2 $]] || [[$ \chi^2 $]]:卡方分布 || [[$ L1=(n-1)S^2 / \chi^2_{\alpha/2} $]] _[[$ L2= (n-1)S^2 / \chi^2_{1-\alpha/2} $]] ||
+|| [[$ p $]] || [[$ \frac{\hat{p}-p}{\sqrt{p(1-p)/n}} \to Z $]] || Z:標準常態 || [[$ \hat{p}\pm Z_{\alpha/2} S/\sqrt{\hat{p} (1-\hat{p})/n} $]] ||
+
+說明：[[$ \hat{p} $]] 其實是一種 0-1 情況的平均值。
+
++ 檢定
+
+||~ 被檢定參數 ||~ 推論分布公式 ||~ 相關分配 ||~ 上下界限 ||
+|| [[$ \mu=\mu_0 $]] ([[$ \sigma^2$]] 已知) || [[$ \frac{\bar{X}-\mu}{\sigma/\sqrt{n}} \to  Z $]] || Z:標準常態  || [[$ \bar{X} \pm Z_{\alpha/2} \sigma/\sqrt{n} $]] ||
+|| [[$ \mu=\mu_0 $]] ([[$ \sigma^2$]] 未知) || [[$ \frac{\bar{X}-\mu}{S/\sqrt{n}} \to T $]] || [[$ T = \frac{Z}{\sqrt{\chi^2/\gamma}} $]] || [[$ \bar{X}\pm Z_{\alpha/2} S/\sqrt{n} $]] ||
+|| [[$ \sigma^2=\sigma_0^2 $]] || [[$ (n-1) S^2/\sigma^2 $]] _
+[[$ = \sum_{i=1}^n (X_i-\bar{X})^2/\sigma^2 $]] || [[$ \chi^2 $]]:卡方分布 || [[$ L1=(n-1)S^2 / \chi^2_{\alpha/2} $]] _
+[[$ L2= (n-1)S^2 / \chi^2_{1-\alpha/2} $]] ||
+|| [[$ M=M_0 $]] || [[$ W_{+} = \sum_{所有正排名} R_i $]] _
+[[$ |W_{-}| = \sum_{所有負排名} |R_i| $]] || Wilcoxon Sign Rank || [[$ E[W] = \frac{n(n+1)}{4} $]] _
+[[$ Var(W) = \frac{n(n+1)(2n+1)}{24} $]] ||
+|| [[$ p=p_0 $]] || [[$ \frac{\hat{p}-p}{\sqrt{p(1-p)/n}} \to Z $]] || Z:標準常態 || [[$ \hat{p}\pm Z_{\alpha/2} \frac{S}{\sqrt{\hat{p} (1-\hat{p})/n}} $]] ||
+|| [[$ p_1=p_2 $]] || [[$ \hat{p}_1-\hat{p}_2=\frac{X_1}{n_1}-\frac{X_2}{n_2} $]] || Z:標準常態 || [[$ (\hat{p}_1-\hat{p}_2)\pm Z_{\alpha/2}\frac{S}{\sqrt{\hat{p}_1 (1-\hat{p}_1)/n_2+\hat{p}_2 (1-\hat{p}_2)/n_2 }} $]] ||
+|| [[$ \mu_1=\mu_2 $]] ||  ||  ||  |||| [[$ \sigma_1=\sigma_2 $]] ||  ||  ||  ||
+|| [[$ M_X=M_Y $]] ||  ||  ||  ||
+
+
+練習題3：[[[st:meanIntervalEstEx | 平均值的信賴區間估計 (母體變異數已知)]]]
+ * 練習題4：[[[st:varIntervalEstEx | 變異數的信賴區間估計]]] (常態母體 => 服從自由度為 n-1 的卡方分配)
+ * 練習題5：[[[st:tTestEx | 平均值的信賴區間估計 (母體變異數未知)]]] (用 S 取代 [[$ \sigma $]] => 學生 t 分配)
+# 2011.12.7 (檢定)
+ * 練習題1：[[[st:meanTestEx | 分配平均的假設檢定]]] ([[$ \mu=\mu_0 ? $]] )
+ * 練習題2：[[[st:varTestEx | 變異數假設檢定]]] ([[$ \sigma^2 = \sigma_0^2  ? $]] )
+ * 練習題3：[[[st:medianTestEx | 中位數的假設檢定]]] ([[$ M = M_0 ? $]] ) (無母數方法, Wilcoxon Sign-Rank 檢定)
+# 2011.12.14 (比例的推論)
+ * 練習題1：[[[st:proportionEstEx | 比例的推論]]] ([[$ \hat{p} = \frac{X}{n}=\frac{樣本裡有該特徵的個數}{樣本數} $]] , 有事前估計與沒有事前估計的推論所需樣本數不同)
+ * 練習題2：[[[st:proportionTestEx | 比例的檢定]]] ([[$ p = p_0 ? $]] )
+ * 練習題3：[[[st:medianTestEx | 比較兩比例：估計+檢定]]] ([[$ p_1 = p_2 ? $]] )
+# 2011.12.21 (比較兩平均與變異數)
+ * 練習題1：[[[st:proportionEstEx | 比較兩平均]]] ([[$ \mu_1 = \mu_2 ? $]])
+ * 練習題2：[[[st:proportionTestEx | 比較兩變異數]]] ([[$ \sigma_1=\sigma_2 ? $]] , F 分配)
+ * 練習題3：[[[st:proportionTestEx | 比較兩平均 (變異數相等)]]]

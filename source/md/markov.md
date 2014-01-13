@@ -1,0 +1,158 @@
+# 馬可夫模型
+
+隨機過程很像離散數學當中的有限狀態機，但是狀態轉移的行為是具有隨機性的，可以用機率的方式描述狀態間轉移的行為。
+
+## 馬可夫鏈
+
+馬可夫鏈是一種具有狀態的隨機過程，從目前狀態轉移 s 到下一個狀態 s' 的機率由   ![](../timg/92a4e6201523.jpg)   (或者   ![](../timg/6fea2ffd3c80.jpg)  ) 所表示，這個狀態之轉移機率並不會受到狀態以外的因素所影響，因此與時間無關。
+
+隨機漫步就是馬可夫鏈的例子。隨機漫步中每一步的狀態是在圖形中的點，每一步可以移動到任何一個相鄰的點，在這裡移動到每一個點的概率都是相同的(無論之前漫步路徑是如何的)。
+
+假如我們不斷的觀察某種隨機現象，會看到許多一連串的觀察值    ![](../timg/b739c263bf07.jpg)   ，這些觀察值會形成整個隨機現象空間   ![](../timg/38a3fc669fb3.jpg)   。
+
+假如這些觀察值之間有某種因果關係，那麼我們就有可能透過馬可夫過程描述此因果關係，舉例而言，如果每個事件只受到前一個事件的影響，那麼就可以用   ![](../timg/1eb60530defb.jpg)   表示此隨機現象，這種隨機過程稱為時間無關的馬可夫鏈 (Time-homogeneous Markov chains,  或稱為穩定型馬可夫鏈 stationary Markov chains)。
+
+假如下一個觀察值可能受前 m 個觀察值所影響，那麼此種隨機過程可由機率分布   ![](../timg/bbf9f22b751f.jpg)   表示，因此稱為 m 階的馬可夫過程。
+
+然而，對於某個機率現象而言，往往不是所有的隨機變數都可觀察到，我們通常只能觀察到部分的隨機變數，也就是系統當中有某些不可觀察的隱含變數。於是我們必須假設有某些不可觀察的隨機變數 Z 的存在。
+
+## 隱馬可夫模型
+
+隱馬可夫模型 (Hidden Markov Model，HMM) 是用來描述具有隱含變數的隨機過程模型，此模型在人工智慧的許多子領域有很強的應用。
+
+在正常的馬可夫模型中，狀態對於觀察者來說是直接可見的。這樣狀態的轉換概率便是全部的參數。而在隱馬可夫模型中,狀態並不是直接可見的，但受狀態影響的某些變數則是可見的。每一個狀態在可能輸出的符號上都有一概率分佈。因此輸出符號的序列能夠透露出狀態序列的一些資訊。
+
+下圖顯示了 HMM 模型的概念，其中的 X 是隱含變數，Y 是可觀察變數，a 是轉換機率 (transition probabilities)，b 是輸出概率 (output probabilities)。
+
+![](../img/Hmm1.png)
+
+如果將狀態轉換與輸出區分開來，上圖的連線可以進一步詳細區分為輸出線與轉換線，形成下列模型。
+
+![](../img/Hmm3.png)
+
+如果以時間順序為觀察重點，則 HMM 模型可以用下列圖形表示。其中隱含變數   ![](../timg/837c9f1adf5d.jpg)   是決定狀態的關鍵，影響了輸出變數   ![](../timg/95be3b202f70.jpg)   與下一個狀態   ![](../timg/ffd39f7b6d8a.jpg)  。
+
+![](../img/Hmm2.png)
+
+對於 HMM 模型而言，有三個重要的問題，都有對應的演算法可用。
+
+1. 針對已知的模型，計算某一特定輸出序列的概率：可使用 Forward Algorithm 或 Backward Algorithm 解決.
+2. 針對已知的模型，尋找最可能的能產生某一特定輸出序列的隱含狀態的序列：可以使用 Viterbi Algorithm 解決.
+3. 針對某輸出序列，尋找最可能的狀態轉移以及輸出概率：通常使用最大可能性法則 (Maximum Likelihood) 的演算法，像是 Baum-Welch algorithm (又稱為 Forward-backward Algorithm) 解決，此種演算法是 EM 演算法的一種特例。
+
+
+## 貝氏網路 (Bayesian Network)
+
+貝氏網路是用來描述機率因果關係的網路，對於一個已知的貝氏網路 (Bayesian Network)，其中的某個樣本   ![](../timg/793b3951c288.jpg)    的機率可以用下列算式表示
+
+ ![](../timg/2bb1fe016033.jpg) 
+
+貝氏網路也可以被視為某種隱馬可夫模型，其中某些節點是可觀察節點 (X)，某些節點是隱含節點 (Z) ，我們可以透過蒙地卡羅馬可夫算法計算某個分布   ![](../timg/66494012c295.jpg)   的機率值。
+
+## 蒙地卡羅算法
+
+利用亂數隨機抽樣的方式以計算某種解答的演算法，被稱為蒙地卡羅演算法，其中最簡單的方法是直接取樣算法。
+
+舉例而言，假如我們不知道半徑為 1 的圓形面積，那麼就可以利用亂數隨機取樣 1百萬個 X=random[-1...1], Y=random[-1...1] 之間的的值，然後看看有多少點落在   ![](../timg/20073db7fb80.jpg)   的範圍之內 P(in circle)。最後利用 4 * P(in circle) 就可以計算出該圓形的面積。
+
+蒙地卡羅法除了用來計算某些曲線或形狀的面積，也可以用來逼近某些聯合隨機變數   ![](../timg/66494012c295.jpg)   ，像是利用 Gibbs Sampling 程序計算條件獨立下的聯合分布情況，或者利用 Metropolis Hasting 程序計算貝氏網路當中聯合機率分布的值。
+
+
+以蒙地卡羅馬可夫算法  (Markov Chain Monte Carlo) 計算貝氏網路的聯合機率分布簡稱 MCMC 法，此方法透過對前一事件進行隨機改變而產生事件樣本，其演算法如下所示。
+
+```
+Algorithm MCMC-Ask(X,e,bn, N) returns an estimate of P(X|e)
+  local variables : N[X], a vector of counts over X, initially zero
+                            Z, the nonevidence variables in bn
+                            x, the current state of the network, initially copied from e.
+  initialize x with random values for the variable for the variables in Z
+  for j=1 to N do
+      N[x] = N[x] + 1 where x is the value of X in x
+      for each Zi in Z do
+         sample the value of Zi in x from P(Zi | mb(Zi)) given the value of MB(Zi) in X
+  return Normalize(N[X])
+```
+
+## 參考文獻
+* 維基百科編者. 隱馬爾可夫模型[G/OL]. 維基百科，自由的百科全書, http://zh.wikipedia.org/w/index.php?title=%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B&oldid=11012460, 2009年08月28日15:47 [2009年12月21日06:42].
+* Hidden Markov model. (2009, December 20). In Wikipedia, The Free Encyclopedia. Retrieved 06:43, December 21, 2009, from http://en.wikipedia.org/w/index.php?title=Hidden_Markov_model&oldid=332893255
+* http://www.shokhirev.com/nikolai/abc/alg/hmm/hmm.html
+* [線代啟示錄：馬可夫鏈專題](http://ccjou.wordpress.com/%E5%B0%88%E9%A1%8C%E6%8E%A2%E7%A9%B6/%E9%A6%AC%E5%8F%AF%E5%A4%AB%E9%8F%88%E5%B0%88%E9%A1%8C/)
+
+## R 軟體的資源
+
+* HMM:HMM - Hidden Markov Models
+ * http://cran.r-project.org/web/packages/HMM/index.html
+* hmm.discnp:Hidden Markov models with discrete non-parametric observation distributions
+ * http://cran.r-project.org/web/packages/hmm.discnp/index.html
+* RHmm:Hidden Markov Models simulations and estimations
+ * http://cran.r-project.org/web/packages/RHmm/index.html
+* tileHMM:Hidden Markov Models for ChIP-on-Chip Analysis
+ * http://cran.r-project.org/web/packages/tileHMM/index.html
+* BMN:The pseudo-likelihood method for pairwise binary markov networks
+ * http://cran.r-project.org/web/packages/BMN/index.html
+* depmixS4	Dependent Mixture Models - Hidden Markov Models of GLMs and Other Distributions in S4
+ * http://cran.r-project.org/web/packages/depmixS4/index.html
+* pomp:Statistical inference for partially observed Markov processes
+ * http://cran.r-project.org/web/packages/pomp/index.html
+* HiddenMarkov:Hidden Markov Models
+ * http://cran.r-project.org/web/packages/HiddenMarkov/index.html
+* hsmm:Hidden Semi Markov Models
+ * http://cran.r-project.org/web/packages/hsmm/index.html
+* MSBVAR:Markov-Switching, Bayesian, Vector Autoregression Models
+ * http://cran.r-project.org/web/packages/MSBVAR/index.html
+* mhsmm:Parameter estimation and prediction for hidden Markov and semi-Markov models for data with multiple observation sequences
+* msm:Multi-state Markov and hidden Markov models in continuous time
+* pomp:Statistical inference for partially observed Markov processes
+* queueing:Basic Markovian queueing models
+* RHmm:Hidden Markov Models simulations and estimations
+* RMC:Functions for fitting Markov models
+* rEMM:Extensible Markov Model (EMM) for Data Stream Clustering in R
+* rqmcmb2	Markov Chain Marginal Bootstrap for Quantile Regression
+* SIN	A:SINful Approach to Selection of Gaussian Graphical Markov Models
+* VLMC:VLMC – Variable Length Markov Chains
+
+蒙地卡羅馬可夫法 (Monte Carlo Markov Chain, MCMC)
+
+* mcmc:Markov Chain Monte Carlo
+ * http://cran.r-project.org/web/packages/mcmc/index.html
+* mcmcplots:Create Plots from MCMC Output
+ * http://cran.r-project.org/web/packages/mcmcplots/index.html
+* BayHap:Bayesian analysis of haplotype association using Markov Chain Monte Carlo
+ * http://cran.r-project.org/web/packages/BayHap/index.html
+* MCMCglmm:MCMC Generalised Linear Mixed Models
+ * http://cran.r-project.org/web/packages/MCMCglmm/index.html
+* MCMChybridGP:Hybrid Markov chain Monte Carlo using Gaussian Processes
+ * http://cran.r-project.org/web/packages/MCMChybridGP/index.html
+* MCMCpack:Markov chain Monte Carlo (MCMC) Package
+ * http://cran.r-project.org/web/packages/MCMCpack/index.html
+* MHadaptive:General Markov Chain Monte Carlo for Bayesian Inference using adaptive Metropolis-Hastings sampling
+ * http://cran.r-project.org/web/packages/MHadaptive/index.html
+* potts:Markov Chain Monte Carlo for Potts Models
+
+MCMC
+
+* 網路電子書 , [Handbook of Computational Statistics](http://fedc.wiwi.hu-berlin.de/xplore/ebooks/html/csa/node1.html ), J.E. Gentle et. al.  ISBN-10: 3540404643
+ * [3. Markov Chain Monte Carlo Technology](http://fedc.wiwi.hu-berlin.de/xplore/ebooks/html/csa/node24.html), Siddhartha Chib
+* Persi Diaconis, The Markov Chain Monte Carlo Revolution
+ * http://www-stat.stanford.edu/~cgates/PERSI/papers/MCMCRev.pdf
+* Stuart Russell and Peter Norvig, Artificial Intelligence: A Modern Approach (Second Edition)
+ * http://aima.cs.berkeley.edu/
+
+Monte Carlo Markov Chain
+
+* http://en.wikipedia.org/wiki/Hidden_Markov_model
+* http://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm
+* http://en.wikipedia.org/wiki/MCMC
+* http://en.wikipedia.org/wiki/Viterbi_algorithm
+
+Viterbi Algorithm
+* [A Gentle Introduction to Dynamic Programming and the Viterbi Algorithm](http://www.cambridge.org/resources/0521882672/7934_kaeslin_dynpro_new.pdf)
+* [A tutorial for a Hidden Markov Model toolkit (implemented in C) that contains a description of the Viterbi algorithm](http://www.kanungo.com/software/hmmtut.pdf)
+* [An implementation of the Viterbi algorithm in Perl](http://search.cpan.org/dist/Algorithm-Viterbi/)
+* [An implementation of a variant of the Viterbi algorithm in Python](http://www.biais.org/blog/index.php/2007/09/05/52-viterbi-algorithm-variant-in-python)
+* [An implementation of the demonstrated Viterbi algorithm in C#](http://pcarvalho.com/forward_viterbi/)
+* [An implementation of the demonstrated Viterbi algorithm in C++](http://bozskyfilip.blogspot.com/2009/01/viterbi-algorithm-in-c-and-using-stl.html)
+* [An implementation of the demonstrated Viterbi algorithm in C++ and Boost](http://codingplayground.blogspot.com/2009/02/viterbi-algorithm-in-boost-and-c.html )
+* [An implementation of the demonstrated Viterbi algorithm in Java](http://psubi.com/viterbi.html)
+* [An implementation of the demonstrated Viterbi algorithm in C and assembly](http://www.ka9q.net/code/fec/)

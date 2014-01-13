@@ -1,0 +1,148 @@
+問題：如果有 k 組母體，當我們對這 k 祖母體進行抽樣，隨機取得 [[$ n_1, n_2, ...., n_k $]] 個樣本之後，我們應該如何檢定這些樣本的特性，像是平均數與變異數呢？
+
++ 檢定平均數
+
+問題一：是否所有的平均數都沒有顯著的差別？
+
+|| 假設 || 公式 || 說明 ||
+|| H0|| [[$ \mu_1 = \mu_2 =... = \mu_k $]] || ||
+|| H1|| [[$ \mu_i \neq \mu_j $]]  || 對於某些 i 與 j 而言 ||
+
+問題二：檢定對比？(Testing Contrasts)
+
+* 範例：[[$ \mu_1 + \mu_2 = \mu_3 + \mu_4 $]] ?
+* 定義：(處理平均對比) [[$ L = \sum_{i=1}^{k} c_i \mu_i $]] ; 其中 [[$ \sum_{i=1}^k c_i = 0 $]]
+* 檢定：(對比平方和)
+
+[[math]]
+SS_L = F_{1, N-k} =  
+\frac{ 
+   \left( \sum_{i=1}^k c_i \bar{Y}_i \right)^2
+   /
+   \sum_{i=1}^k \frac{c_i^2}{n_i} 
+}{MS_E}
+[[/math]]
+
+* 定義：(垂直對比) 兩個對比 [[$ L_1 = \sum_{i=1}^k a_i \mu_i $]] 與 [[$ L_2 = \sum_{i=1}^k b_i \mu_i $]] 垂直 <=> [[$ \sum_{i=1}^k \frac{a_i b_i}{n_i} = 0 $]]
+  * 為了避免 [[$ SS_{L1} + SS_{L1} + ... SS_{L1} = SS_{Tr} $]] 會造成碰巧檢定不出來，因此要求對比之間必須要符合「垂直」(orthogonal) 的條件。
+
+
++ 檢定變異數
+
+問題一：是否所有的變異數都沒有顯著的差別？
+
+|| 假設 || 公式 || 說明 ||
+|| H0|| [[$ \sigma_1 = \sigma_2 =... = \sigma_k $]] || ||
+|| H1||[[$ \sigma_i \neq \sigma_j $]] || 對於某些 i 與 j 而言 ||
+
+問題二：哪些變異數有顯著的差別？成對比較：(Pairwise Comparison)
+
+* 方法一：Duncan 多重全距檢定。
+
+* 方法二：Tokey 檢定。
+
++ 檢定中位數 (無母數方法)
+
+問題一：是否所有的中位數都沒有顯著的差別？
+
+H0: [[$ M_1 = M_2 =... = M_k $]]
+H1: [[$ M_i \neq M_j $]] ; 對於某些 i 與 j 而言。
+
+* 方法一：Kruskal-Wallis 檢定
+
+* 方法二：Friedman 檢定
+
++ R 程式範例
+
+* 資料庫：R 軟體內建的 [[[r:InsectSprays]]] 資料庫 -- 檔案下載：[[file InsectSprays.dat]]
+
+* 資料意義：實驗者使用了 A, B, C, D, E, F 等六種殺蟲劑在田野中進行效能測試，每種殺蟲劑重複測試了 12 次，觀測變量是昆蟲的數量。
+
+* 分析目標：研究殺蟲劑的效能，採用變異數分析的方式，進行分析研究。
+
+* 分析過程
+
+[[code]]
+> InsectSprays
+   count spray
+1     10     A
+2      7     A
+3     20     A
+4     14     A
+... 省略 ....
+> aov.spray <- aov(sqrt(count) ~ spray, data = InsectSprays)
+> aov.spray
+Call:
+   aov(formula = sqrt(count) ~ spray, data = InsectSprays)
+
+Terms:
+                   spray Residuals
+Sum of Squares  88.43787  26.05798
+Deg. of Freedom        5        66
+
+Residual standard error: 0.6283453 
+Estimated effects may be unbalanced
+> opar <- par()
+> par(mfcol = c(2,2))
+> plot(aov.spray)
+[[/code]]
+
+[[=image PlotAovSpray.jpg size="medium"]]
+= 圖一：plot(aov.spray) 所繪製的圖形
+
+[[code]]
+> par(opar)
+> termplot(aov.spray, se=TRUE, partial.resid=TRUE, rug=TRUE)
+[[/code]]
+
+[[=image TermplotAovSpray.jpg size="medium"]]
+= 圖二：Termplot(aov.spray, ...) 所繪製的圖形
+
+[[code]]
+> str(aov.spray)
+List of 13
+ $ coefficients : Named num [1:6] 3.761 0.116 -2.516 -1.596 -1.951 ...
+  ..- attr(*, "names")= chr [1:6] "(Intercept)" "sprayB" "sprayC" "sprayD" ...
+ $ residuals    : Named num [1:72] -0.598 -1.115 0.711 -0.019 -0.019 ...
+  ..- attr(*, "names")= chr [1:72] "1" "2" "3" "4" ...
+... 省略 ...
+> str(aov.spray, max.level = -1)
+List of 13
+ - attr(*, "class")= chr [1:2] "aov" "lm"
+> names(aov.spray)
+ [1] "coefficients"  "residuals"     "effects"       "rank"         
+ [5] "fitted.values" "assign"        "qr"            "df.residual"  
+ [9] "contrasts"     "xlevels"       "call"          "terms"        
+[13] "model"        
+> aov.spray$coefficients
+(Intercept)      sprayB      sprayC      sprayD      sprayE      sprayF 
+  3.7606784   0.1159530  -2.5158217  -1.5963245  -1.9512174   0.2579388 
+> str(summary(aov.spray))
+List of 1
+ $ :Classes ‘anova’ and 'data.frame':   2 obs. of  5 variables:
+  ..$ Df     : num [1:2] 5 66
+  ..$ Sum Sq : num [1:2] 88.4 26.1
+  ..$ Mean Sq: num [1:2] 17.688 0.395
+  ..$ F value: num [1:2] 44.8 NA
+  ..$ Pr(>F) : num [1:2] 6.33e-20 NA
+ - attr(*, "class")= chr [1:2] "summary.aov" "listof"
+> names(summary(aov.spray))
+NULL
+> apropos("^summary")
+ [1] "summary"                 "Summary"                
+ [3] "summary.aov"             "summary.aovlist"        
+ [5] "summary.connection"      "summary.data.frame"     
+ [7] "Summary.data.frame"      "summary.Date"           
+ [9] "Summary.Date"            "summary.default"        
+[11] "Summary.difftime"        "summary.factor"         
+[13] "Summary.factor"          "summary.glm"            
+[15] "summary.infl"            "summary.lm"             
+[17] "summary.manova"          "summary.matrix"         
+[19] "summary.mlm"             "Summary.numeric_version"
+[21] "Summary.ordered"         "summary.POSIXct"        
+[23] "Summary.POSIXct"         "summary.POSIXlt"        
+[25] "Summary.POSIXlt"         "summary.srcfile"        
+[27] "summary.srcref"          "summary.stepfun"        
+[29] "summary.table"           "summaryRprof"           
+> 
+[[/code]]

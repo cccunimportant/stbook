@@ -1,0 +1,508 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#機率分布-離散型">機率分布 (離散型)</a><ul>
+<li><a href="#簡介">簡介</a></li>
+<li><a href="#二項分布-binomial-distribution">二項分布 (Binomial distribution)</a></li>
+<li><a href="#負二項分布-netative-binomial-distribution">負二項分布 (Netative binomial distribution)</a></li>
+<li><a href="#多項分布-multinomial-distribution">多項分布 (Multinomial Distribution)</a></li>
+<li><a href="#幾何分布-geometric-distribution">幾何分布 (Geometric distribution)</a></li>
+<li><a href="#超幾何分布-hypergeometric-distribution">超幾何分布 (Hypergeometric distribution)</a></li>
+<li><a href="#布瓦松分布-poisson-distribution">布瓦松分布 (Poisson distribution)</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="機率分布-離散型"><a href="#機率分布-離散型">機率分布 (離散型)</a></h1>
+<h2 id="簡介"><a href="#簡介">簡介</a></h2>
+<p>在程式設計領域，「設計模式」是一些經常被使用到的物件樣式，而在數學領域，也同樣存在著某些「常見模式」，在機率統計領域，這些「常見模式」就是機率分布。</p>
+<p>機率分布可以分為「離散型」與「連續型」兩類，以下是一些常見的離散型機率分布。</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">離散機率模型</th>
+<th align="left">密度函數</th>
+<th align="left">R 函數名稱</th>
+<th align="left">說明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">二項分布</td>
+<td align="left"><img src="../timg/9474fc44e360.jpg" /></td>
+<td align="left">binom(n:size, p:prob)</td>
+<td align="left">n:樣本數, p:正面機率, <br/> n 次試驗中有 x 個成功的機率</td>
+</tr>
+<tr class="even">
+<td align="left">多項分布</td>
+<td align="left"><img src="../timg/8a0544157d79.jpg" /></td>
+<td align="left">multinom(n:size, p(1..k):prob)</td>
+<td align="left">n:樣本數, p[1..n]:各項的機率</td>
+</tr>
+<tr class="odd">
+<td align="left">負二項分布</td>
+<td align="left"><img src="../timg/c77b7e7c5cb0.jpg" /></td>
+<td align="left">nbinom(size, prob)</td>
+<td align="left">x:樣本數, , p:正面機率, <br/> 要得到第 r 次成功所需要的試驗次數</td>
+</tr>
+<tr class="even">
+<td align="left">幾何分布</td>
+<td align="left"><img src="../timg/5659648f10e2.jpg" /></td>
+<td align="left">geom(p:prob)</td>
+<td align="left">p: 成功機率, 第一次成功所需要的試驗次數</td>
+</tr>
+<tr class="odd">
+<td align="left">超幾何分布</td>
+<td align="left"><img src="../timg/e0b0e13f6298.jpg" /></td>
+<td align="left">hyper(N:m,n:n,r:k)</td>
+<td align="left">m:白球數量, n:黑球數量, k:抽出球數, <br/> 同二項分布，但取樣後不放回</td>
+</tr>
+<tr class="even">
+<td align="left">布瓦松分布</td>
+<td align="left"><img src="../timg/1960dc6e970a.jpg" /></td>
+<td align="left">pois(lambda)</td>
+<td align="left">k:期望值, <img src="../timg/cc7b6d325f41.jpg" /> , <br/> 在 s 時間內，事件出現平均 k 次</td>
+</tr>
+</tbody>
+</table>
+<h2 id="二項分布-binomial-distribution"><a href="#二項分布-binomial-distribution">二項分布 (Binomial distribution)</a></h2>
+<p>分布公式： <img src="../timg/7be6fde7a69a.jpg" /></p>
+<p>意義：dbinom(x; n, p)：在 n 次柏努力試驗中有 x 次成功的機率 (已知單次試驗成功機率為 p)。</p>
+<p>R 的公式：dbinom(x; n, p) = p(x) = choose(n,x) p^x (1-p)^(n-x)</p>
+<ul>
+<li>R 函數：binom(size=n:樣本數, prob=p:成功機率)</li>
+<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Binomial.html">http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Binomial.html</a></li>
+</ul>
+<p>二項定理： <img src="../timg/ee857d255892.jpg" /></p>
+<p>特性</p>
+<ol style="list-style-type: decimal">
+<li><img src="../timg/bc4e02b902b1.jpg" /></li>
+<li><img src="../timg/b54416bd544b.jpg" title="fig:" /></li>
+</ol>
+<p>動差生成函數： <img src="../timg/526a680f0b7b.jpg" /></p>
+<h3 id="r-程式範例二項分布曲線圖"><a href="#r-程式範例二項分布曲線圖">R 程式範例：二項分布曲線圖</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>n=<span class="dv">10</span>; p=<span class="fl">0.3</span>; k=<span class="kw">seq</span>(<span class="dv">0</span>,n)
+&gt;<span class="st"> </span><span class="kw">plot</span>(k, <span class="kw">dbinom</span>(k,n,p), <span class="dt">type=</span><span class="st">&#39;h&#39;</span>, <span class="dt">main=</span><span class="st">&#39;dbinom(0:20, n=10, p=0.3)&#39;</span>, <span class="dt">xlab=</span><span class="st">&#39;k&#39;</span>)
+&gt;<span class="st"> </span></code></pre>
+<div class="figure">
+<img src="../img/dbinomPlot.jpg" alt="二項分布的圖形" /><p class="caption">二項分布的圖形</p>
+</div>
+<h3 id="r-程式範例定理-常態分配可用來逼近二項分布"><a href="#r-程式範例定理-常態分配可用來逼近二項分布">R 程式範例：(定理) 常態分配可用來逼近二項分布</a></h3>
+<p>假如 n 夠大的話，通常只要 n*min(p, 1-p) &gt; 5 就可以採用下列逼近方式</p>
+<div class="figure">
+<img src="../timg/fb966d6547cb.jpg" />
+</div>
+<p>原始程式：</p>
+<pre class="sourceCode R"><code class="sourceCode r">op=<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
+n=<span class="dv">3</span>; p=<span class="fl">0.3</span>; k=<span class="kw">seq</span>(<span class="dv">0</span>,n)
+<span class="kw">plot</span>(k, <span class="kw">dbinom</span>(k,n,p), <span class="dt">type=</span><span class="st">&#39;h&#39;</span>, <span class="dt">main=</span><span class="st">&#39;dbinom(n=3, p=0.3)&#39;</span>, <span class="dt">xlab=</span><span class="st">&#39;k&#39;</span>)
+<span class="kw">curve</span>(<span class="kw">dnorm</span>(x,n*p,<span class="kw">sqrt</span>(n*p*(<span class="dv">1</span>-p))), <span class="dt">add=</span>T, <span class="dt">col=</span><span class="st">&#39;blue&#39;</span>)
+
+n=<span class="dv">5</span>; p=<span class="fl">0.3</span>; k=<span class="kw">seq</span>(<span class="dv">0</span>,n)
+<span class="kw">plot</span>(k, <span class="kw">dbinom</span>(k,n,p), <span class="dt">type=</span><span class="st">&#39;h&#39;</span>, <span class="dt">main=</span><span class="st">&#39;dbinom(n=5, p=0.3)&#39;</span>, <span class="dt">xlab=</span><span class="st">&#39;k&#39;</span>)
+<span class="kw">curve</span>(<span class="kw">dnorm</span>(x,n*p,<span class="kw">sqrt</span>(n*p*(<span class="dv">1</span>-p))), <span class="dt">add=</span>T, <span class="dt">col=</span><span class="st">&#39;blue&#39;</span>)
+
+n=<span class="dv">10</span>; p=<span class="fl">0.3</span>; k=<span class="kw">seq</span>(<span class="dv">0</span>,n)
+<span class="kw">plot</span>(k, <span class="kw">dbinom</span>(k,n,p), <span class="dt">type=</span><span class="st">&#39;h&#39;</span>, <span class="dt">main=</span><span class="st">&#39;dbinom(n=10, p=0.3)&#39;</span>, <span class="dt">xlab=</span><span class="st">&#39;k&#39;</span>)
+<span class="kw">curve</span>(<span class="kw">dnorm</span>(x,n*p,<span class="kw">sqrt</span>(n*p*(<span class="dv">1</span>-p))), <span class="dt">add=</span>T, <span class="dt">col=</span><span class="st">&#39;blue&#39;</span>)
+
+n=<span class="dv">100</span>; p=<span class="fl">0.3</span>; k=<span class="kw">seq</span>(<span class="dv">0</span>,n)
+<span class="kw">plot</span>(k, <span class="kw">dbinom</span>(k,n,p), <span class="dt">type=</span><span class="st">&#39;h&#39;</span>, <span class="dt">main=</span><span class="st">&#39;dbinom(n=100, p=0.3)&#39;</span>, <span class="dt">xlab=</span><span class="st">&#39;k&#39;</span>)
+<span class="kw">curve</span>(<span class="kw">dnorm</span>(x,n*p,<span class="kw">sqrt</span>(n*p*(<span class="dv">1</span>-p))), <span class="dt">add=</span>T, <span class="dt">col=</span><span class="st">&#39;blue&#39;</span>)</code></pre>
+<p>輸出圖形：</p>
+<div class="figure">
+<img src="../img/dbinomPlot4.jpg" />
+</div>
+<h3 id="r-程式範例二項分布統計圖"><a href="#r-程式範例二項分布統計圖">R 程式範例：二項分布統計圖</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x =<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">100000</span>, <span class="dv">100</span>, <span class="fl">0.8</span>)
+&gt;<span class="st"> </span><span class="kw">hist</span>(x, <span class="dt">nclas=</span><span class="kw">max</span>(x)-<span class="kw">min</span>(x)+<span class="dv">1</span>)
+&gt;<span class="st"> </span></code></pre>
+<div class="figure">
+<img src="../img/rbinomHist.jpg" />
+</div>
+<h3 id="r-程式範例四白努力試驗"><a href="#r-程式範例四白努力試驗">R 程式範例四：白努力試驗</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>y &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">50</span>, <span class="dv">25</span>, .<span class="dv">4</span>)
+&gt;<span class="st"> </span>m1 &lt;-<span class="st"> </span><span class="kw">mean</span>(y)
+&gt;<span class="st"> </span>m2 &lt;-<span class="st"> </span><span class="kw">sum</span>(y) /<span class="st"> </span><span class="dv">25</span>
+&gt;<span class="st"> </span>y
+ [<span class="dv">1</span>] <span class="dv">12</span>  <span class="dv">9</span>  <span class="dv">9</span>  <span class="dv">9</span> <span class="dv">12</span> <span class="dv">11</span> <span class="dv">10</span> <span class="dv">11</span>  <span class="dv">5</span>  <span class="dv">7</span>  <span class="dv">8</span>  <span class="dv">7</span> <span class="dv">16</span>  <span class="dv">6</span> <span class="dv">12</span> <span class="dv">13</span>  <span class="dv">9</span> <span class="dv">12</span>  <span class="dv">9</span> <span class="dv">13</span>  <span class="dv">7</span> <span class="dv">12</span> <span class="dv">15</span>  <span class="dv">8</span>
+[<span class="dv">25</span>]  <span class="dv">9</span>  <span class="dv">7</span> <span class="dv">10</span>  <span class="dv">4</span> <span class="dv">10</span> <span class="dv">10</span>  <span class="dv">9</span> <span class="dv">10</span> <span class="dv">13</span>  <span class="dv">8</span> <span class="dv">10</span> <span class="dv">14</span>  <span class="dv">8</span> <span class="dv">11</span> <span class="dv">11</span> <span class="dv">10</span> <span class="dv">10</span>  <span class="dv">9</span>  <span class="dv">7</span> <span class="dv">13</span>  <span class="dv">5</span>  <span class="dv">5</span> <span class="dv">11</span> <span class="dv">13</span>
+[<span class="dv">49</span>]  <span class="dv">9</span>  <span class="dv">8</span>
+&gt;<span class="st"> </span>m1
+[<span class="dv">1</span>] <span class="fl">9.72</span>
+&gt;<span class="st"> </span>m2
+[<span class="dv">1</span>] <span class="fl">19.44</span>
+&gt;<span class="st"> </span>m3 &lt;-<span class="st"> </span><span class="kw">sum</span> ( (y-m1)^<span class="dv">2</span> ) /<span class="st"> </span><span class="dv">50</span>
+&gt;<span class="st"> </span>m3
+[<span class="dv">1</span>] <span class="fl">6.8816</span>
+&gt;<span class="st"> </span></code></pre>
+<p>說明： y 中的每個數字，代表模擬投擲 25 次白努力試驗後，成功的次數有幾次。因此 rbinom(50, 25, .4) 總共進行了 50*25 次白努力試驗。</p>
+<h3 id="參考文獻"><a href="#參考文獻">參考文獻</a></h3>
+<ul>
+<li>Distributions in the stats package -- <a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Distributions.html">http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Distributions.html</a></li>
+<li>Wikipedia:二項分佈 -- <a href="http://zh.wikipedia.org/wiki/%E4%BA%8C%E9%A0%85%E5%88%86%E4%BD%88">http://zh.wikipedia.org/wiki/%E4%BA%8C%E9%A0%85%E5%88%86%E4%BD%88</a></li>
+<li>Wikipedia:Binomial_distribution -- <a href="http://en.wikipedia.org/wiki/Binomial_distribution">http://en.wikipedia.org/wiki/Binomial_distribution</a></li>
+</ul>
+<h2 id="負二項分布-netative-binomial-distribution"><a href="#負二項分布-netative-binomial-distribution">負二項分布 (Netative binomial distribution)</a></h2>
+<p>公式： <img src="../timg/ac4a18c96a0b.jpg" /></p>
+<p>範圍：r=1,2,3,.... ; x= r, r+1, r+2, ....</p>
+<p>意義：要得到第 r 次成功所需要的試驗次數 x;</p>
+<p>R 函數： nbinom(size, prob) ; r:size:成功數, p:prob:成功機率</p>
+<ul>
+<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/NegBinomial.html">http://stat.ethz.ch/R-manual/R-patched/library/stats/html/NegBinomial.html</a></li>
+</ul>
+<p>特性</p>
+<ol style="list-style-type: decimal">
+<li><img src="../timg/1ff0b1f39258.jpg" /></li>
+<li><img src="../timg/933590aefdd6.jpg" title="fig:" /></li>
+</ol>
+<p>動差生成函數： <img src="../timg/bd10f9db1026.jpg" /></p>
+<h3 id="r-程式範例負二項分布曲線圖"><a href="#r-程式範例負二項分布曲線圖">R 程式範例：負二項分布曲線圖</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>n=<span class="dv">20</span>; p=<span class="fl">0.4</span>; k=<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">50</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(k, <span class="kw">dnbinom</span>(k,n,p), <span class="dt">type=</span><span class="st">&#39;h&#39;</span>, <span class="dt">main=</span><span class="st">&#39;dnbinom(k,n=20,p=0.4)&#39;</span>, <span class="dt">xlab=</span><span class="st">&#39;k&#39;</span>)
+&gt;<span class="st">  </span></code></pre>
+<div class="figure">
+<img src="../img/dnbinomPlot.jpg" />
+</div>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x =<span class="st"> </span><span class="kw">rnbinom</span>(<span class="dv">100000</span>, <span class="dv">100</span>, <span class="fl">0.8</span>)
+&gt;<span class="st"> </span><span class="kw">hist</span>(x, <span class="dt">nclass=</span><span class="kw">max</span>(x)-<span class="kw">min</span>(x)+<span class="dv">1</span>)
+&gt;<span class="st"> </span></code></pre>
+<div class="figure">
+<img src="../img/rnbinomHist.jpg" />
+</div>
+<h3 id="r-程式範例-進階"><a href="#r-程式範例-進階">R 程式範例 (進階)</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r"><span class="kw">require</span>(graphics)
+x &lt;-<span class="st"> </span><span class="dv">0</span>:<span class="dv">11</span>
+<span class="kw">dnbinom</span>(x, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">prob =</span> <span class="dv">1</span>/<span class="dv">2</span>) *<span class="st"> </span><span class="dv">2</span>^(<span class="dv">1</span> +<span class="st"> </span>x) <span class="co"># == 1</span>
+<span class="dv">126</span> /<span class="st">  </span><span class="kw">dnbinom</span>(<span class="dv">0</span>:<span class="dv">8</span>, <span class="dt">size  =</span> <span class="dv">2</span>, <span class="dt">prob  =</span> <span class="dv">1</span>/<span class="dv">2</span>) <span class="co">#- theoretically integer</span>
+
+## Cumulative (&#39;p&#39;) = Sum of discrete prob.s (&#39;d&#39;);  Relative error :
+<span class="kw">summary</span>(<span class="dv">1</span> -<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">dnbinom</span>(x, <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">prob =</span> <span class="dv">1</span>/<span class="dv">2</span>)) /
+<span class="st">                  </span><span class="kw">pnbinom</span>(x, <span class="dt">size  =</span> <span class="dv">2</span>, <span class="dt">prob =</span> <span class="dv">1</span>/<span class="dv">2</span>))
+
+x &lt;-<span class="st"> </span><span class="dv">0</span>:<span class="dv">15</span>
+size &lt;-<span class="st"> </span>(<span class="dv">1</span>:<span class="dv">20</span>)/<span class="dv">4</span>
+<span class="kw">persp</span>(x,size, dnb &lt;-<span class="st"> </span><span class="kw">outer</span>(x, size, function(x,s) <span class="kw">dnbinom</span>(x,s, <span class="dt">prob=</span> <span class="fl">0.4</span>)),
+      <span class="dt">xlab =</span> <span class="st">&quot;x&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;s&quot;</span>, <span class="dt">zlab=</span><span class="st">&quot;density&quot;</span>, <span class="dt">theta =</span> <span class="dv">150</span>)
+<span class="kw">title</span>(tit &lt;-<span class="st"> &quot;negative binomial density(x,s, pr = 0.4)  vs.  x &amp; s&quot;</span>)
+
+<span class="kw">image</span>  (x,size, <span class="kw">log10</span>(dnb), <span class="dt">main=</span> <span class="kw">paste</span>(<span class="st">&quot;log [&quot;</span>,tit,<span class="st">&quot;]&quot;</span>))
+<span class="kw">contour</span>(x,size, <span class="kw">log10</span>(dnb),<span class="dt">add=</span><span class="ot">TRUE</span>)
+
+## Alternative parametrization
+x1 &lt;-<span class="st"> </span><span class="kw">rnbinom</span>(<span class="dv">500</span>, <span class="dt">mu =</span> <span class="dv">4</span>, <span class="dt">size =</span> <span class="dv">1</span>)
+x2 &lt;-<span class="st"> </span><span class="kw">rnbinom</span>(<span class="dv">500</span>, <span class="dt">mu =</span> <span class="dv">4</span>, <span class="dt">size =</span> <span class="dv">10</span>)
+x3 &lt;-<span class="st"> </span><span class="kw">rnbinom</span>(<span class="dv">500</span>, <span class="dt">mu =</span> <span class="dv">4</span>, <span class="dt">size =</span> <span class="dv">100</span>)
+h1 &lt;-<span class="st"> </span><span class="kw">hist</span>(x1, <span class="dt">breaks =</span> <span class="dv">20</span>, <span class="dt">plot =</span> <span class="ot">FALSE</span>)
+h2 &lt;-<span class="st"> </span><span class="kw">hist</span>(x2, <span class="dt">breaks =</span> h1$breaks, <span class="dt">plot =</span> <span class="ot">FALSE</span>)
+h3 &lt;-<span class="st"> </span><span class="kw">hist</span>(x3, <span class="dt">breaks =</span> h1$breaks, <span class="dt">plot =</span> <span class="ot">FALSE</span>)
+<span class="kw">barplot</span>(<span class="kw">rbind</span>(h1 ![](../timg/d7d2ac3ced7f.jpg) counts, h3$counts),
+        <span class="dt">beside =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;cyan&quot;</span>),
+        <span class="dt">names.arg =</span> <span class="kw">round</span>(h1 ![](../timg/728bbfdb9a46.jpg) breaks)])<span class="er">)</span></code></pre>
+<p>執行結果：</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">require</span>(graphics)
+&gt;<span class="st"> </span>x &lt;-<span class="st"> </span><span class="dv">0</span>:<span class="dv">11</span>
+&gt;<span class="st"> </span><span class="kw">dnbinom</span>(x, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">prob =</span> <span class="dv">1</span>/<span class="dv">2</span>) *<span class="st"> </span><span class="dv">2</span>^(<span class="dv">1</span> +<span class="st"> </span>x) <span class="co"># == 1</span>
+ [<span class="dv">1</span>] <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span>
+&gt;<span class="st"> </span><span class="dv">126</span> /<span class="st">  </span><span class="kw">dnbinom</span>(<span class="dv">0</span>:<span class="dv">8</span>, <span class="dt">size  =</span> <span class="dv">2</span>, <span class="dt">prob  =</span> <span class="dv">1</span>/<span class="dv">2</span>) <span class="co">#- theoretically integer</span>
+[<span class="dv">1</span>]   <span class="fl">504.0</span>   <span class="fl">504.0</span>   <span class="fl">672.0</span>  <span class="fl">1008.0</span>  <span class="fl">1612.8</span>  <span class="fl">2688.0</span>  <span class="fl">4608.0</span>  <span class="fl">8064.0</span> <span class="fl">14336.0</span>
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span>## Cumulative (&#39;p&#39;) = Sum of discrete prob.s (&#39;d&#39;);  Relative error :
+<span class="er">&gt;</span><span class="st"> </span><span class="kw">summary</span>(<span class="dv">1</span> -<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">dnbinom</span>(x, <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">prob =</span> <span class="dv">1</span>/<span class="dv">2</span>)) /
++<span class="st">                   </span><span class="kw">pnbinom</span>(x, <span class="dt">size  =</span> <span class="dv">2</span>, <span class="dt">prob =</span> <span class="dv">1</span>/<span class="dv">2</span>))
+     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+-<span class="fl">2.22e-16</span> -<span class="fl">2.22e-16</span> -<span class="fl">2.22e-16</span> -<span class="fl">1.48e-16</span>  <span class="fl">0.00e+00</span>  <span class="fl">0.00e+00</span> 
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span>x &lt;-<span class="st"> </span><span class="dv">0</span>:<span class="dv">15</span>
+&gt;<span class="st"> </span>size &lt;-<span class="st"> </span>(<span class="dv">1</span>:<span class="dv">20</span>)/<span class="dv">4</span>
+&gt;<span class="st"> </span><span class="kw">persp</span>(x,size, dnb &lt;-<span class="st"> </span><span class="kw">outer</span>(x, size, function(x,s) <span class="kw">dnbinom</span>(x,s, <span class="dt">prob=</span> <span class="fl">0.4</span>)),
++<span class="st">       </span><span class="dt">xlab =</span> <span class="st">&quot;x&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;s&quot;</span>, <span class="dt">zlab=</span><span class="st">&quot;density&quot;</span>, <span class="dt">theta =</span> <span class="dv">150</span>)
+&gt;<span class="st"> </span><span class="kw">title</span>(tit &lt;-<span class="st"> &quot;negative binomial density(x,s, pr = 0.4)  vs.  x &amp; s&quot;</span>)
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span><span class="kw">image</span>  (x,size, <span class="kw">log10</span>(dnb), <span class="dt">main=</span> <span class="kw">paste</span>(<span class="st">&quot;log [&quot;</span>,tit,<span class="st">&quot;]&quot;</span>))
+&gt;<span class="st"> </span><span class="kw">contour</span>(x,size, <span class="kw">log10</span>(dnb),<span class="dt">add=</span><span class="ot">TRUE</span>)
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span>## Alternative parametrization
+<span class="er">&gt;</span><span class="st"> </span>x1 &lt;-<span class="st"> </span><span class="kw">rnbinom</span>(<span class="dv">500</span>, <span class="dt">mu =</span> <span class="dv">4</span>, <span class="dt">size =</span> <span class="dv">1</span>)
+&gt;<span class="st"> </span>x2 &lt;-<span class="st"> </span><span class="kw">rnbinom</span>(<span class="dv">500</span>, <span class="dt">mu =</span> <span class="dv">4</span>, <span class="dt">size =</span> <span class="dv">10</span>)
+&gt;<span class="st"> </span>x3 &lt;-<span class="st"> </span><span class="kw">rnbinom</span>(<span class="dv">500</span>, <span class="dt">mu =</span> <span class="dv">4</span>, <span class="dt">size =</span> <span class="dv">100</span>)
+&gt;<span class="st"> </span>h1 &lt;-<span class="st"> </span><span class="kw">hist</span>(x1, <span class="dt">breaks =</span> <span class="dv">20</span>, <span class="dt">plot =</span> <span class="ot">FALSE</span>)
+&gt;<span class="st"> </span>h2 &lt;-<span class="st"> </span><span class="kw">hist</span>(x2, <span class="dt">breaks =</span> h1$breaks, <span class="dt">plot =</span> <span class="ot">FALSE</span>)
+&gt;<span class="st"> </span>h3 &lt;-<span class="st"> </span><span class="kw">hist</span>(x3, <span class="dt">breaks =</span> h1$breaks, <span class="dt">plot =</span> <span class="ot">FALSE</span>)
+&gt;<span class="st"> </span><span class="kw">barplot</span>(<span class="kw">rbind</span>(h1 ![](../timg/d7d2ac3ced7f.jpg) counts, h3$counts),
++<span class="st">         </span><span class="dt">beside =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;cyan&quot;</span>),
++<span class="st">         </span><span class="dt">names.arg =</span> <span class="kw">round</span>(h1 ![](../timg/728bbfdb9a46.jpg) breaks)])<span class="er">)</span></code></pre>
+<p>繪圖結果：</p>
+<div class="figure">
+<img src="../img/nbinom.jpg" />
+</div>
+<h3 id="參考文獻-1"><a href="#參考文獻-1">參考文獻</a></h3>
+<ul>
+<li><a href="http://zh.wikipedia.org/wiki/%E8%B2%A0%E4%BA%8C%E9%A0%85%E5%88%86%E4%BD%88">Wikipedia:負二項分布</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Negative_binomial_distribution">Wikipedia:Negative_binomial_distribution</a></li>
+</ul>
+<h2 id="多項分布-multinomial-distribution"><a href="#多項分布-multinomial-distribution">多項分布 (Multinomial Distribution)</a></h2>
+<p>分布公式： <img src="../timg/ffcfc83a10ec.jpg" /></p>
+<p>意義：n 次試驗中各種情況分別出現 x1, x2, ..., xk 次的機率</p>
+<p>範圍： <img src="../timg/0c6e0602cb12.jpg" /></p>
+<p>R 函數：multinom(size, prob) ; n:size:樣本數, p:prob:各種情況的機率</p>
+<ul>
+<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Multinom.html">http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Multinom.html</a></li>
+</ul>
+<h3 id="r-函數範例"><a href="#r-函數範例">R 函數範例：</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r"><span class="kw">rmultinom</span>(<span class="dv">10</span>, <span class="dt">size =</span> <span class="dv">12</span>, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.1</span>,<span class="fl">0.2</span>,<span class="fl">0.8</span>))
+
+pr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">6</span>,<span class="dv">10</span>) <span class="co"># normalization not necessary for generation</span>
+<span class="kw">rmultinom</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dt">prob =</span> pr)
+
+## all possible outcomes of Multinom(N = 3, K = 3)
+X &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">as.matrix</span>(<span class="kw">expand.grid</span>(<span class="dv">0</span>:<span class="dv">3</span>, <span class="dv">0</span>:<span class="dv">3</span>))); X &lt;-<span class="st"> </span>X[, <span class="kw">colSums</span>(X) &lt;=<span class="st"> </span><span class="dv">3</span>]
+X &lt;-<span class="st"> </span><span class="kw">rbind</span>(X, <span class="dv">3</span>:<span class="dv">3</span> -<span class="st"> </span><span class="kw">colSums</span>(X)); <span class="kw">dimnames</span>(X) &lt;-<span class="st"> </span><span class="kw">list</span>(letters[<span class="dv">1</span>:<span class="dv">3</span>], <span class="ot">NULL</span>)
+X
+<span class="kw">round</span>(<span class="kw">apply</span>(X, <span class="dv">2</span>, function(x) <span class="kw">dmultinom</span>(x, <span class="dt">prob =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>))), <span class="dv">3</span>)</code></pre>
+<p>執行結果：</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">rmultinom</span>(<span class="dv">10</span>, <span class="dt">size =</span> <span class="dv">12</span>, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.1</span>,<span class="fl">0.2</span>,<span class="fl">0.8</span>))
+     [,<span class="dv">1</span>] [,<span class="dv">2</span>] [,<span class="dv">3</span>] [,<span class="dv">4</span>] [,<span class="dv">5</span>] [,<span class="dv">6</span>] [,<span class="dv">7</span>] [,<span class="dv">8</span>] [,<span class="dv">9</span>] [,<span class="dv">10</span>]
+[<span class="dv">1</span>,]    <span class="dv">1</span>    <span class="dv">1</span>    <span class="dv">1</span>    <span class="dv">0</span>    <span class="dv">2</span>    <span class="dv">0</span>    <span class="dv">1</span>    <span class="dv">1</span>    <span class="dv">0</span>     <span class="dv">2</span>
+[<span class="dv">2</span>,]    <span class="dv">1</span>    <span class="dv">2</span>    <span class="dv">3</span>    <span class="dv">0</span>    <span class="dv">3</span>    <span class="dv">0</span>    <span class="dv">2</span>    <span class="dv">1</span>    <span class="dv">1</span>     <span class="dv">2</span>
+[<span class="dv">3</span>,]   <span class="dv">10</span>    <span class="dv">9</span>    <span class="dv">8</span>   <span class="dv">12</span>    <span class="dv">7</span>   <span class="dv">12</span>    <span class="dv">9</span>   <span class="dv">10</span>   <span class="dv">11</span>     <span class="dv">8</span>
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span>pr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">6</span>,<span class="dv">10</span>) <span class="co"># normalization not necessary for generation</span>
+&gt;<span class="st"> </span><span class="kw">rmultinom</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dt">prob =</span> pr)
+     [,<span class="dv">1</span>] [,<span class="dv">2</span>] [,<span class="dv">3</span>] [,<span class="dv">4</span>] [,<span class="dv">5</span>] [,<span class="dv">6</span>] [,<span class="dv">7</span>] [,<span class="dv">8</span>] [,<span class="dv">9</span>] [,<span class="dv">10</span>]
+[<span class="dv">1</span>,]    <span class="dv">1</span>    <span class="dv">1</span>    <span class="dv">2</span>    <span class="dv">2</span>    <span class="dv">1</span>    <span class="dv">1</span>    <span class="dv">2</span>    <span class="dv">1</span>    <span class="dv">1</span>     <span class="dv">2</span>
+[<span class="dv">2</span>,]    <span class="dv">2</span>    <span class="dv">2</span>    <span class="dv">2</span>    <span class="dv">2</span>    <span class="dv">6</span>    <span class="dv">7</span>    <span class="dv">3</span>    <span class="dv">5</span>    <span class="dv">4</span>     <span class="dv">4</span>
+[<span class="dv">3</span>,]    <span class="dv">9</span>    <span class="dv">4</span>    <span class="dv">8</span>    <span class="dv">4</span>    <span class="dv">8</span>    <span class="dv">8</span>    <span class="dv">4</span>    <span class="dv">7</span>    <span class="dv">3</span>     <span class="dv">6</span>
+[<span class="dv">4</span>,]    <span class="dv">8</span>   <span class="dv">13</span>    <span class="dv">8</span>   <span class="dv">12</span>    <span class="dv">5</span>    <span class="dv">4</span>   <span class="dv">11</span>    <span class="dv">7</span>   <span class="dv">12</span>     <span class="dv">8</span>
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span>## all possible outcomes of Multinom(N = 3, K = 3)
+<span class="er">&gt;</span><span class="st"> </span>X &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">as.matrix</span>(<span class="kw">expand.grid</span>(<span class="dv">0</span>:<span class="dv">3</span>, <span class="dv">0</span>:<span class="dv">3</span>))); X &lt;-<span class="st"> </span>X[, <span class="kw">colSums</span>(X) &lt;=<span class="st"> </span><span class="dv">3</span>]
+&gt;<span class="st"> </span>X &lt;-<span class="st"> </span><span class="kw">rbind</span>(X, <span class="dv">3</span>:<span class="dv">3</span> -<span class="st"> </span><span class="kw">colSums</span>(X)); <span class="kw">dimnames</span>(X) &lt;-<span class="st"> </span><span class="kw">list</span>(letters[<span class="dv">1</span>:<span class="dv">3</span>], <span class="ot">NULL</span>)
+&gt;<span class="st"> </span>X
+  [,<span class="dv">1</span>] [,<span class="dv">2</span>] [,<span class="dv">3</span>] [,<span class="dv">4</span>] [,<span class="dv">5</span>] [,<span class="dv">6</span>] [,<span class="dv">7</span>] [,<span class="dv">8</span>] [,<span class="dv">9</span>] [,<span class="dv">10</span>]
+a    <span class="dv">0</span>    <span class="dv">1</span>    <span class="dv">2</span>    <span class="dv">3</span>    <span class="dv">0</span>    <span class="dv">1</span>    <span class="dv">2</span>    <span class="dv">0</span>    <span class="dv">1</span>     <span class="dv">0</span>
+b    <span class="dv">0</span>    <span class="dv">0</span>    <span class="dv">0</span>    <span class="dv">0</span>    <span class="dv">1</span>    <span class="dv">1</span>    <span class="dv">1</span>    <span class="dv">2</span>    <span class="dv">2</span>     <span class="dv">3</span>
+c    <span class="dv">3</span>    <span class="dv">2</span>    <span class="dv">1</span>    <span class="dv">0</span>    <span class="dv">2</span>    <span class="dv">1</span>    <span class="dv">0</span>    <span class="dv">1</span>    <span class="dv">0</span>     <span class="dv">0</span>
+&gt;<span class="st"> </span><span class="kw">round</span>(<span class="kw">apply</span>(X, <span class="dv">2</span>, function(x) <span class="kw">dmultinom</span>(x, <span class="dt">prob =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>))), <span class="dv">3</span>)
+ [<span class="dv">1</span>] <span class="fl">0.244</span> <span class="fl">0.146</span> <span class="fl">0.029</span> <span class="fl">0.002</span> <span class="fl">0.293</span> <span class="fl">0.117</span> <span class="fl">0.012</span> <span class="fl">0.117</span> <span class="fl">0.023</span> <span class="fl">0.016</span>
+&gt;<span class="st"> </span></code></pre>
+<h2 id="幾何分布-geometric-distribution"><a href="#幾何分布-geometric-distribution">幾何分布 (Geometric distribution)</a></h2>
+<div class="figure">
+<img src="../timg/4596a6c90794.jpg" />
+</div>
+<p>範圍：r=1,2,3,.... ; x= r, r+1, r+2, ....</p>
+<p>意義：第一次成功所需要的試驗次數。</p>
+<p>R 函數： geom(prob) ; p:prob:成功機率, x-1:size:失敗次數, q:失敗機率</p>
+<ul>
+<li>R 的公式： <img src="../timg/0d77b33676f5.jpg" /></li>
+<li>R 當中的 x 代表失敗次數，而非第一次成功的次數，因此 R 當中的 x 相當於上式中的 (x-1)</li>
+<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Geometric.html">http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Geometric.html</a></li>
+</ul>
+<p>特性：</p>
+<ol style="list-style-type: decimal">
+<li><img src="../timg/19aff995f75e.jpg" /></li>
+<li><img src="../timg/9fb84c80d91d.jpg" title="fig:" /></li>
+</ol>
+<p>動差生成函數： <img src="../timg/e0090dd5a203.jpg" /></p>
+<h3 id="r-程式範例曲線圖"><a href="#r-程式範例曲線圖">R 程式範例：曲線圖</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">p=<span class="fl">0.7</span>; k=<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">10</span>)
+<span class="kw">plot</span>(k, <span class="kw">dgeom</span>(k, p), <span class="dt">type=</span><span class="st">&#39;h&#39;</span>, <span class="dt">main=</span><span class="st">&#39;dgeom(p=0.5)&#39;</span>, <span class="dt">xlab=</span><span class="st">&#39;k&#39;</span>)</code></pre>
+<p><a href="../img/dgeomPlot.jpg"></a></p>
+<h3 id="r-程式範例"><a href="#r-程式範例">R 程式範例：</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r"><span class="kw">qgeom</span>((<span class="dv">1</span>:<span class="dv">9</span>)/<span class="dv">10</span>, <span class="dt">prob =</span> .<span class="dv">2</span>)
+Ni &lt;-<span class="st"> </span><span class="kw">rgeom</span>(<span class="dv">20</span>, <span class="dt">prob =</span> <span class="dv">1</span>/<span class="dv">4</span>); <span class="kw">table</span>(<span class="kw">factor</span>(Ni, <span class="dv">0</span>:<span class="kw">max</span>(Ni)))</code></pre>
+<p>執行結果：</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">qgeom</span>((<span class="dv">1</span>:<span class="dv">9</span>)/<span class="dv">10</span>, <span class="dt">prob =</span> .<span class="dv">2</span>)
+[<span class="dv">1</span>]  <span class="dv">0</span>  <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">2</span>  <span class="dv">3</span>  <span class="dv">4</span>  <span class="dv">5</span>  <span class="dv">7</span> <span class="dv">10</span>
+&gt;<span class="st"> </span>Ni &lt;-<span class="st"> </span><span class="kw">rgeom</span>(<span class="dv">20</span>, <span class="dt">prob =</span> <span class="dv">1</span>/<span class="dv">4</span>); <span class="kw">table</span>(<span class="kw">factor</span>(Ni, <span class="dv">0</span>:<span class="kw">max</span>(Ni)))
+
+ <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">2</span>  <span class="dv">3</span>  <span class="dv">4</span>  <span class="dv">5</span>  <span class="dv">6</span>  <span class="dv">7</span>  <span class="dv">8</span>  <span class="dv">9</span> <span class="dv">10</span> <span class="dv">11</span> <span class="dv">12</span> <span class="dv">13</span> <span class="dv">14</span> <span class="dv">15</span> <span class="dv">16</span> <span class="dv">17</span> 
+ <span class="dv">4</span>  <span class="dv">5</span>  <span class="dv">3</span>  <span class="dv">2</span>  <span class="dv">0</span>  <span class="dv">3</span>  <span class="dv">1</span>  <span class="dv">0</span>  <span class="dv">0</span>  <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">0</span>  <span class="dv">0</span>  <span class="dv">0</span>  <span class="dv">0</span>  <span class="dv">0</span>  <span class="dv">0</span>  <span class="dv">1</span> 
+&gt;<span class="st"> </span></code></pre>
+<h3 id="參考"><a href="#參考">參考</a></h3>
+<ul>
+<li><a href="http://zh.wikipedia.org/wiki/%E5%B9%BE%E4%BD%95%E5%88%86%E4%BD%88">Wikipedia:幾何分佈</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Geometric_distribution">Wikipedia:Geometric_distribution</a></li>
+</ul>
+<h2 id="超幾何分布-hypergeometric-distribution"><a href="#超幾何分布-hypergeometric-distribution">超幾何分布 (Hypergeometric distribution)</a></h2>
+<div class="figure">
+<img src="../timg/a6d8f069bf9d.jpg" />
+</div>
+<p>意義：N 個球中有白球有 r 個，黑球 N-r 個，取出 n 個球，其中有 x 個白球的機率; (取後不放回)</p>
+<p>R 函數： hyper(m,n,k) = choose(m, x) choose(n, k-x) / choose(m+n, k)</p>
+<ul>
+<li>R 函數的意義：m+n 個球中有白球有 m 個，黑球 n 個，取出 k 個球，其中有 x 個白球的機率; (取後不放回)</li>
+<li>R 的網址：http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Hypergeometric.html</li>
+<li>課本與 R 之間對應公式：N=&gt;m+n; n=&gt;k; r=&gt;m</li>
+<li>R 的公式： <img src="../timg/f6f5ab119565.jpg" /></li>
+</ul>
+<p>特性</p>
+<ol style="list-style-type: decimal">
+<li><img src="../timg/dd9e9d127e70.jpg" /></li>
+<li><img src="../timg/2256cd7515c8.jpg" title="fig:" /></li>
+</ol>
+<p>動差生成函數： <img src="../timg/7466dac38750.jpg" /></p>
+<h3 id="r-程式範例曲線圖-1"><a href="#r-程式範例曲線圖-1">R 程式範例：曲線圖</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">m=<span class="dv">10</span>; n=<span class="dv">5</span>; k=<span class="dv">8</span>
+x=<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">10</span>)
+<span class="kw">plot</span>(x, <span class="kw">dhyper</span>(x, m, n, k), <span class="dt">type=</span><span class="st">&#39;h&#39;</span>, <span class="dt">main=</span><span class="st">&#39;dhyper(m=10,n=5,k=8)&#39;</span>, <span class="dt">xlab=</span><span class="st">&#39;x&#39;</span>)</code></pre>
+<div class="figure">
+<img src="../img/dhyperPlot.jpg" />
+</div>
+<h3 id="r-程式範例-1"><a href="#r-程式範例-1">R 程式範例：</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">m &lt;-<span class="st"> </span><span class="dv">10</span>; n &lt;-<span class="st"> </span><span class="dv">7</span>; k &lt;-<span class="st"> </span><span class="dv">8</span>
+x &lt;-<span class="st"> </span><span class="dv">0</span>:(k<span class="dv">+1</span>)
+<span class="kw">rbind</span>(<span class="kw">phyper</span>(x, m, n, k), <span class="kw">dhyper</span>(x, m, n, k))
+<span class="kw">all</span>(<span class="kw">phyper</span>(x, m, n, k) ==<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">dhyper</span>(x, m, n, k)))<span class="co"># FALSE</span>
+## but error is very small:
+<span class="kw">signif</span>(<span class="kw">phyper</span>(x, m, n, k) -<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">dhyper</span>(x, m, n, k)), <span class="dt">digits=</span><span class="dv">3</span>)</code></pre>
+<p>執行結果：</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>m &lt;-<span class="st"> </span><span class="dv">10</span>; n &lt;-<span class="st"> </span><span class="dv">7</span>; k &lt;-<span class="st"> </span><span class="dv">8</span>
+&gt;<span class="st"> </span>x &lt;-<span class="st"> </span><span class="dv">0</span>:(k<span class="dv">+1</span>)
+&gt;<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">phyper</span>(x, m, n, k), <span class="kw">dhyper</span>(x, m, n, k))
+     [,<span class="dv">1</span>]         [,<span class="dv">2</span>]       [,<span class="dv">3</span>]     [,<span class="dv">4</span>]      [,<span class="dv">5</span>]      [,<span class="dv">6</span>]      [,<span class="dv">7</span>]
+[<span class="dv">1</span>,]    <span class="dv">0</span> <span class="fl">0.0004113534</span> <span class="fl">0.01336898</span> <span class="fl">0.117030</span> <span class="fl">0.4193747</span> <span class="fl">0.7821884</span> <span class="fl">0.9635952</span>
+[<span class="dv">2</span>,]    <span class="dv">0</span> <span class="fl">0.0004113534</span> <span class="fl">0.01295763</span> <span class="fl">0.103661</span> <span class="fl">0.3023447</span> <span class="fl">0.3628137</span> <span class="fl">0.1814068</span>
+           [,<span class="dv">8</span>]       [,<span class="dv">9</span>] [,<span class="dv">10</span>]
+[<span class="dv">1</span>,] <span class="fl">0.99814891</span> <span class="fl">1.00000000</span>     <span class="dv">1</span>
+[<span class="dv">2</span>,] <span class="fl">0.03455368</span> <span class="fl">0.00185109</span>     <span class="dv">0</span>
+&gt;<span class="st"> </span><span class="kw">all</span>(<span class="kw">phyper</span>(x, m, n, k) ==<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">dhyper</span>(x, m, n, k)))<span class="co"># FALSE</span>
+[<span class="dv">1</span>] <span class="ot">FALSE</span>
+&gt;<span class="st"> </span>## but error is very small:
+<span class="er">&gt;</span><span class="st"> </span><span class="kw">signif</span>(<span class="kw">phyper</span>(x, m, n, k) -<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">dhyper</span>(x, m, n, k)), <span class="dt">digits=</span><span class="dv">3</span>)
+ [<span class="dv">1</span>]  <span class="fl">0.00e+00</span>  <span class="fl">0.00e+00</span>  <span class="fl">1.73e-18</span>  <span class="fl">0.00e+00</span> -<span class="fl">5.55e-17</span>  <span class="fl">1.11e-16</span>  <span class="fl">2.22e-16</span>
+ [<span class="dv">8</span>]  <span class="fl">2.22e-16</span>  <span class="fl">2.22e-16</span>  <span class="fl">2.22e-16</span>
+&gt;<span class="st"> </span></code></pre>
+<h3 id="參考文獻-2"><a href="#參考文獻-2">參考文獻</a></h3>
+<ul>
+<li><a href="http://zh.wikipedia.org/wiki/%E8%B6%85%E5%87%A0%E4%BD%95%E5%88%86%E5%B8%83">Wikipedia:超幾何分布</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Hypergeometric_distribution">Wikipedia:Hypergeometric_distribution</a></li>
+</ul>
+<h2 id="布瓦松分布-poisson-distribution"><a href="#布瓦松分布-poisson-distribution">布瓦松分布 (Poisson distribution)</a></h2>
+<p>意義：在單位時間內，事件出現平均 λ 次的機率分布。</p>
+<p>公式： <img src="../timg/0c930d2788b1.jpg" /></p>
+<p>R 的公式： <img src="../timg/ca43e8b89676.jpg" /></p>
+<p>R 函數：<a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Poisson.html">pois(λ:事件平均出現次數)</a></p>
+<p>變數意義： <img src="../timg/c049e3fdcead.jpg" /></p>
+<p>特性：</p>
+<p>布瓦松分布可以與泰勒展開式中的 Maclaurin 級數對映起來，所謂的 Maclaurin 級數就是泰勒展開式在 0 點的展開式。</p>
+<p>If the Taylor series is centered at zero, then that series is also called a Maclaurin series, named after the Scottish mathematician Colin Maclaurin, who made extensive use of this special case of Taylor series in the 18th century.</p>
+<div class="figure">
+<img src="../timg/1ac4c638a017.jpg" />
+</div>
+<h3 id="布瓦松分配的公式來源"><a href="#布瓦松分配的公式來源">布瓦松分配的公式來源</a></h3>
+<p>布瓦松分配可視為二項分配的極限形式，當 binom(n, p) 當中 n 趨近於無限大，而 p 非常小的時候，就會趨近布瓦松分配。</p>
+<p>關鍵公式： <img src="../timg/f5c44c7b2ec9.jpg" /></p>
+<p>證明過程：</p>
+<div class="figure">
+<img src="../timg/c1453b053b73.jpg" />
+</div>
+<p><img src="../timg/67179a38983c.jpg" /> <img src="../timg/1719d1f14b56.jpg" /></p>
+<div class="figure">
+<img src="../timg/848edbaea265.jpg" />
+</div>
+<p>其中的 An 趨近於 1 ，證明如下：</p>
+<div class="figure">
+<img src="../timg/08ef57551c17.jpg" />
+</div>
+<p>期望值與變異數</p>
+<ol style="list-style-type: decimal">
+<li><img src="../timg/a7ee5299c8dd.jpg" /></li>
+<li><img src="../timg/f6b3e210bca6.jpg" title="fig:" /></li>
+</ol>
+<p>動差生成函數： <img src="../timg/96fa85ea62fa.jpg" /></p>
+<h3 id="r-程式範例曲線圖-2"><a href="#r-程式範例曲線圖-2">R 程式範例：曲線圖</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">lambda=<span class="fl">5.0</span>; k=<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">20</span>); 
+<span class="kw">plot</span>(k, <span class="kw">dpois</span>(k, lambda), <span class="dt">type=</span><span class="st">&#39;h&#39;</span>, <span class="dt">main=</span><span class="st">&#39;dpois(lambda=4.0)&#39;</span>, <span class="dt">xlab=</span><span class="st">&#39;k&#39;</span>)</code></pre>
+<div class="figure">
+<img src="../img/dpoisPlot.jpg" />
+</div>
+<h3 id="r-程式範例-2"><a href="#r-程式範例-2">R 程式範例：</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r"><span class="kw">require</span>(graphics)
+
+-<span class="kw">log</span>(<span class="kw">dpois</span>(<span class="dv">0</span>:<span class="dv">7</span>, <span class="dt">lambda=</span><span class="dv">1</span>) *<span class="st"> </span><span class="kw">gamma</span>(<span class="dv">1</span>+<span class="st"> </span><span class="dv">0</span>:<span class="dv">7</span>)) <span class="co"># == 1</span>
+Ni &lt;-<span class="st"> </span><span class="kw">rpois</span>(<span class="dv">50</span>, <span class="dt">lambda =</span> <span class="dv">4</span>); <span class="kw">table</span>(<span class="kw">factor</span>(Ni, <span class="dv">0</span>:<span class="kw">max</span>(Ni)))
+
+<span class="dv">1</span> -<span class="st"> </span><span class="kw">ppois</span>(<span class="dv">10</span>*(<span class="dv">15</span>:<span class="dv">25</span>), <span class="dt">lambda=</span><span class="dv">100</span>)  <span class="co"># becomes 0 (cancellation)</span>
+    <span class="kw">ppois</span>(<span class="dv">10</span>*(<span class="dv">15</span>:<span class="dv">25</span>), <span class="dt">lambda=</span><span class="dv">100</span>, <span class="dt">lower.tail=</span><span class="ot">FALSE</span>)  <span class="co"># no cancellation</span>
+
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))
+x &lt;-<span class="st"> </span><span class="kw">seq</span>(-<span class="fl">0.01</span>, <span class="dv">5</span>, <span class="fl">0.01</span>)
+<span class="kw">plot</span>(x, <span class="kw">ppois</span>(x, <span class="dv">1</span>), <span class="dt">type=</span><span class="st">&quot;s&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;F(x)&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Poisson(1) CDF&quot;</span>)
+<span class="kw">plot</span>(x, <span class="kw">pbinom</span>(x, <span class="dv">100</span>, <span class="fl">0.01</span>),<span class="dt">type=</span><span class="st">&quot;s&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;F(x)&quot;</span>,
+     <span class="dt">main=</span><span class="st">&quot;Binomial(100, 0.01) CDF&quot;</span>)</code></pre>
+<p>執行結果：</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">require</span>(graphics)
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span>-<span class="kw">log</span>(<span class="kw">dpois</span>(<span class="dv">0</span>:<span class="dv">7</span>, <span class="dt">lambda=</span><span class="dv">1</span>) *<span class="st"> </span><span class="kw">gamma</span>(<span class="dv">1</span>+<span class="st"> </span><span class="dv">0</span>:<span class="dv">7</span>)) <span class="co"># == 1</span>
+[<span class="dv">1</span>] <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span>
+&gt;<span class="st"> </span>Ni &lt;-<span class="st"> </span><span class="kw">rpois</span>(<span class="dv">50</span>, <span class="dt">lambda =</span> <span class="dv">4</span>); <span class="kw">table</span>(<span class="kw">factor</span>(Ni, <span class="dv">0</span>:<span class="kw">max</span>(Ni)))
+
+ <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">2</span>  <span class="dv">3</span>  <span class="dv">4</span>  <span class="dv">5</span>  <span class="dv">6</span>  <span class="dv">7</span>  <span class="dv">8</span> 
+ <span class="dv">1</span>  <span class="dv">3</span>  <span class="dv">6</span>  <span class="dv">8</span> <span class="dv">11</span> <span class="dv">11</span>  <span class="dv">4</span>  <span class="dv">3</span>  <span class="dv">3</span> 
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span><span class="dv">1</span> -<span class="st"> </span><span class="kw">ppois</span>(<span class="dv">10</span>*(<span class="dv">15</span>:<span class="dv">25</span>), <span class="dt">lambda=</span><span class="dv">100</span>)  <span class="co"># becomes 0 (cancellation)</span>
+ [<span class="dv">1</span>] <span class="fl">1.233094e-06</span> <span class="fl">1.261664e-08</span> <span class="fl">7.085799e-11</span> <span class="fl">2.252643e-13</span> <span class="fl">4.440892e-16</span>
+ [<span class="dv">6</span>] <span class="fl">0.000000e+00</span> <span class="fl">0.000000e+00</span> <span class="fl">0.000000e+00</span> <span class="fl">0.000000e+00</span> <span class="fl">0.000000e+00</span>
+[<span class="dv">11</span>] <span class="fl">0.000000e+00</span>
+&gt;<span class="st">     </span><span class="kw">ppois</span>(<span class="dv">10</span>*(<span class="dv">15</span>:<span class="dv">25</span>), <span class="dt">lambda=</span><span class="dv">100</span>, <span class="dt">lower.tail=</span><span class="ot">FALSE</span>)  <span class="co"># no cancellation</span>
+ [<span class="dv">1</span>] <span class="fl">1.233094e-06</span> <span class="fl">1.261664e-08</span> <span class="fl">7.085800e-11</span> <span class="fl">2.253110e-13</span> <span class="fl">4.174239e-16</span>
+ [<span class="dv">6</span>] <span class="fl">4.626179e-19</span> <span class="fl">3.142097e-22</span> <span class="fl">1.337219e-25</span> <span class="fl">3.639328e-29</span> <span class="fl">6.453883e-33</span>
+[<span class="dv">11</span>] <span class="fl">7.587807e-37</span>
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))
+&gt;<span class="st"> </span>x &lt;-<span class="st"> </span><span class="kw">seq</span>(-<span class="fl">0.01</span>, <span class="dv">5</span>, <span class="fl">0.01</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(x, <span class="kw">ppois</span>(x, <span class="dv">1</span>), <span class="dt">type=</span><span class="st">&quot;s&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;F(x)&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Poisson(1) CDF&quot;</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(x, <span class="kw">pbinom</span>(x, <span class="dv">100</span>, <span class="fl">0.01</span>),<span class="dt">type=</span><span class="st">&quot;s&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;F(x)&quot;</span>,
++<span class="st">      </span><span class="dt">main=</span><span class="st">&quot;Binomial(100, 0.01) CDF&quot;</span>)
+&gt;<span class="st"> </span></code></pre>
+<div class="figure">
+<img src="../img/poisson.jpg" />
+</div>
+<h3 id="參考文獻-3"><a href="#參考文獻-3">參考文獻</a></h3>
+<ul>
+<li><a href="http://zh.wikipedia.org/wiki/%E5%8D%9C%E7%93%A6%E6%9D%BE%E5%88%86%E4%BD%88">Wikipedia:卜瓦松分佈</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Poisson_distribution">Wikipedia:Poisson_distribution</a></li>
+</ul>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

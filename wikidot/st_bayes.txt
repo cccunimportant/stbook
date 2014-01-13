@@ -1,0 +1,42 @@
+練習題1：(2011.10.05) [[[st:bayesexai | 人工智慧中的機率統計範例 -- 牙醫判斷牙痛問題？]]]
+
++ 貝氏定理
+
+* 定義：
+
+[[math]]
+P(A | B) = P(B | A)  \frac{P(A)}{P(B)}
+[[/math]]
+
+* 證明：
+
+[[math type="eqnarray"]]
+because && P(B | A) = \frac{P(A \cap B)}{P(A)} \\
+and && P(A | B) = \frac{P(A \cap B)}{P(B)} \\
+so && P(A \cap B) = P(B|A] P(A) = P(A|B) P(B) \\
+finally && P(A | B) = P(B | A)  \frac{P(A)}{P(B)}
+[[/math]]
+
++ 多個變數的貝氏定理
+
+[[math]]
+P(A,B|C) = P(C|A,B) * \frac{P(A,B)}{P(C)}
+[[/math]]
+
+[[math]]
+P(A|B,C) = P(B,C|A) * \frac{P(A)}{P(B,C)}
+[[/math]]
+
+[[math]]
+P(A,B|C,D) = P(C,D|A,B) * \frac{P(A,B)}{P(C,D)}
+[[/math]]
+
+其他情況可以類推，只要能正確改寫 A , B 為任何隨機變數序列都行。
+
++ 條件獨立與貝氏定理
+
+假如 A 與 B 在給定 C 的情況下條件獨立，那麼以下算式成立：
+
+[[math]]
+P(A,B|C) = P(A|C) * P(B|C) = P(C|A)* P(C|B)*\frac{P(A) P(B)}{P(C)^2}
+[[/math]]

@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<p>E-M是使用高斯分配(Gaussian Distribution，也就是常態分配)來描述該案例隸屬於某群集的機率密度，利用此機率函數來來取代剛性群集的距離函數</p>
+<p>E 步驟：(期望) 計算似然函數，使用 x 相對於 z 的條件機率分布。</p>
+<p>[[math]] Q(|^{(t)}) = E_{Z|x,^{(t)}}]</p>
+<p>M 步驟：(最大化) 找出最佳化的參數 [[math]] ^{(t+1)} = Q(|^{(t)}) [[/math]]</p>
+<p>其中m是平均值，而s表示標準差。</p>
+<p>[[math]] F(q,) =E_q [ L (; x,Z) ] + H(q) = -D_{}(q | p_{Z|X}(|x;) ) + L(;x) [[/math]]</p>
+<p>Then the steps in the EM algorithm may be viewed as:</p>
+<p>:'''Expectation step''': Choose ''q'' to maximize ''F'': [[math]] q^{(t)} =  F(q,^{(t)}) [[/math]]</p>
+<p>:'''Maximization step''': Choose ''θ'' to maximize ''F'': [[math]] ^{(t+1)} =  F(q^{(t)},) [[/math]]</p>
+<ul>
+<li>最佳化</li>
+</ul>
+<p>EM 演算法其實求取的最佳化，事實上就是最大似然法則 (也就是最大商法則) 的結果，以下是 EM 最佳化的算式之基本推導方法。</p>
+<p>[[math type=&quot;eqnarray&quot;]] &amp;&amp; <em>z P(Z=z|x,h) L(x,Z=z|h) \ &amp;=&amp; </em>z  P(x,Z=z|h) \ &amp;=&amp;  _z P(x,Z=z,h) P(x,Z=z|h) \ &amp;=&amp;  H(x,Z|h) \ [[/math]]</p>
+<ul>
+<li>EM 演算法</li>
+</ul>
+<p>EM 演算法 (Expectation-maximization Algorithm) 可以總結成下列公式</p>
+<p>[[math]] h^{t+1} = <em>h ; </em>z P(Z=z | x, h^t) L(x,Z=z|h^t) [[/math]]</p>
+<p>說明：h : 機率模型, Z : 隱變數, x : 觀察值</p>
+<p>E-step 計算隱變數 z 的條件熵期望值，因此稱為 Expectation，這也就是算式 [[ <img src="../timg/b9070751fcb7.jpg" /> ]] 意義。</p>
+<p>M-step 則是尋找一個讓條件熵最大化的機率模型 h，因此稱為 Maximization，也就是 [[ <img src="../timg/ecc3a97c5452.jpg" /> ]] 的步驟。</p>
+<p>EM 演算法的應用非常廣泛，特別是在人工智慧領域中的分群 (Clustering) ，貝氏網路的學習 (Bayesian Network)，以及隱馬可夫模型 (Hidden Markov Model) 的學習上，都有強大的應用，以下分別介紹之。</p>
+<ul>
+<li>EM 學習法與最大商法則</li>
+</ul>
+<p>[[math type=&quot;eqnarray&quot;]] h^{t+1} &amp;=&amp; <em>h ; </em>z P(Z=z | x, h^t) L(x,Z=z|h^t) &amp;=&amp; <em>h ; </em>z P(Z=z | x, h^t) L(x,Z=z|h^t) &amp;=&amp; <em>h ; </em>z P(Z=z | x, h^t) L(x,Z=z|h^t) [[/math]]</p>
+<ul>
+<li>一個簡單的範例 假如有一個機率源 h 會產生二進位的亂數 (0 or 1)，已知此機率源產生 0 的機率為(h1,...h5) = (0,0.3,0.5,0.7,1.0) 等五種情況之ㄧ，假如我們觀察該機率源所產生的隨機亂數序列為 x[1..n] = (0,1,1,1,0,1,1,1,1,0,....)，那麼我們在每個時間點應該假設該機率源的分布 h 為何種分布最好呢？</li>
+</ul>
+<p>說明：假如這是一場賭局，我們只能從 (h1,...h5) 當中選擇一個機率源模型，當第 n 個觀察值進來時，我們應該將賭金押在哪一個機率源才對呢？</p>
+<p>在這樣的模型下，沒有任何隱變數存在，因此 z 為空集合，不需考慮。於是 EM 目標函數退化成下列公式。</p>
+<p>[[math type=&quot;eqnarray&quot;]] h^{t+1} &amp;=&amp; <em>h ; </em>z P(z|x,h^t) L(x,z|h^t) \ &amp;=&amp; <em>h ;  L(x|h^t) \ &amp;=&amp; </em>h ; L(x|h^t) \ &amp;=&amp; <em>h ;  \ &amp;=&amp; </em>h ; (P(x,h^t) - P(h)) \ &amp;=&amp; <em>h ; P(x,h^t) \ &amp;=&amp; </em>h ; (P(x_i=0,h)^{N(0)} P(x_i=1,h)^{N(1)}) \ &amp;=&amp; <em>h ; N(0) P(x</em>i=0,h) + N(1) P(x_i=1,h) \ &amp;=&amp; <em>h ; </em>{x_i} P(x_i) P(x_i,h) \ [[/math]]</p>
+<p>於是，EM 的目標是尋找產生 x 序列機率最大的假設 h，也就是讓 [[ <img src="../timg/fba21de1118d.jpg" /> ]] 最大的 h，在這個問題上，[[ <img src="../timg/ecc3a97c5452.jpg" /> ]] 的程序很容易做，以下是一個範例。</p>
+<p>首先，我們可以列出每個機率源產生該序列的機率，</p>
+<p>當 x[1] 進來時，我們應該押 h1, 當 x[2] 進來時，我們應該押 h3 或 h4 當 x[3] 進來時，我們應該押 h3, 當 x[4] 進來時，我們應該押 h5 ... 當 x[10] 進來時，我們應該押 h5</p>
+<p>P(h|x)=P(x,h)/P(x)</p>
+<p>P(x|h)=P(x,h)/P(h)</p>
+<p>那麼在此範例中，P(x), P(h), P(x,h) 各為多少呢？</p>
+<p>P(h) 可以直接根據最大商法則設定為平均分布，也就是 P(h1)=P(h2)=P(h3)=P(h4)=P(h5)=0.2。 P(x) 可以直接根據最大商法則設定為平均分布，也就是 [[ <img src="../timg/ad068e5893d1.jpg" /> ]]</p>
+<p>P(x,h) = P(x[1..n], h) = p(h,x=0)^{N_x[0]} p(h,x=1)^{N_x[1]}</p>
+<ul>
+<li>使用 EM 進行分群 (Clustering)</li>
+</ul>
+<p>E-M是使用高斯分配(Gaussian Distribution，也就是常態分配)來描述該案例隸屬於某群集的機率密度，利用此機率函數來來取代剛性群集的距離函數</p>
+<p>E 步驟：(期望) 計算似然函數，使用 x 相對於 z 的條件機率分布。</p>
+<p>[[math]] Q(|^{(t)}) = E_{Z|x,^{(t)}}]</p>
+<p>M 步驟：(最大化) 找出最佳化的參數 [[math]] ^{(t+1)} = Q(|^{(t)}) [[/math]]</p>
+<p>其中m是平均值，而s表示標準差。</p>
+<p>[[math]] F(q,) =E_q [ L (; x,Z) ] + H(q) = -D_{}(q | p_{Z|X}(|x;) ) + L(;x) [[/math]]</p>
+<p>Then the steps in the EM algorithm may be viewed as:</p>
+<p>:'''Expectation step''': Choose ''q'' to maximize ''F'': [[math]] q^{(t)} =  F(q,^{(t)}) [[/math]]</p>
+<p>:'''Maximization step''': Choose ''θ'' to maximize ''F'': [[math]] ^{(t+1)} =  F(q^{(t)},) [[/math]]</p>
+<ul>
+<li><p>參考文獻 # http://en.wikipedia.org/wiki/Expectation-maximization_algorithm # http://en.wikipedia.org/wiki/Baum-Welch_algorithm (forward-backward algorithm) # http://en.wikipedia.org/wiki/Inside-outside_algorithm # http://blog.pluskid.org/?tag=clustering</p></li>
+<li><p>隨機變數</p></li>
+</ul>
+<p>隨機試驗 (Random Experiment)：舉凡觀察、實驗、調查、檢驗、抽樣等</p>
+<p>在機率理論中，樣本空間 S 與隨機變數 X 有不同的意義，樣本空間是指</p>
+<p>但為了方便起見，在本文中我們通常將隨機變數</p>
+<p>在機率理論中，對於一個樣本空間 X 而言，我們可以用 P(x) 表示樣本 x 出現的機率。</p>
+<p>假如 X 可以透過直接觀察得到，那麼我們可以不斷觀察 X 機率源所產生的事件序列 [[ <img src="../timg/c9b742e5dcff.jpg" /> ]]，並且統計在觀察中 x 出現的機率 P'(x)。</p>
+<p>假如</p>
+<ul>
+<li>聯合機率分布 對於許多機率現象，x 事件與 y 事件可能會伴隨出現，並且有某種程度的關連性，我們可以用 P(x,y) 代表 x,y 同時出現的機率，並用 (X,Y) 代表此聯合隨機變數。</li>
+</ul>
+<p>假如 x 可能受到 y 變數的影響，則我們可以用 P(x|y) 代表在 y 事件出現的情況之下，x 事件出現的機率，這稱為條件機率。</p>
+<p>假如 y 變數可以透過直接觀察得到，那麼我們可以直接觀察聯合隨機分布 (X,Y) 的出現機率 P(x,y)，</p>
+<p>假如所有變數都可以直接觀察，那麼就可以用 X 代表所有的隨機變數所組合而成的變數，並且以 P(x) 表示 x 事件出現的機率。</p>
+<p>假如所有變數都可以直接觀察，</p>
+<p>有時，構</p>
+<p>P(x)</p>
+<p>在機率理論中，假如有些未能觀察到的隱變數存在，則可以用條件機率描述此種現象，舉例而言，</p>
+<p>在馬可夫模型中，假如有些未能觀察到的隱變數存在，則稱為隱馬可夫模型 (Hidden Markov Model, HMM)，我們可以用</p>
+<ul>
+<li><p>最大似然法則</p></li>
+<li><p>最大商法則</p></li>
+</ul>
+<p>[[math type=&quot;eqnarray&quot;]] &amp;&amp; <em>z P(Z=z|x,h) L(x,Z=z|h) \ &amp;=&amp; </em>z  P(x,Z=z|h) \ &amp;=&amp;  _z P(x,Z=z,h) P(x,Z=z|h) \ &amp;=&amp;  H(x,Z|h) \ [[/math]]</p>
+<ul>
+<li>EM 演算法</li>
+</ul>
+<p>EM 演算法 (Expectation-maximization Algorithm) 可以總結成下列公式</p>
+<p>[[math]] h^{t+1} = <em>h ; </em>z P(Z=z | x, h^t) L(x,Z=z|h^t) [[/math]]</p>
+<p>說明：h : 機率模型, Z : 隱變數, x : 觀察值</p>
+<p>E-step 計算隱變數 z 的條件熵期望值，因此稱為 Expectation，這也就是算式 [[ <img src="../timg/b9070751fcb7.jpg" /> ]] 意義。</p>
+<p>M-step 則是尋找一個讓條件熵最大化的機率模型 h，因此稱為 Maximization，也就是 [[ <img src="../timg/9b5bc57ac810.jpg" /> ]] 的步驟。</p>
+<p>EM 演算法的應用非常廣泛，特別是在人工智慧領域中的分群 (Clustering) ，貝氏網路的學習 (Bayesian Network)，以及隱馬可夫模型 (Hidden Markov Model) 的學習上，都有強大的應用，以下分別介紹之。</p>
+<ul>
+<li>EM 學習法與最大商法則</li>
+</ul>
+<p>[[math]] h^{t+1} &amp;=&amp; <em>h ; </em>z P(Z=z | x, h^t) L(x,Z=z|h^t) &amp;=&amp; <em>h ; </em>z P(Z=z | x, h^t) L(x,Z=z|h^t) &amp;=&amp; <em>h ; </em>z P(Z=z | x, h^t) L(x,Z=z|h^t) [[/math]]</p>
+<ul>
+<li>一個簡單的範例 假如有一個機率源 h 會產生二進位的亂數 (0 or 1)，已知此機率源產生 0 的機率為(h1,...h5) = (0,0.3,0.5,0.7,1.0) 等五種情況之ㄧ，假如我們觀察該機率源所產生的隨機亂數序列為 x[1..n] = (0,1,1,1,0,1,1,1,1,0,....)，那麼我們在每個時間點應該假設該機率源的分布 h 為何種分布最好呢？</li>
+</ul>
+<p>說明：假如這是一場賭局，我們只能從 (h1,...h5) 當中選擇一個機率源模型，當第 n 個觀察值進來時，我們應該將賭金押在哪一個機率源才對呢？</p>
+<p>在這樣的模型下，沒有任何隱變數存在，因此 z 為空集合，不需考慮。於是 EM 目標函數退化成下列公式。</p>
+<p>[[math type=&quot;eqnarray&quot;]] h^{t+1} &amp;=&amp; <em>h ; </em>z P(z|x,h^t) L(x,z|h^t) \ &amp;=&amp; <em>h ;  L(x|h^t) \ &amp;=&amp; </em>h ; L(x|h^t) \ &amp;=&amp; <em>h ;  \ &amp;=&amp; </em>h ; (P(x,h^t) - P(h)) \ &amp;=&amp; <em>h ; P(x,h^t) \ &amp;=&amp; </em>h ; (P(x_i=0,h)^{N(0)} P(x_i=1,h)^{N(1)}) \ &amp;=&amp; <em>h ; N(0) P(x</em>i=0,h) + N(1) P(x_i=1,h) \ &amp;=&amp; <em>h ; </em>{x_i} P(x_i) P(x_i,h) \ [[/math]]</p>
+<p>於是，EM 的目標是尋找產生 x 序列機率最大的假設 h，也就是讓 [[ <img src="../timg/fba21de1118d.jpg" /> ]] 最大的 h，在這個問題上，[[ <img src="../timg/ecc3a97c5452.jpg" /> ]] 的程序很容易做，只要讓 首先，我們可以列出每個機率源產生該序列的機率，</p>
+<p>當 x[1] 進來時，我們應該押 h1, 當 x[2] 進來時，我們應該押 h3 或 h4 當 x[3] 進來時，我們應該押 h3, 當 x[4] 進來時，我們應該押 h5 ... 當 x[10] 進來時，我們應該押 h5</p>
+<p>P(h|x)=P(x,h)/P(x)</p>
+<p>P(x|h)=P(x,h)/P(h)</p>
+<p>那麼在此範例中，P(x), P(h), P(x,h) 各為多少呢？</p>
+<p>P(h) 可以直接根據最大商法則設定為平均分布，也就是 P(h1)=P(h2)=P(h3)=P(h4)=P(h5)=0.2。 P(x) 可以直接根據最大商法則設定為平均分布，也就是 [[ <img src="../timg/ad068e5893d1.jpg" /> ]]</p>
+<p>P(x,h) = P(x[1..n], h) = p(h,x=0)^{N_x[0]} p(h,x=1)^{N_x[1]}</p>
+<ul>
+<li>使用 EM 進行分群 (Clustering)</li>
+</ul>
+<p>E-M是使用高斯分配(Gaussian Distribution，也就是常態分配)來描述該案例隸屬於某群集的機率密度，利用此機率函數來來取代剛性群集的距離函數</p>
+<p>E 步驟：(期望) 計算似然函數，使用 x 相對於 z 的條件機率分布。</p>
+<p>[[math]] Q(|^{(t)}) = E_{Z|x,^{(t)}}]</p>
+<p>M 步驟：(最大化) 找出最佳化的參數 [[math]] ^{(t+1)} =argmax  Q(|^{(t)}) [[/math]]</p>
+<p>其中m是平均值，而s表示標準差。</p>
+<p>[[math]] F(q,) =E_q [ L (; x,Z) ] + H(q) = -D_{}(q | p_{Z|X}(|x;) ) + L(;x) [[/math]]</p>
+<p>Then the steps in the EM algorithm may be viewed as:</p>
+<p>:'''Expectation step''': Choose ''q'' to maximize ''F'': [[math]] q^{(t)} = argmax  F(q,^{(t)}) [[/math]]</p>
+<p>:'''Maximization step''': Choose ''θ'' to maximize ''F'': [[math]] ^{(t+1)} = argmax  F(q^{(t)},) [[/math]]</p>
+<ul>
+<li><p>參考文獻 # http://en.wikipedia.org/wiki/Expectation-maximization_algorithm # http://en.wikipedia.org/wiki/Baum-Welch_algorithm (forward-backward algorithm) # http://en.wikipedia.org/wiki/Inside-outside_algorithm # http://blog.pluskid.org/?tag=clustering</p></li>
+<li><p>參考文獻 # EM algorithm for Mixture models (test version) -- http://staff.aist.go.jp/s.akaho/MixtureEM.html # Mixture Models, EM algorithm -- http://lcn.epfl.ch/tutorial/english/mixtureModel/index.html # Wikipedia:Expectation-maximization algorithm -- http://en.wikipedia.org/wiki/Expectation-maximization_algorithm</p></li>
+</ul>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

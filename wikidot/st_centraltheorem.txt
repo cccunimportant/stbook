@@ -1,0 +1,189 @@
++ 中央極限定理
+
+[[math type="eqnarray"]]
+\frac{x_1+x_2+...+x_n}{n}  = \bar{x} \rightarrow N(\mu, \sigma/\sqrt{n})
+[[/math]]
+
+另一種講法：Z 為標準常態分布
+
+[[math type="eqnarray"]]
+\frac{\bar{x}-\mu}{\sigma/\sqrt{n}} \rightarrow Z
+[[/math]]
+
+
++ 常態分布的重要數值
+
+[[math type="eqnarray"]]
+1. && P[-\sigma < X - \mu < \sigma] &=& 0.68 \\
+2. && P[-2 \sigma < X - \mu < 2 \sigma] &=& 0.95 \\
+3. && P[-3 \sigma < X - \mu < 3 \sigma] &=& 0.997
+[[/math]]
+
++ R 程式範例一
+
+[[math type="eqnarray"]]
+x_1+x_2+...+x_n \rightarrow N(\mu, \delta/\sqrt{n})
+[[/math]]
+
+[[code]]
+> u <- matrix ( runif(250000), 1000, 250 )
+> y <- apply ( u, 2, mean )
+> hist(u[,1])
+> hist(y)
+> ?apply
+> 
+[[/code]]
+
+說明：
+1. u 乃是將 25 萬個 uniform 樣本分配成 1000*250 的矩陣，
+2. y 對 u 進行列統計 apply ( u, 2, mean ) 代表對每行取平均值 mean(col of u) 的結果。
+3. 因此 y 代表從 Uniform Distribution 中每次取出 1000 個樣本，然後進行加總平均 (x1+x2+...+x1000)/1000 的結果。
+4. 從下列的 hist(y) 圖形中，我們可以看到中央極限定理的證據：[[$ \mu_i = mean(x_i[1,1000]) $]] 會趨向常態分布。
+
+[[=image HistU.jpg]]
+= 圖一、hist(u[,1]) 畫出的圖形
+
+[[=image HistY.jpg]]
+= 圖二、hist(y) 畫出的圖形
+
++ R 程式範例二
+
+[[code type="R"]]
+CLT = function(x) {
+  op<-par(mfrow=c(2,2)) 		# 設為 2*2 的四格繪圖版
+  hist(x, nclass=50)			# 繪製 x 序列的直方圖 (histogram)。
+  m2 <- matrix(x, nrow=2, )		# 將 x 序列分為 2*k 兩個一組的矩陣 m2。
+  xbar2 <- apply(m2, 2, mean)	# 取每兩個一組的平均值 (x1+x2)/2 放入 xbar2 中。
+  hist(xbar2, nclass=50)		# 繪製 xbar2 序列的直方圖 (histogram)。
+  m10 <- matrix(x, nrow=10, )	# 將 x 序列分為 10*k 兩個一組的矩陣 m10。
+  xbar10 <- apply(m10, 2, mean)	# 取每10個一組的平均值 (x1+..+x10)/10 放入 xbar10 中。
+  hist(xbar10, nclass=50)		# 繪製 xbar10 序列的直方圖 (histogram)。
+  m20 <- matrix(x, nrow=20, )	# 將 x 序列分為 25*k 兩個一組的矩陣 m25。
+  xbar20 <- apply(m20, 2, mean)	# 取每20個一組的平均值 (x1+..+x20)/20 放入 xbar20 中。
+  hist(xbar20, nclass=50)		# 繪製 xbar20 序列的直方圖 (histogram)。
+}
+
+CLT(rbinom(100000, 20, 0.5)) 	# 用參數為 n=20, p=0.5 的二項分布驗證中央極限定理。
+CLT(runif(100000)) 				# 用參數為 a=0, b=1 的均等分布驗證中央極限定理。
+CLT(rpois(100000, 4)) 			# 用參數為 lambda=4 的布瓦松分布驗證中央極限定理。
+CLT(rgeom(100000, 0.5)) 		# 用參數為 n=20, m=10, k=5 的超幾何分布驗證中央極限定理。
+CLT(rhyper(100000, 20, 10, 5)) 	# 用參數為 p=0.5 的幾何分布驗證中央極限定理。
+CLT(rnorm(100000)) 				# 用參數為 mean=0, sd=1 的標準常態分布驗證中央極限定理。
+CLT(sample(1:6, 100000, replace=T))	# 用擲骰子的分布驗證中央極限定理。
+CLT(sample(0:1, 100000, replace=T))	# 用丟銅板的分布驗證中央極限定理。
+[[/code]]
+
+[[=image CLTCoin.jpg size="medium"]]
+= 圖三、指令 CLT(sample(0:1, 100000, replace=T)) 的執行結果
+
++ 中央極限定理 (Central Limit Theorem, CLT) 的證明
+
+[[math type="eqnarray"]]
+\frac{x_1+x_2+...+x_n}{n}  = \bar{x} \rightarrow N(\mu, \delta/\sqrt{n})
+[[/math]]
+
+證明：Classical CLT (Lindeberg–Lévy CLT)
+
+本證明的有效條件：假定 [[$ (x_1, x_2,...,x_n $]] 是相同且獨立的隨機分布所抽出的樣本。
+
+本證明需使用到機率中的 [[[st:moment | 動差生成函數]]] 與微積分中的 [[[ma:taylor | 泰勒展開式]]]
+
+假如 E(Y) = 0 且 Var(Y) = 1，那麼根據 [[$ Var(Y) = E(Y^2) - E(Y)^2 = E(Y^2) - 0^2 = E(Y^2) $]]，則 Y 的動差生成函數將符合下列算式：
+
+[[math type="eqnarray"]]
+m_Y(t) &=& E[1] + t E[Y] + \frac{(t E[Y])^2}{2!} + .... \\
+             &=& 1 + t * 0 + \frac{t^2 Var(Y)}{2!} + .... \\
+             &=& 1 + 0 + \frac{t^2}{2!} + .... \\
+[[/math]]
+
+令 [[$ Y_i = \frac{X_i-\mu}{\sigma} $]]，也就是將 [[$ X_i $]] 標準化後的結果，那麼 Y 將符合上述的 [[$ E(Y) = 0 , Var(Y) = 1 $]] 之條件。
+
+接著我們將可以定義算式 [[$ Z_n $]] 如下所示
+
+[[math]]
+Z_n =  \frac{n\bar{X}_n-n\mu}{\sigma \sqrt{n}} = \sum_{i=1}^n {Y_i \over \sqrt{n}}
+[[/math]]
+
+此時根據動差生成函數的基本特性，可以發現 [[$ Z_n $]] 的動差特徵函數之特性如下
+
+[[math]]
+m_{Z_n}(t) = \left[m_Y\left({t \over \sqrt{n}}\right)\right]^n = \left[ 1 - {t^2 \over 2n} + o\left({t^2 \over n}\right) \right]^n \, \rightarrow \, e^{-t^2/2}, \quad n \rightarrow \infty.
+[[/math]]
+
+也就是隨機變數 [[$ Z_n $]] 的動差生成函數 [[$ m_{Z_n}(t) $]] 將會趨近於標準常態分布的動差生成函數  [[$ e^{-t^2/2} $]]。
+
+由於動差生成函數是隨機變數的「指紋」，因此隨機變數  [[$ Z_n $]] 也將隨著 n 的增大而越來越趨近標準常態分布 [[$ Z $]] 。
+
++ 參考文獻
+# [http://msenux.redwoods.edu/math/R/CentralLimit.php The Central Limit Theorem (Part 1)]
+# 洋洋 -- [http://episte.math.ntu.edu.tw/articles/mm/mm_09_3_07/index.html 淺談機率上的幾個極限定理]
+# Proof of Central Limit Theorem, H. Krieger, Mathematics 157, Harvey Mudd College, Spring, 2005
+ * http://www.math.hmc.edu/~krieger/m157cltproof.pdf
+# Central limit theorem:From Wikipedia, the free encyclopedia
+ * http://en.wikipedia.org/wiki/Central_limit_theorem
+# Two Proofs of the Central Limit Theorem, Yuval Filmus, January/February 2010
+ * http://www.cs.toronto.edu/~yuvalf/CLT.pdf
+
+
+[!--
+檔案：d:/code/R/limit.central.R
+[[code]]
+limit.central <- function(r=runif, distpar=c(0,1), m=0.5, 
+           s=1/sqrt(12), n=c(1,3,10,30), N=1000) {
+  for (i in n) {
+	if (length(distpar) == 2) {
+		x <- matrix(r(i*N, distpar[1], distpar[2]), nc=i)
+	} else {
+		x <- matrix(r(i*N, distpar), nc=i)
+	}
+	x <- (apply(x, 1, sum) - i*m)/(sqrt(i)*s)
+	hist(x, col=' light blue', probability=T, main=paste("n=", i), 
+	       ylim=c(0, max(.4, density(x)$y)))
+	lines(density(x), col=' red', lwd = 3)
+	curve(dnorm(x), col=' blue', lwd=3, lty=3, add=T)
+	if (N > 100) {
+		rug(sample(x, 100))
+	} else {
+		rug(x)
+	}
+  }
+}
+[[/code]]
+
+執行結果：
+[[=image limit.central.exp.jpg]]
+
+[[code]]
+> setwd('d:/code/R')
+> source('limit.central.R')
+> op<-par(mfrow=c(2,2))
+> limit.central(runif)
+[[/code]]
+
+執行結果：
+[[=image limit.central.unif.jpg]]
+
+執行情況：
+[[code]]
+
+> op<-par(mfrow=c(2,2))
+> limit.central(rbinom, distpar=c(10, 0.1), m=1, s=0.9)
+> 
+[[/code]]
+
+執行結果：
+[[=image limit.central.binom.jpg]]
+
+[[code]]
+> op<-par(mfrow=c(2,2))
+> limit.central(rpois, distpar=1, m=1, s=1, n=c(3,10,30,50))
+[[/code]]
+
+執行結果：
+[[=image limit.central.pois.jpg]]
+
+[[code]]
+> op<-par(mfrow=c(2,2))
+> limit.central(rexp, distpar=1, m=1, s=1)
+[[/code]]
+--]

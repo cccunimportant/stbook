@@ -1,0 +1,3 @@
+[[module ListPages order="updated_at desc" rss="st:modify_rss" category=""]]
+* %%title%% : %%link%% , %%updated_at%%
+[[/module]]

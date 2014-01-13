@@ -1,0 +1,30 @@
++ 簡介
+
+Gibbs 取樣程序的使用時機是在聯合分布 [[$ P(X,Y) $]] 未知，但是單一變數的條件機率 [[$ P(X|Y), P(Y|X), P(X), P(Y) $]] 已知的情況。在此種情況下，我們可以利用亂數產生的樣本，統計聯合機率分布。
+
+該程序首先取得一個樣本 y0 作為初始值，然後利用蒙地卡羅法透過 (X, y0) 產生新樣本 x1，接著再利用 (x1, Y)  產生 y1。於是我們得到下列這個疊代程序 
+
+Algorithm GibbsSampling(X, Y)
+　[[$ y_0 $]] = generate sample from P(Y)
+　for i = 1 to N
+　　[[$ x_i $]] = generate sample from [[$ P(X | y_{i-1}) $]]
+　　[[$ y_i $]] = generate sample from [[$ P(Y | x_i)$]]
+　calculate P(X,Y)
+End Algorithm
+
+以上疊代程序是針對兩個隨機變數的情況，假如我們希望延伸到 k 個隨機變數的情況，可以修改演算法如下。
+
+Algorithm GibbsSampling([[$ X_1, ...,X_k $]])
+　[[$ y_0 $]] = generate sample from P(Y)
+　for i = 1 to N
+　　j = random(1..k)
+　　[[$ x_j $]] = generate sample from [[$ P(X_i | X_1, ..., X_{j-1}, X_{j+1},...,X_k) $]]
+　calculate [[$ P(X_1, ...,X_k) $]]
+End Algorithm
+
+
+Gibbs 取樣程序是『蒙地卡羅馬可夫算法』(MCMC) 的一個案例，也是 Metropolis-Hasting 取樣程序的一個特例，我們可以利用Metropolis-Hasting 取樣程序計算貝氏網路的聯合機率分布。
+
++ 參考文獻
+# 3.4 The Gibbs Sampling Algorithm, http://fedc.wiwi.hu-berlin.de/xplore/ebooks/html/csa/node28.html
+# Handbook of Computational Statistics , http://fedc.wiwi.hu-berlin.de/xplore/ebooks/html/

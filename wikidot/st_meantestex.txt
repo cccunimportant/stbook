@@ -1,0 +1,130 @@
++ 檢驗對象
+
+t.test(x, alternative="two.sided") 乃是進行雙尾檢定，也就是檢定下列假設。
+
+[[math type="eqnarray"]]
+H0:\mu = \mu_0 \\
+H1:\mu \ne \mu_0 \\ 
+[[/math]]
+
+t.test(x, alternative="less") 乃是進行右尾檢定，也就是檢定下列假設。
+
+[[math type="eqnarray"]]
+H0:\mu \lt \mu_0 \\
+H1:\mu \ge \mu_0 \\
+[[/math]]
+
+t.test(x, alternative="greater") 乃是進行左尾檢定，也就是檢定下列假設。
+
+[[math type="eqnarray"]]
+H0:\mu \gt \mu_0 \\
+H1:\mu \le \mu_0 \\
+[[/math]]
+
++ R 操作
+
++ 範例一：請根據 x 檢定下列假設。
+
+t.test(x, alternative="two.sided") 乃是進行雙尾檢定，也就是檢定下列假設。
+
+[[math type="eqnarray"]]
+H0:\mu = \mu_0 \\
+H1:\mu \ne \mu_0 \\
+[[/math]]
+
+[[math type="eqnarray"]]
+H0 : \mu = 4.2 \\
+H1 : \mu \ne 4.2  \\
+[[/math]]
+
+[[code]]
+> x
+ [1]  4.383281191  3.606786546  4.149433964  1.764763558  6.612769168
+ [6]  6.460276485  6.847852709  6.903313100  6.791519852  0.778853119
+[11]  1.976568888  5.133699226  2.289355261  8.126511534  9.726945692
+[16]  4.884082940  6.731184198  7.374879912  3.766449953  8.097331884
+[21]  9.170561683  5.112942270  6.364315744  2.411775284 -0.001746999
+[26]  0.523137438  1.739547059  5.635931324  0.506979141 12.134334049
+> t.test(x, alternative="two.sided")
+
+        One Sample t-test
+
+data:  x 
+t = 9.0115, df = 29, p-value = 6.625e-10
+alternative hypothesis: true mean is not equal to 0 
+95 percent confidence interval:
+ 3.865301 6.134941 
+sample estimates:
+mean of x 
+ 5.000121 
+[[/code]]
+
+註：事實上，我是用 x = rnorm(30, mean=5, sd=3) 產生出 x 序列的。
+
+
++ 範例二：延續上題的 x，但檢定假設修改如下。
+
+t.test(x, alternative="less") 乃是進行右尾檢定，也就是檢定下列假設。
+
+[[math type="eqnarray"]]
+H0:\mu \lt \mu_0 \\
+H1:\mu \ge \mu_0 \\
+[[/math]]
+
+
+[[math type="eqnarray"]]
+H0 : \mu \lt 4.2 \\
+H1 : \mu \ge 4.2  \\
+[[/math]]
+
+[[code]]
+> t.test(x, alternative="less")
+
+        One Sample t-test
+
+data:  x 
+t = 9.0115, df = 29, p-value = 1
+alternative hypothesis: true mean is less than 0 
+95 percent confidence interval:
+     -Inf 5.942902 
+sample estimates:
+mean of x 
+ 5.000121 
+[[/code]]
+
+
++ 範例三：延續上題的 x，但檢定假設修改如下。
+
+t.test(x, alternative="greater") 乃是進行左尾檢定，也就是檢定下列假設。
+
+[[math type="eqnarray"]]
+H0:\mu \gt \mu_0 \\
+H1:\mu \le \mu_0 \\
+[[/math]]
+
+[[math type="eqnarray"]]
+H0 : \mu \gt 4.2 \\
+H1 : \mu \le 4.2  \\
+[[/math]]
+
+[[code]]
+> t.test(x, alternative="greater")
+
+        One Sample t-test
+
+data:  x 
+t = 9.0115, df = 29, p-value = 3.313e-10
+alternative hypothesis: true mean is greater than 0 
+95 percent confidence interval:
+ 4.05734     Inf 
+sample estimates:
+mean of x 
+ 5.000121 
+
+> 
+[[/code]]
+
++ 參考文獻
+# http://en.wikipedia.org/wiki/Alternative_hypothesis
+# http://people.virginia.edu/~trb6e/slides/t-testLab1.pdf
+ * Note: alternative="greater" means a test to see if the ﬁrst score is greater than the second. Not the other way around.

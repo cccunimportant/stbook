@@ -1,0 +1,41 @@
+在程式設計領域，「設計模式」是一些經常被使用到的物件樣式，而在數學領域，也同樣存在著某些「常見模式」，在機率統計領域，這些「常見模式」就是機率分布。
+
+* 柏努力試驗：每次試驗可以分為成功或失敗 (例如投擲銅板得到正面代表成功，反面代表失敗)。
+
+機率分布可以分為「離散型」與「連續型」兩類，以下是一些常見機率分布的「密度函數」與「R 函數」。
+
++ 機率分布 (離散型)
+|| 機率模型 	||密度函數 ||  R 函數名稱 || 說明 		|| 用途 ||
+|| [[[st:binom|二項分布]]]	|| [[$ {n \choose x} p^x (1-p)^{n-x} $]] || [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Binomial.html binom(n:size, p:prob)] 	||  n:樣本數, p:正面機率 || n 次試驗中有 x 個成功的機率 ||
+|| [[[st:multinom|多項分布]]]	|| [[$ \frac{n!}{x_1!...x_k!}  p_1^{x_1} p_2^{x_2}...p_k^{x_k} $]] || [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Multinom.html multinom(n:size, p(1..k):prob)] 	|| n:樣本數, p[1..n]:各項的機率	||  ||
+|| [[[st:nbinom|負二項分布]]]	|| [[$ {x-1 \choose r-1} (1-p)^{x-r} p^r $]] || [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/NegBinomial.html binom(size, prob)]	|| x:樣本數, , p:正面機率 || 要得到第 r 次成功所需要的試驗次數 ||
+|| [[[st:geom|幾何分布]]]	|| [[$ (1-p)^{x-1} p $]] || [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Geometric.html geom(p:prob)] 	|| p: 成功機率 || 第一次成功所需要的試驗次數 ||
+|| [[[st:hyper|超幾何分布]]]	|| [[$ \frac{{ r \choose x} {N-r \choose n-x}}{N \choose n} $]] || [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Hypergeometric.html hyper(N:m,n:n,r:k)] || m:白球數量, n:黑球數量, k:抽出球數 || 同二項分布，但取樣後不放回 ||
+|| [[[st:poisson|布瓦松分布]]]	|| [[$ \frac{e^{-\lambda s} {\lambda s}^x}{x!} $]] || [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Poisson.html pois(lambda)] || k:期望值,  [[$ \lambda = \frac{k}{s} $]] || [[$ k=\lambda s$]]，在 s 時間內，事件出現平均 k 次 ||
+
++ 機率分布 (連續型)
+
+|| 機率模型 	|| 密度函數 || R 函數 		|| 說明 		|| 用途 ||
+|| [[[st:norm|常態分布]]] (Normal) || [[$ \frac{1}{\sqrt{2\pi} \sigma} e^{- \frac{1}{2} [(x-\mu)/\sigma]^2} $]] ||  [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Normal.html norm(mean, sd)] ||	|| 中央極限定理：x1+x2+...+xk; 當 k 越大就越接近常態分布 || 
+|| [[[st:gamma|伽瑪分布]]] (Gamma) || [[$ \frac{1}{\Gamma(a) b^{a}} x^{a-1} e^{-x/b} $]] ||  [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/GammaDist.html gamma(shape, rate = 1, scale = 1/rate)] ||  [[$ \Gamma(k) = \int_{0}^{\infty} z^{k-1} e^{-z} dz $]] ||  指數分布與卡方分布都是 Gamma 分布的特例 ||
+|| [[[st:exp|指數分布]]]	(Exponential)|| [[$ \frac{1}{b} e^{-x/b} $]] || [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Exponential.html exp(rate)] || 伽瑪分布([[$ a=1, b=\frac{1}{\lambda}$]]) || 布瓦松過程中，第一次事件出現的時間 W ||
+|| [[[st:chisq|卡方分布]]] (Chi-Square) ||  [[$ \frac{1}{2^{\gamma/2}\Gamma(\gamma/2)}\,x^{\gamma/2 - 1} e^{-x/2} $]] ||  [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Chisquare.html chisq(df, ncp)] || 伽瑪分布([[$ b=2, a=\gamma/2 $]]) || 利用樣本推斷母體變異數 || 
+|| [[[st:unif|均勻分布]]] (Uniform) || [[$ \frac{1}{b-a} $]] || [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Uniform.html unif(a:min, b:max)] || a:範圍下限, b: 上限 || 出現機會均等 ||
+|| [[[st:cauchy|柯西分布]]] (Cauchy) || [[$ \frac{1}{\pi} \frac{a}{a^2 + (x-b)^2} $]] || [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Cauchy.html cauchy(b:location, a:scale)] ||  || 
+|| [[[st:weibull|威布爾分布]]] (Weibull)|| [[$ a b x^{b-1} e^{-a x^{b}} $]] || [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Weibull.html weibull(a:shape, b:scale)] || [[$ \rho(t)=\frac{f(t)}{R(t)}$]] || 可靠度工程：f(x) 失敗時間, R(t) 可靠度, [[$ \rho(t) $]] 失敗率 ||
+|| [[[st:t|T 分布]]] (T)	|| [[$ \frac{Z}{\sqrt{X_{\gamma}^2/\gamma}} $]] || [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/TDist.html t(df, ncp)] || || 估計變異數時使用的分布 || 
+|| [[[st:f|F 分布]]] (F)	|| [[$ \frac{X_{\gamma_1}^2 / \gamma_1}{X_{\gamma_2}^2/\gamma_2} $]] ||  [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Fdist.html f(df1, df2, ncp)] 	|| || 等變異數 F 檢定時使用 || 
+|| [[[st:beta|貝塔分布]]] (Beta) ||   || [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Beta.html beta(a:shape1, b:shape2, ncp)] ||  || 
+|| [[[st:lnorm| 對數常態分布]]]	 (Log Normal) || ||  [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Lognormal.html lnorm(meanlog, sdlog)] 	|| 				|| 
+|| [[[st:logis|邏輯分布]]]	|| ||  [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Logistic.html logis(location, scale)]	|| 				||
+|| [[[st:SignRank|Signrank]]]	|| ||  [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/SignRank.html signrank(n)]	|| 				||
+|| [[[st:wilcoxon|威爾斯]]]	|| ||  [http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Wilcoxon.html wilcox(m, n)] 	|| a,b 為兩組樣本	|| 
+
+參考：Distributions in the stats package -- http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Distributions.html
+
++ 非標準 R 函數
+|| [[[st:invnorm|反常態分布]]]	|| || invnorm(m, l) 	|| 				|| 
+|| [[[st:invgamma|反伽瑪分布]]] || ||  invgamma(shape, scale) || 				||
+|| [[[st:dirchlet|Dirichlet 分布]]]	||  || dirichlet(a1, a2, ..., ak) 	|| 				||
+|| [[[st:pareto|柏累托分布]]]	|| ||  pareto(a,b) 	|| 				|| 
+|| [[[st:rayl|瑞利分布]]]	(Rayl)	|| || rayl(b) 	|| 				||

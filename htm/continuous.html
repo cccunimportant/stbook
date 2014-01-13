@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#機率分布-連續型">機率分布 (連續型)</a><ul>
+<li><a href="#簡介">簡介</a></li>
+<li><a href="#t-分布">T 分布</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="機率分布-連續型"><a href="#機率分布-連續型">機率分布 (連續型)</a></h1>
+<h2 id="簡介"><a href="#簡介">簡介</a></h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left">連續機率模型</th>
+<th align="left">密度函數</th>
+<th align="left">R 函數</th>
+<th align="left">說明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">常態分布(Normal)</td>
+<td align="left"><img src="../timg/b0aca724e39e.jpg" /></td>
+<td align="left">norm(mean, sd)</td>
+<td align="left">中央極限定理：x1+x2+...+xk; 當 k 越大就越接近常態分布</td>
+</tr>
+<tr class="even">
+<td align="left">伽瑪分布 (Gamma)</td>
+<td align="left"><img src="../timg/7a2f5a287065.jpg" /></td>
+<td align="left">gamma(shape, rate = 1, scale = 1/rate)</td>
+<td align="left"><img src="../timg/c63269e21148.jpg" /> <br/> 指數分布與卡方分布都是 Gamma 分布的特例</td>
+</tr>
+<tr class="odd">
+<td align="left">指數分布 (Exponential)</td>
+<td align="left"><img src="../timg/71075ebb0855.jpg" /></td>
+<td align="left">exp(rate)</td>
+<td align="left">伽瑪分布( <img src="../timg/ad965fa877cb.jpg" /> ) <br/> 布瓦松過程中，第一次事件出現的時間 W</td>
+</tr>
+<tr class="even">
+<td align="left">卡方分布 (Chi-Square)</td>
+<td align="left"><img src="../timg/1c1902be8fc6.jpg" /></td>
+<td align="left">chisq(df, ncp)</td>
+<td align="left">伽瑪分布( <img src="../timg/10fe70a365dc.jpg" /> ) <br/> 利用樣本推斷母體變異數</td>
+</tr>
+<tr class="odd">
+<td align="left">均勻分布 (Uniform)</td>
+<td align="left"><img src="../timg/d199631f1413.jpg" /></td>
+<td align="left">unif(a:min, b:max)</td>
+<td align="left">a:範圍下限, b: 上限 <br/> 出現機會均等</td>
+</tr>
+<tr class="even">
+<td align="left">柯西分布 (Cauchy)</td>
+<td align="left"><img src="../timg/868c8083bf08.jpg" /></td>
+<td align="left">cauchy(b:location, a:scale)</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">威布爾分布 (Weibull)</td>
+<td align="left"><img src="../timg/d1d29714916b.jpg" /></td>
+<td align="left">weibull(a:shape, b:scale)</td>
+<td align="left"><img src="../timg/787bf9141c33.jpg" /> <br/> 可靠度工程：f(x) 失敗時間, R(t) 可靠度, <img src="../timg/5cba230c35b4.jpg" /> 失敗率</td>
+</tr>
+<tr class="even">
+<td align="left">T 分布 (T)</td>
+<td align="left"><img src="../timg/47685e30d909.jpg" /></td>
+<td align="left">t(df, ncp)</td>
+<td align="left">估計變異數時使用的分布</td>
+</tr>
+<tr class="odd">
+<td align="left">F 分布 (F)</td>
+<td align="left"><img src="../timg/984c910d56d9.jpg" /></td>
+<td align="left">f(df1, df2, ncp)</td>
+<td align="left">等變異數 F 檢定時使用</td>
+</tr>
+<tr class="even">
+<td align="left">貝塔分布 (Beta)</td>
+<td align="left"><img src="../timg/6e86d1feb294.jpg" /></td>
+<td align="left">beta(a:shape1, b:shape2, ncp)</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">對數常態分布 (Log Normal)</td>
+<td align="left"></td>
+<td align="left">lnorm(meanlog, sdlog)</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">邏輯分布</td>
+<td align="left"></td>
+<td align="left">logis(location, scale)</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Signrank</td>
+<td align="left"></td>
+<td align="left">signrank(n)</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">威爾斯</td>
+<td align="left"></td>
+<td align="left">wilcox(m, n)</td>
+<td align="left">a,b 為兩組樣本</td>
+</tr>
+</tbody>
+</table>
+<h2 id="t-分布"><a href="#t-分布">T 分布</a></h2>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

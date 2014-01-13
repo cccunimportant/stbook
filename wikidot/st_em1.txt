@@ -1,0 +1,157 @@
++ 隨機變數
+
+隨機試驗 (Random Experiment)：舉凡觀察、實驗、調查、檢驗、抽樣等
+
+在機率理論中，樣本空間 S 與隨機變數 X 有不同的意義，樣本空間是指
+
+
+但為了方便起見，在本文中我們通常將隨機變數
+
+在機率理論中，對於一個樣本空間 X 而言，我們可以用 P(x) 表示樣本 x 出現的機率。
+
+
+
+假如 X 可以透過直接觀察得到，那麼我們可以不斷觀察 X 機率源所產生的事件序列 [[$ x_1,x_2,....x_n $]]，並且統計在觀察中 x 出現的機率 P'(x)。
+
+假如
+
+
++ 聯合機率分布
+對於許多機率現象，x 事件與 y 事件可能會伴隨出現，並且有某種程度的關連性，我們可以用 P(x,y) 代表 x,y 同時出現的機率，並用 (X,Y) 代表此聯合隨機變數。
+
+假如 x 可能受到 y 變數的影響，則我們可以用 P(x|y) 代表在 y 事件出現的情況之下，x 事件出現的機率，這稱為條件機率。
+
+假如 y 變數可以透過直接觀察得到，那麼我們可以直接觀察聯合隨機分布 (X,Y) 的出現機率 P(x,y)，
+
+假如所有變數都可以直接觀察，那麼就可以用 X 代表所有的隨機變數所組合而成的變數，並且以 P(x) 表示 x 事件出現的機率。
+
+假如所有變數都可以直接觀察，
+
+有時，構
+
+P(x)
+
+在機率理論中，假如有些未能觀察到的隱變數存在，則可以用條件機率描述此種現象，舉例而言，
+
+在馬可夫模型中，假如有些未能觀察到的隱變數存在，則稱為隱馬可夫模型 (Hidden Markov Model, HMM)，我們可以用 
+
+
++ 最大似然法則
+
+
++ 最大商法則
+
+[[math type="eqnarray"]]
+&& \sum_z P(Z=z|x,h) L(x,Z=z|h) \\
+&=& \sum_z \frac{P(x,Z=z,h)}{P(x,h)} \log P(x,Z=z|h) \\
+&=& \frac{1}{P(x,h)} \sum_z P(x,Z=z,h) \log P(x,Z=z|h) \\
+&=& \frac{1}{P(x,h)} H(x,Z|h) \\
+[[/math]]
+
++ EM 演算法
+
+EM 演算法 (Expectation-maximization Algorithm) 可以總結成下列公式
+
+[[math]]
+h^{t+1} = \arg\max_h \; \sum_z P(Z=z | x, h^t) L(x,Z=z|h^t)
+[[/math]]
+
+說明：h : 機率模型, Z : 隱變數, x : 觀察值
+
+E-step 計算隱變數 z 的條件熵期望值，因此稱為 Expectation，這也就是算式 [[$ \sum_z P(Z=z | x, h^t) L(x,Z=z|h^t) $]] 意義。
+
+M-step 則是尋找一個讓條件熵最大化的機率模型 h，因此稱為 Maximization，也就是 [[$ argmax_h(...) $]] 的步驟。
+
+EM 演算法的應用非常廣泛，特別是在人工智慧領域中的分群 (Clustering) ，貝氏網路的學習 (Bayesian Network)，以及隱馬可夫模型 (Hidden Markov Model) 的學習上，都有強大的應用，以下分別介紹之。
+
++ EM 學習法與最大商法則
+
+[[math]]
+h^{t+1} &=& \arg\max_h \; \sum_z P(Z=z | x, h^t) L(x,Z=z|h^t)
+               &=& \arg\max_h \; \sum_z P(Z=z | x, h^t) L(x,Z=z|h^t)
+               &=& \arg\max_h \; \sum_z P(Z=z | x, h^t) L(x,Z=z|h^t)
+[[/math]]
+
++ 一個簡單的範例
+假如有一個機率源 h 會產生二進位的亂數 (0 or 1)，已知此機率源產生 0 的機率為(h1,...h5) = (0,0.3,0.5,0.7,1.0) 等五種情況之ㄧ，假如我們觀察該機率源所產生的隨機亂數序列為 x[1..n] = (0,1,1,1,0,1,1,1,1,0,....)，那麼我們在每個時間點應該假設該機率源的分布 h 為何種分布最好呢？
+
+說明：假如這是一場賭局，我們只能從 (h1,...h5) 當中選擇一個機率源模型，當第 n 個觀察值進來時，我們應該將賭金押在哪一個機率源才對呢？
+
+在這樣的模型下，沒有任何隱變數存在，因此 z 為空集合，不需考慮。於是 EM 目標函數退化成下列公式。
+
+[[math type="eqnarray"]]
+h^{t+1} &=& \arg\max_h \; \sum_z P(z|x,h^t) L(x,z|h^t) \\
+               &=& \arg\max_h \; \frac{P(\emptyset,x,h^t)}{P(x,h^t)} L(x|h^t) \\
+               &=& \arg\max_h \; L(x|h^t) \\
+               &=& \arg\max_h \; \log \frac{P(x,h^t)}{P(h)} \\
+               &=& \arg\max_h \; (\log P(x,h^t) - \log P(h)) \\
+               &=& \arg\max_h \; \log P(x,h^t) \\
+               &=& \arg\max_h \; \log (P(x_i=0,h)^{N(0)} P(x_i=1,h)^{N(1)}) \\
+               &=& \arg\max_h \; N(0) \log P(x_i=0,h) + N(1) \log P(x_i=1,h) \\
+               &=& \arg\max_h \; \sum_{x_i} P(x_i) \log P(x_i,h) \\
+[[/math]]
+
+於是，EM 的目標是尋找產生 x 序列機率最大的假設 h，也就是讓 [[$ \sum_{x_i} P(x_i) \log P(x_i,h) $]] 最大的 h，在這個問題上，[[$ \arg\max_h(...) $]] 的程序很容易做，只要讓
+首先，我們可以列出每個機率源產生該序列的機率，
+
+當 x[1] 進來時，我們應該押 h1, 
+當 x[2] 進來時，我們應該押 h3 或 h4
+當 x[3] 進來時，我們應該押 h3, 
+當 x[4] 進來時，我們應該押 h5
+...
+當 x[10] 進來時，我們應該押 h5
+
+
+
+P(h|x)=P(x,h)/P(x)
+
+P(x|h)=P(x,h)/P(h)
+
+那麼在此範例中，P(x), P(h), P(x,h) 各為多少呢？
+
+P(h) 可以直接根據最大商法則設定為平均分布，也就是 P(h1)=P(h2)=P(h3)=P(h4)=P(h5)=0.2。
+P(x) 可以直接根據最大商法則設定為平均分布，也就是 [[$ P(x) = P(x[1..n]) = 0.5^N_x(0) 0.5^N_x(1) = 0.5^n $]]
+
+P(x,h) = P(x[1..n], h) = p(h,x=0)^{N_x[0]} p(h,x=1)^{N_x[1]}
+
++ 使用 EM 進行分群 (Clustering)
+
+E-M是使用高斯分配(Gaussian Distribution，也就是常態分配)來描述該案例隸屬於某群集的機率密度，利用此機率函數來來取代剛性群集的距離函數
+
+E 步驟：(期望) 計算似然函數，使用 x 相對於 z 的條件機率分布。
+
+[[math]]
+Q(\theta|\theta^{(t)}) = E_{Z|x,\theta^{(t)}}\left[ \log L (\theta;x,Z)  \right]
+[[/math]]
+
+M 步驟：(最大化) 找出最佳化的參數
+[[math]]
+\theta^{(t+1)} =argmax \ Q(\theta|\theta^{(t)})
+[[/math]]
+
+
+其中m是平均值，而s表示標準差。
+
+[[math]]
+F(q,\theta) =E_q [ \log L (\theta ; x,Z) ] + H(q) = -D_{\text{KL}}\big(q \big\| p_{Z|X}(\cdot|x;\theta ) \big) + \log L(\theta;x) 
+[[/math]]
+
+Then the steps in the EM algorithm may be viewed as:
+
+:'''Expectation step''': Choose ''q'' to maximize ''F'':
+[[math]]
+q^{(t)} = argmax \ F(q,\theta^{(t)}) 
+[[/math]]
+
+:'''Maximization step''': Choose ''&theta;'' to maximize ''F'':
+[[math]]
+\theta^{(t+1)} = argmax \ F(q^{(t)},\theta)
+[[/math]]
+
+
+
++ 參考文獻
+# http://en.wikipedia.org/wiki/Expectation-maximization_algorithm
+# http://en.wikipedia.org/wiki/Baum-Welch_algorithm (forward-backward algorithm)
+# http://en.wikipedia.org/wiki/Inside-outside_algorithm
+# http://blog.pluskid.org/?tag=clustering

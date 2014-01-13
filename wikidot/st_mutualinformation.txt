@@ -1,0 +1,123 @@
++ 熵的定義
+熵，又稱為亂度，其意義是整個系統的平均資訊量，通常我們使用 H(X) 符號代表隨機變數 X 的熵。
+
+[[math]]
+H(X)  =  \operatorname{E}(I(X)).
+[[/math]]
+
+其中的 E 代表期望值函數, I(X) 代表資訊量所形成的隨機變數。
+
+[[math]]
+H(X) = \sum_{i=1}^n {p(x_i)\,I(x_i)} = -\sum_{i=1}^n {p(x_i) \log p(x_i)}
+[[/math]]
+
+H(X) 乃是一個凸函數 (Convex Function)，因此具有許多良好的數學特性，這些特性讓熵再數學上成為一個相當有價值的工具。圖一顯示了一個只有兩個可能性 [[$ p(x=1), p(x=0) $]] 的機率分布，您可以從中觀察到這個凸函數的特性。
+
+[[=image Binary_entropy_plot.svg]]
+= 圖一、只有兩個可能值的熵函數
+
+因此，H(X, Y) 即為包含 X, Y 兩個隨機變數系統的聯合熵。其直覺意義是，我們平均需要使用 H(X,Y) 個位元才能表達其中的一個 (x,y) 元素。假如 x 為已知的情況之下，那麼我們需要再加入多少位元才能表達其中的 (x,y) 元素呢？這就是 H(Y|X)的 意義。
+
++ 聯合熵的定義
+
+
+
++ 條件熵
+
+條件熵 (Concitional Entropy) 的定義如下。
+[[math  eq3 type="eqnarray"]]
+H(Y|X)\ &\equiv& \sum_{x\in\mathcal X}\,p(x)\,H(Y|X=x)\\
+&=& -\sum_{x\in\mathcal X}p(x)\sum_{y\in\mathcal Y}\,p(y|x)\,\log\,p(y|x)\\
+&=& -\sum_{x\in\mathcal X}\sum_{y\in\mathcal Y}\,p(y,x)\,\log\,p(y|x)\\
+&=& -\sum_{x\in\mathcal X, y\in\mathcal Y}p(x,y)\log\,p(y|x).
+[[/math]]
+
+條件熵 H(Y|X) 相當於聯合熵 H(Y,X)  減去單獨的熵 H(X)，其數學式如下所示。
+
+[[math eq4]]
+H(Y|X)\,=\,H(Y,X)-H(X) \, .
+[[/math]]
+
+公式 [[eref 4]] 的證明過程如下所示。
+
+[[math  eq5 type="eqnarray"]]
+  H(X,Y) &=& -\sum_{x\in\mathcal X, y\in\mathcal Y}p(x,y)log\,p(x,y)\\
+&=& -\sum_{x\in\mathcal X, y\in\mathcal Y}p(x,y)log\left(p(y|x)p(x)\right)\\
+&=& -\sum_{x\in\mathcal X, y\in\mathcal Y}p(x,y)log\,p(y|x) - \sum_{x\in\mathcal X, y\in\mathcal Y} p(x,y) log\,p(x)\\
+&=& H(Y|X)-\sum_{x\in\mathcal X, y\in\mathcal Y}p(x,y)log\,p(x)\\
+&=& H(Y|X)-\sum_{x\in\mathcal X}\sum_{y\in\mathcal Y}p(x,y)log\,p(x)\\
+&=& H(Y|X)-\sum_{x\in\mathcal X}log\,p(x)\sum_{y\in\mathcal Y}p(x,y)\\
+&=& H(Y|X)-\sum_{x\in\mathcal X}(log\,p(x))p(x)\\
+&=& H(Y|X)-\sum_{x\in\mathcal X}p(x)log\,p(x)\\
+&=& H(Y|X)+H(X)\\
+&=& H(X)+H(Y|X)\\
+[[/math]]
+
++ 互資訊
+
+針對兩個隨機變數 X, Y，假如其機率分布分別為 [[$ p_1(x), p_2(y) $]], 而其聯合機率分布為 p(x,y)，則 X, Y 的互資訊 I(X;Y) 定義如下。
+
+[[math eq1]]
+I(X;Y) = \sum_{y \in Y} \sum_{x \in X} p(x,y) \log{ \left( \frac{p(x,y)}{p_1(x)\,p_2(y)} \right) }, \,\!
+[[/math]]
+
+假如隨機變數 X 與 Y 無關 (條件獨立)，則其互資訊將會為 0，由下式可得證。
+[[math eq2]]
+\log{ \left( \frac{p(x,y)}{p_1(x)\,p_2(y)} \right) } = \log{1} = 0
+[[/math]]
+
+
+互資訊 I(X;Y) 代表兩個隨機變數間共有的訊息位元數 (關聯性)，相當於隨機變數 X 的熵 H(X) 與條件熵 H(X | Y) 之間的差，互資訊與熵之間的關係如下所示。
+
+[[math  eq6 type="eqnarray"]]
+I(X;Y) &=& H(X) - H(X|Y) \\ 
+&=& H(Y) - H(Y|X) \\ 
+&=& H(X) + H(Y) - H(X,Y) \\
+&=& H(X,Y) - H(X|Y) - H(Y|X)
+[[/math]]
+
+由於互資訊代表兩者之間的關聯性，關聯性越強者互資訊越大，因此可用互資訊量度兩個隨機變數之間的距離，我們可以定義量度方式 d(X,Y)，代表兩個隨機變數 X, Y 之間的距離。
+
+[[math eq7]]
+d(X,Y) = H(X,Y)-I(X;Y)
+[[/math]]
+
+或者將其正規化後，成為下列量度方式 D(X,Y)，
+[[math eq8]]
+D(X,Y) = d(X,Y)/H(X,Y) \le 1
+[[/math]]
+
+
++ 條件互資訊
+
+條件互資訊的定義如下，代表
+[[math]]
+I(X;Y|Z) & \equiv & \mathbb E_Z \big(I(X;Y)|Z\big)
+    & = & \sum_{z\in Z} \sum_{y\in Y} \sum_{x\in X}
+      p_Z(z) p_{X,Y|Z}(x,y|z) \log \frac{p_{X,Y|Z}(x,y|z)}{p_{X|Z}(x|z)p_{Y|Z}(y|z)}
+[[/math]]
+
+
+上列算式可以進一部簡化如下
+[[math]]
+I(X;Y|Z) = \sum_{z\in Z} \sum_{y\in Y} \sum_{x\in X}
+      p_{X,Y,Z}(x,y,z) \log \frac{p_Z(z)p_{X,Y,Z}(x,y,z)}{p_{X,Z}(x,z)p_{Y,Z}(y,z)}.
+[[/math]]
+
+多變數的條件互資訊可以用遞回方法定義，其數學式如下所示。
+
+[[math]]
+I(X_1;\,...\,;X_n) = I(X_1;\,...\,;X_{n-1}) - I(X_1;\,...\,;X_{n-1}|X_n)
+[[/math]]
+
+[[math]]
+I(X_1;\,...\,;X_{n-1}|X_n) = \mathbb E_{X_n} \big(I(X_1;\,...\,;X_{n-1})|X_n\big)
+[[/math]]
+
++ 注意事項
+# 本文由維基百科修改而來，修改使用時請遵照 [http://en.wikipedia.org/wiki/Wikipedia:Text_of_Creative_Commons_Attribution-ShareAlike_3.0_Unported_License Creative Commons Attribution-ShareAlike License] 授權協議。
+
++ 參考文獻
+# Wikipedia contributors. Entropy (information theory). Wikipedia, The Free Encyclopedia. November 30, 2009, 18:28 UTC. Available at: http://en.wikipedia.org/w/index.php?title=Entropy_(information_theory)&oldid=328845498. Accessed December 3, 2009.
+# Wikipedia contributors. Mutual information. Wikipedia, The Free Encyclopedia. November 30, 2009, 23:33 UTC. Available at: http://en.wikipedia.org/w/index.php?title=Mutual_information&oldid=328909860. Accessed December 3, 2009.
+#

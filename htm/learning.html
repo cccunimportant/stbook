@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#機率密度函數-為未知">機率密度函數：[[ <img src="../timg/4f20acb43000.jpg" /> ]], [[ <img src="../timg/f6c1ecf1eac0.jpg" /> ]] 為未知。</a></li>
+<li><a href="#概似函數">概似函數：[[ <img src="../timg/b8a38444245c.jpg" /> ]]</a></li>
+<li><a href="#求可以讓-最大化的-參數">求可以讓 [[ <img src="../timg/50d620d15d07.jpg" /> ]] 最大化的 [[ <img src="../timg/f6c1ecf1eac0.jpg" /> ]] 參數 [[ <img src="../timg/433acd3e109e.jpg" /> ]]。</a><ul>
+<li><a href="#最大似然法則-maximum-likelihood">最大似然法則 (Maximum Likelihood)</a></li>
+<li><a href="#計算統計學----機率模型假說與學習">計算統計學 -- 機率模型：假說與學習</a></li>
+</ul></li>
+</ul>
+</div>
+<ul>
+<li>簡介</li>
+</ul>
+<p>利用亂數隨機抽樣的方式以計算某種解答的演算法，被稱為蒙地卡羅演算法，其中最簡單的方法是直接取樣算法。</p>
+<p>舉例而言，假如我們不知道半徑為 1 的圓形面積，那麼就可以利用亂數隨機取樣 1百萬個 X=random[-1...1], Y=random[-1...1] 之間的的值，然後看看有多少點落在 [[ <img src="../timg/48c015fd7703.jpg" /> ]] 的範圍之內 P(in circle)。最後利用 4 * P(in circle) 就可以計算出該圓形的面積。</p>
+<ul>
+<li><p>直接取樣演算法</p></li>
+<li><p>最大慨似估計</p></li>
+</ul>
+<h1 id="機率密度函數-為未知"><a href="#機率密度函數-為未知">機率密度函數：[[ <img src="../timg/4f20acb43000.jpg" /> ]], [[ <img src="../timg/f6c1ecf1eac0.jpg" /> ]] 為未知。</a></h1>
+<h1 id="概似函數"><a href="#概似函數">概似函數：[[ <img src="../timg/b8a38444245c.jpg" /> ]]</a></h1>
+<h1 id="求可以讓-最大化的-參數"><a href="#求可以讓-最大化的-參數">求可以讓 [[ <img src="../timg/50d620d15d07.jpg" /> ]] 最大化的 [[ <img src="../timg/f6c1ecf1eac0.jpg" /> ]] 參數 [[ <img src="../timg/433acd3e109e.jpg" /> ]]。</a></h1>
+<ul>
+<li>可以直接最大化 [[ <img src="../timg/50d620d15d07.jpg" /> ]] ，或者最大化 [[ <img src="../timg/e1c96ba17c9d.jpg" /> ]] 亦可</li>
+<li>(因為許多獨立隨機變數的算式會表現為某些機率式的乘積，此時取 ln 可以讓這些乘積轉化為相加的運算，數學上會變得較為簡單)。 # 用 [[ <img src="../timg/433acd3e109e.jpg" /> ]] 取代 [[ <img src="../timg/f6c1ecf1eac0.jpg" /> ]] ，就可得到最大慨似估計式。 # 利用已知樣本求取「最大慨似估計式」的觀察值，以便估計其中的參數值。</li>
+</ul>
+<p>說明：如果是常態分布，通常 [[ <img src="../timg/4148000cddd6.jpg" /> ]]</p>
+<h2 id="最大似然法則-maximum-likelihood"><a href="#最大似然法則-maximum-likelihood">最大似然法則 (Maximum Likelihood)</a></h2>
+<ul>
+<li>簡介</li>
+</ul>
+<p>對於任何一個隨機現象，我們可以用隨機變數 [[ <img src="../timg/1d4530134299.jpg" /> ]] 描述，假設樣本 x 的機率分布以 [[ <img src="../timg/8e654074b5a6.jpg" /> ]] 表示。</p>
+<p>假如經過觀察之後，經由觀察數據 [[ <img src="../timg/aa6a170df23e.jpg" /> ]] 的統計，得到其分布為 [[ <img src="../timg/4a949196924e.jpg" /> ]] ，於是我們就可以利用機率分布 [[ <img src="../timg/d964473f93bc.jpg" /> ]] 反推出 [[ <img src="../timg/d85cbe02cc02.jpg" /> ]]。</p>
+<p>一個最簡單的想法是 [[ <img src="../timg/b7fc35e8e6eb.jpg" /> ]]，也就是這些觀察是具有代表性的，於是統計上的機率分布符合真實的機率分佈。</p>
+<p>這個想法的背後，其實是有理論基礎的，其理論稱為最大似然法則 (Maximum Likelihood Principle)。</p>
+<ul>
+<li>最大似然法則</li>
+</ul>
+<p>隨然我們觀察到的統計現象是 p'，但是真正的 p 卻有無限多種可能，基本上任何機率分布都可能產生觀察現象 p'。</p>
+<p>即便如此，每一個機率分布 p 會產生觀察現象 p' 的可能性卻大有不同，假如機率模型 p 與 p'(x) 的分布一致 ，那麼 p 產生 p'(x) 現象的機率將會是最大的。</p>
+<p>因此，設定 [[ <img src="../timg/b7fc35e8e6eb.jpg" /> ]] 的想法，其背後的目標乃是要最大化機率源模型 p 產生 p' 現象的可能性，這個最大化的目標就稱為最大似然法則。</p>
+<ul>
+<li>一個簡單的範例</li>
+</ul>
+<p>假如我們觀察拋擲銅板的現象，得到觀察序列 x = {0, 1, 0, 0, 1, 1, 0, 0, 0, 1 } 這個現象，其中的 1 代表正面 (人頭)，0 代表反面 (字)，因此正面共出現 4 次，反面共出現 6 次。</p>
+<p>因此，[[ <img src="../timg/cccacda7ce02.jpg" /> ]]。</p>
+<p>那麼我們應該如何假設 p(0) 與 p(1) 的機率分布呢？</p>
+<p>根據最大似然法則，我們應該去找出一個機率模型 p 可以最大化下列算式。</p>
+<p>[[math]] <em>p ; p(x) = </em>i p(x_i) [[/math]]</p>
+<p>我們可以計算看看下列兩個機率模型 p1, p2, p3 可能產生 x 的機率各為多少。</p>
+<p>[[math type=&quot;eqnarray&quot;]] &amp;&amp; p1(1)=0.5 ; p1(0) = 0.5 \ &amp;&amp; p2(1)=0.2 ; p2(0) = 0.8 \ &amp;&amp; p3(1)=0.4 ; p3(0) = 0.6 \ [[/math]]</p>
+<p>根據簡單的機率公式，我們可以算出下列結果。</p>
+<p>[[math type=&quot;eqnarray&quot;]] &amp;&amp; p1(x) = <em>i p1(x</em>i) = 0.5^4 * 0.5^6 = 0.00097656 \ &amp;&amp; p2(x) = <em>i p2(x</em>i) = 0.2^4 * 0.8^6 = 0.00041943 \ &amp;&amp; p3(x) = <em>i p3(x</em>i) = 0.4^4 * 0.6^6 = 0.00119439 \ [[/math]]</p>
+<p>因此果然驗證了最可能的機率模型是 p3，也就是 p(1)=0.4, p(0)=0.6。</p>
+<p>雖然我們找出了符合觀察現象 x 的最可能機率模型 (p3) ，但是對於投擲銅板這件事而言，p3 卻不是最適當的模型，因為最適當的模型是 p1 。</p>
+<p>這個例子說明了一件事實，用最大似然法則所找出來的機率模型 p' 未必是真正的機率源模型，只是根據觀察現象 x 所推導出來的最佳化機率模型而已。</p>
+<p>但是，假如統計資料 x 序列的長度更長，那麼 x 的統計數據通常會更接近真實機率分布 X，因此最大似然法則所找出的機率模型 p' 也就會更接近機率源模型 p，於是我們就可以認為 p' 足以代表 p 了。</p>
+<ul>
+<li>最大條件機率的分布</li>
+</ul>
+<p>針對許多機率現象，我們只能觀察到某些面向的結果，但是無法觀察到全部的面向。這種情況就可以使用條件機率。</p>
+<p>根據最大似然法則，假如已觀察到聯合機率分布 (X,Y)，其中 (x,y) 事件出現的機率為 p'(x,y) ，那麼根據最大似然法則，我們應當尋求盡可能滿足下列條件的算式。</p>
+<p>[[math]] _h ; P(x,y|h) [[/math]]</p>
+<p>然而，通常雙變數的聯合機率分布 p'(x,y) 會遭遇到『樣本稀疏性』的問題，因此若直接最大化上述算式，將會造成相當大的統計偏差。</p>
+<p>為了解決『樣本稀疏性』的問題，我們應該採用較為可信的 p'(x) 作為 p(x) 的估計，p'(y) 作為 p(y) 的估計，而非直接採用 p'(x,y) 作為 p(x,y) 的估計值。</p>
+<p>[[math type=&quot;eqnarray&quot;]] p'(x,y) &amp;=&amp;  * p'(x) p'(y) \ &amp; &amp;  * p'(x) p'(y) [[/math]]</p>
+<p>於是我們可以最佳化下列算式</p>
+<p>[[math]] _p ;  * p'(x) p'(y) [[/math]]</p>
+<p>根據條件機率的定義，我們可以將 p'(x,y) 改寫如下。</p>
+<p>[[math]] p'(x,y) = p'(x)*p'(y|x) [[/math]]</p>
+<p>如果我們用 p(y|x) 取代 p'(y|x)，那麼我們應該最大化下列算式。</p>
+<p>於是我們可以最大化下列算式。</p>
+<p>[[math eqXY type=&quot;eqnarray&quot;]] &amp;&amp; ; { p'(x) * p(y|x) } [[/math]]</p>
+<p>針對機率分布 p 而言，其機率為 p(x,y) 相當於下列算式。</p>
+<p>[[math eqXY type=&quot;eqnarray&quot;]] &amp;&amp; ; p(X',Y') \ &amp;=&amp; ; <em>{x',y'} p(x',y') \ &amp;=&amp; ; </em>{x',y'} p(x') p(y'|x') [[/math]]</p>
+<p>根據微積分的原理，如果我們對上述算式進行微分的動作，那麼最佳解將會式微分式為 0 的 p 解 。</p>
+<h2 id="計算統計學----機率模型假說與學習"><a href="#計算統計學----機率模型假說與學習">計算統計學 -- 機率模型：假說與學習</a></h2>
+<ul>
+<li>簡介 在機率理論中，所謂的機率模型，通常是指某種機率獨立性的假設。舉例而言，在簡單貝氏模型 (Naive Bayes Model) 當中，就假設所有的隨機變數 X1, X2,..., Xn 相對於某個前提 C 而言都是條件獨立的，因此可以寫成如下算式。</li>
+</ul>
+<p>[[math]] P(x_1, .., x_n | c) = P(x_1|c) ... P(x_n | c) [[/math]]</p>
+<p>這種機率獨立性的假設，就是一種統計上的假說，我們必須驗證這樣的假說是否合理，如果驗證合理才能使用該公式，否則將會造成龐大的誤差。</p>
+<ul>
+<li>計算統計學中的假說</li>
+</ul>
+<p>有時候，我們會將假說的概念 h 放入機率分布函數中，當成機率分布的參數之一，例如 P(x, h) 其實代表了由 h 假說所決定的一個機率特定機率分布 p，作用在樣本 x 上的結果 。</p>
+<p>在具有假說 h 的情況之下，P(h) 代表由假說 h 所決定的一個機率分布，這是一個特定的機率分布，按照上述規則，原本應該用某個小寫的 p 所代表，但是由於引入了函數形式的關係，我們用 P(h) 代表該假說所決定的特定機率分布。</p>
+<p>大寫的 P 符號通常則代表假說 [[ <img src="../timg/1c0118431e7d.jpg" /> ]] 所形成的機率分布集合，計算統計學的主要任務是找出最好的假說，以便用該假說的機率分布進行預測。這個尋找最佳假說的過程可用下列公式表達。</p>
+<p>[[math type=&quot;eqnarray&quot;]] &amp;&amp; <em>h P(h|x,y) \ &amp;=&amp; </em>h P(x,y|h)  &amp;; by,bayes,theorem\ [[/math]]</p>
+<p>計算統計學通常會用程式 (演算法) 尋找最符合訓練資料 [[ <img src="../timg/debc932e5ffb.jpg" /> ]] 的假說 P(h)，這個過程稱為學習。當電腦完成學習的程序之後，就可以利用 P(h) 預測整個系統的下一個輸出之機率。</p>
+<p>通常在預測進行時系統會取得某些輸入值 x，然後再利用該輸入值找到一個最可能的輸出值，也就是找到讓 P(y|x,h) 最大的輸出 y，因此整個預測程序仍然是一個最佳化的過程，如下列公式所示。</p>
+<p>[[math]] _y P(y|x,h) [[/math]]</p>
+<ul>
+<li>計算統計學中的學習</li>
+</ul>
+<p>要找出計算統計學中的最佳假說，通常採用最大似然法則作為最佳化的目標算式，但實際上最大似然法則與最大商法則乃是一體的兩面，因此也常採用最大商法則進行學習。</p>
+<p><strong>最大商法則</strong> 與 <strong>最大似然法則</strong></p>
+<p>[[math type=&quot;eqnarray&quot;]] &amp;&amp; <em>z P(Z=z|x,h) L(x,Z=z|h) \ &amp;=&amp; </em>z  P(x,Z=z|h) \ &amp;=&amp;  _z P(x,Z=z,h) P(x,Z=z|h) \ &amp;=&amp;  H(x,Z|h) \ [[/math]]</p>
+<ul>
+<li>簡介 計算統計學乃是研究如何用電腦程式尋找統計模型的學問，其方法主要是將假說 (hypothesis) 的概念融入到機率分布當中，利用『最大似然法則』(Maximum Likelihood) 或者『最大熵法則』(Maximum Entropy) 進行最佳化的尋找，以便學習出良好的機率模型。這種學習出來的良好機率模型，可以用來預測下一個樣本出現的機率。</li>
+</ul>
+<p>當程式找出良好的機率模型之後，就可以利用『最大效用法則』，找出最有利的理性決策。這種方法已經廣泛被用在今仍計算與人工智慧的機器翻譯當中，得到相當好的成果。但是大部分的文獻當中都是以數學的方式闡述計算統計學通的理論，這將不利於程式設計師學習。本文將完全採用程式設計師的觀點，將這些數學落實為 C# 程式。</p>
+<p>筆者為此建立了一個程式專案，稱為 CSCS (Computational Statistics in C Sharp)，以下將描述 CSCS 專案的設計原理。</p>
+<ul>
+<li>基本機率物件實作</li>
+</ul>
+<p>樣本點 (Sample Point) &gt; 樣本空間內的一個元素，稱為樣本點，或稱樣本 (Sample)，數學上通常以小寫字母，像是 s, x, y 等符號表示。 &gt; &gt; 實作 &gt;&gt; 在 C# 中，我們可以用字串 (String) 代表一個樣本，例如：假如要代表銅板的正反面，可以用 &quot;0&quot; 代表反面、&quot;1&quot; 代表正面。</p>
+<p>隨機試驗 (Random Experiment) &gt; 舉凡觀察、實驗、調查、檢驗、抽樣等，階可稱為隨機試驗。隨機試驗會產生一連串的樣本點，通常我們用符號 [[ <img src="../timg/d9790f80150c.jpg" /> ]] 代表這種實驗產生的樣本串列。 &gt; &gt; 實作 &gt;&gt; public class SampleList : List<String> { }</p>
+<p>樣本空間 (Sample Space) &gt; 一個隨機試驗之各種可能結果的集合，稱為樣本空間，數學上通常以大寫字母，像是 S, X, Y 等符號表示。 &gt; &gt; 實作： &gt;&gt; 由於使用了字串代表樣本，因此樣本空間將會是字串的集合。</p>
+<p>事件 (Event) &gt; 乃是樣本空間的子集合，包含單一樣本的事件稱為簡單事件，包含兩個以上樣本的事件稱為複合事件。 &gt; &gt; 實作 &gt;&gt; 由於使用了字串代表樣本，因此簡單事件就是一個字串 String，而複合事件則同樣以 SampleList 表示。</p>
+<p>隨機變數 (Random Variable) &gt; 隨機變數是以樣本空間為定義域的實數值函數，舉例而言，如果我們用隨機變數 X 代表投擲兩次銅板時正面 (1) 出現的次數，那麼隨機變數 X 的函數定義如下 X(00) = 0, X(01) = 1, X(10) = 1, X(11) = 2。 &gt; &gt; 實作 &gt;&gt; 隨機變數是一個將樣本映射到某值域的函數 f(x)，由於我們用字串代表樣本，也用字串代表值域中的值，因此隨機變數可以定義為以字串作為輸出入的一個函數。 &gt;&gt; &gt;&gt; public interface RandomVariable &gt;&gt; { &gt;&gt; String f(String v); &gt;&gt; }</p>
+<p>機率分布 (Probability Distribution) &gt; 機率分布乃是針對某些隨機變數之可能值，求其機率所得到的機率函數。通常我們用符號 P 代表機率分配，P(x) 代表 x 樣本出現的機率。 &gt; &gt; 實作 &gt;&gt; 機率分布傳回一個實數 (double) 的機率值，像是 p(x), p(x,y), 或 p(x|y) 等，因此我們用字串 p(exp) 代表一個機率分布函數，其中的參數可能是 (x), (x,y), (x|y) 等數學式，在 C# 實作當中以介面 ProbDistribution 表示。 &gt;&gt; &gt;&gt; public interface ProbDistribution &gt;&gt; { &gt;&gt; double p(String exp); &gt;&gt; }</p>
+<p>機率源 (Probability Source) &gt; 一個產生某隨機變數之樣本點的隨機產生器，稱為機率源，像是我們所生活的世界就是個複雜的機率源，而電腦的亂數產生器也是一種機率源。這是一個從整數領域映射到樣本點的函數 [[ <img src="../timg/26fefcdd6cdf.jpg" /> ]]，代表產生該隨機實驗的系統或函數 (在機率的書籍中我還沒有看過機率源這個名詞，這個名詞是筆者為了方便而定義的)。 &gt; &gt; 實作 &gt;&gt; 隨機源是一個函數, 會不斷的產生樣本，因此可以用以下的 generate() 函數代表，由於產生的樣本以字串表示，因此傳回型態為 String。 &gt;&gt; public interface RandomSource &gt;&gt; { &gt;&gt; String generate(); &gt;&gt; }</p>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

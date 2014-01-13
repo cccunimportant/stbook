@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#均勻分布-uniform-distribution">均勻分布 (Uniform distribution)</a></li>
+</ul>
+</div>
+<h2 id="均勻分布-uniform-distribution"><a href="#均勻分布-uniform-distribution">均勻分布 (Uniform distribution)</a></h2>
+<p>意義：在範圍 (a,b) 內的出現機會均等。</p>
+<p>R 函數：<a href="http://sites.stat.psu.edu/~dhunter/R/html/stats/html/Uniform.html">unif(a:min, b:max)</a></p>
+<p>課本公式： <img src="../timg/e8ca13ccc43f.jpg" /></p>
+<p>R 的公式：f(x) = 1/(max-min)</p>
+<p>變數意義：a:min 範圍下限, b:max 上限</p>
+<h3 id="r-程式範例"><a href="#r-程式範例">R 程式範例</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>op=<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
+&gt;<span class="st"> </span><span class="kw">curve</span>(<span class="kw">dunif</span>(x, <span class="dv">0</span>, <span class="dv">1</span>), -<span class="dv">2</span>, <span class="dv">10</span>)
+&gt;<span class="st"> </span><span class="kw">curve</span>(<span class="kw">dunif</span>(x, <span class="dv">1</span>, <span class="dv">5</span>), -<span class="dv">2</span>, <span class="dv">10</span>)
+&gt;<span class="st"> </span><span class="kw">curve</span>(<span class="kw">dunif</span>(x, -<span class="dv">1</span>, <span class="dv">9</span>), -<span class="dv">2</span>, <span class="dv">10</span>)
+&gt;<span class="st"> </span><span class="kw">curve</span>(<span class="kw">dunif</span>(x, <span class="dv">10</span>, <span class="dv">110</span>), <span class="dv">0</span>, <span class="dv">200</span>)
+&gt;</code></pre>
+<p><a href="../img/dunifCurve4.jpg"></a></p>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

@@ -1,0 +1,40 @@
++ 常態機率規則
+
+[[math type="eqnarray"]]
+1. && P[-\delta < X - \mu < \delta] &=& 0.68 \\
+2. &&P[-2 \delta < X - \mu < 2 \delta] &=& 0.95 \\
+3. && P[-3 \delta < X - \mu < 3 \delta] &=& 0.997
+[[/math]]
+
++ 柴比雪夫不等式
+
+[[math type="eqnarray"]]
+P[ | X - \mu | < k \delta] \ge 1-\frac{1}{k^2}
+[[/math]]
+
++ 中央極限定理
+
+[[math type="eqnarray"]]
+x_1+x_2+...+x_n \rightarrow N(\mu, \delta/\sqrt{n})
+[[/math]]
+
++ 點估計
+
+[[math type="eqnarray"]]
+\bar{X} = \frac{x_1+x_2+...+x_n}{n} \rightarrow \mu
+[[/math]]
+
+
++ 最大似然法則
+
+1. 機率密度函數：[[$ f(X|\theta) $]], [[$ \theta $]] 為未知。
+
+2. 概似函數：[[$ L(\theta) = \prod_{i=1}^n f(x_i) $]]
+
+3. 求可以讓 [[$ L(\theta) $]] 最大化的 [[$ \theta $]] 參數 [[$ \cap{\theta} $]]。
+
+說明：如果是常態分布，通常 [[$ \theta = (\mu, \delta^2) $]]
+
++ 無母數統計方法
+
+指的是樣本來自某一分配，但不預設這個分配的特性 (通常為未知)，這種情況稱為無母數統計方法

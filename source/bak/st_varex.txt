@@ -1,0 +1,51 @@
++ 變異數 (Variance, 方差)
+
+* 定義：(變異數) [[$ Var(X) = \sigma^2 = E[(X-\mu)^2] $]], 其中 [[$ \mu $]] 為 X 的平均值 E[X]。
+* 定義：(標準差) [[$ \sigma $]] 變異數的平方根 [[$ \sigma $]]  被稱為標準差。
+
+* 定理 (a)：[[$ \sigma^2 = Var(X) = E[X^2] - E[X]^2 $]]
+
+* 定理：
+[[math type="eqnarray"]]
+1. && Var(c) = 0 \\
+2. && Var(c X) = c^2 Var(X) \\
+3. && Var(X + Y) = Var(X) + Var(Y) ; 如果 X 與 Y 彼此獨立
+[[/math]]
+
++ 證明
+
+定理 1 : Var(c) = 0
+
+[[math type="eqnarray"]]
+Var[c] &=& E[(c - E[c])^2] &\;&; 根據變異數的定義 \\
+         &=& E(c^2) - E(c)^2 &\;&; 根據定理 (a) \\
+         &=& c^2 - c^2 &\;&; 因為 E(c) = c \\
+         &=& 0 &\;&; 
+[[/math]]
+
+定理 2 : [[$ Var(c X) = c^2 Var(X) $]]
+
+[[math type="eqnarray"]]
+Var(c X) &=& E[(c X - \mu_X^2] &\;&; 根據變異數的定義 \\
+         &=& E(c^2 X^2) - E(c X)^2  &\;&; 根據定理 (a) \\
+         &=& c^2 E(X^2) - c^2 E(X)^2 &\;&; 常數項提出來 \\
+         &=& c^2 (E(X^2) - E(X)^2) &\;&; 根據算術分配律 \\
+         &=& c^2 Var(X)
+[[/math]]
+
+定理 3 : Var(X + Y) = Var(X) + Var(Y)  ; 如果 X 與 Y 彼此獨立
+
+[[math type="eqnarray"]]
+Var[X+Y] &=& E[((X+Y) - (\mu_x + \mu_y))^2] &\;&; 根據變異數的定義 \\
+         &=& E[((X+Y) - (E[X] + E[Y]))^2] &\;&;  \mu_x 就是 E[X], \mu_y 就是 E[Y], \\
+         &=& E[(X+Y)^2] - (E[X] + E[Y])^2 &\;&; 根據定理 (a) \\
+         &=& E[X^2+2 X Y + Y^2] - E[X]^2 - 2 E[X]E[Y] - E[Y]^2 &\;&; 根據乘法定義 \\
+         &=& E[X^2] + E[2 X Y] + E[Y^2] - E[X]^2 - 2 E[X] E[Y] - E[Y]^2 &\;&; 根據乘法定義 \\
+         &=& E[X^2] + E[Y^2] + 2 (E[X Y] - E[X] E[Y]) - E[X]^2 - E[Y]^2 &\;&; 簡單移項 \\
+         &=& E[X^2] + E[Y^2] - E[X]^2 - E[Y]^2 &\;&; X,Y 獨立時 E[XY] = E[X] E[Y] \\
+         &=& (E[X^2] - E[X]^2) + (E[Y^2] - E[Y]^2) &\;&; 簡單移項 \\
+         &=& Var(X) + Var(Y) &\;&; 根據定理 (a) \\
+[[/math]]
+
++ 參考文獻
+# Mean and Variance 平均值和變異數 -- http://dufu.math.ncu.edu.tw/calculus/calculus_eng/node221.html

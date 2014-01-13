@@ -1,0 +1,5 @@
++ 柴比雪夫不等式
+
+[[math type="eqnarray"]]
+P[ | X - \mu | < k \delta] \ge 1-\frac{1}{k^2}
+[[/math]]

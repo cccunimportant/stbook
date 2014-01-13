@@ -1,0 +1,55 @@
++ 簡單貝氏模型 (Naive Bayes Model)
+
+簡單貝氏模型直接假設所有的隨機變數之間具有條件獨立的情況，因此可以直接利用條件機率相乘的方法，計算出聯合機率分布。
+
+**程式實作**
+[[code]]
+    public class NaiveBayesModel : ProbModel
+    {
+    	public HashSet<Object> C = new HashSet<Object>();
+    	public HashSet<Object> X = new HashSet<Object>();
+
+    	public override double p(String exp)
+    	{
+    	 if (exp.IndexOf("|") >= 0)
+    	 {
+    	 String[] x = exp.head("|").split(" ");
+    	 String c = exp.tail("|");
+    	 // p(x1 x2 ... xn | c) = p(x1|c) ... p(xn|c)
+    	 if (x.Length > 1 && X.containsAll(x) && C.Contains(c)) 
+    	 return this.ruleProd(x, c);
+    	 }
+    	 return base.p(exp);
+    	}
+    }
+[[/code]]
+
++ 簡單貝氏模型的測試問題 
+
+問題：已知類別 C 決定隨機變數 X 的機率，類別 C 有 c1, c2 兩個可能值，X 也有 x1, x2 兩個可能值，但是不知 p(c1), p(x1|c1), p(x1|c2), 請問哪一種假設最符合觀察數據 x1 x2 ... xn，在此模型中，p(c2)=1-p(c1), p(x2|c1)=1-p(x1|c1), p(x2|c2)=1-p(x1,c2)，因此只有三個參數需要學習。
+
+**程式實作**
+
+[[code]]
+    public class NaiveBayesProblem1 : ProbProblem
+    {
+        public NaiveBayesProblem1() 
+        {
+            d("c1", 0.3, "c2"); d("x1|c1", 0.7, "x2|c1"); d("x1|c2", 0.5, "x2|c2");
+        }
+
+    	public override String generate()
+    	{
+    	 String c = PR.randomSelect("c1", p("c1"), "c2");
+            String x = PR.randomSelect("x1", p("x1|" + c), "x2");
+    	 return c + "," + x;
+    	}
+
+        public void test()
+        {
+            var model = new NaiveBayesModel();
+            model.C.addAll("c1,c2".split(",")); model.X.addAll("x1,x2".split(","));
+            test(model, "c1;c2;x1|c1;x2|c1;x1|c2;x2|c2;x1 x2 x1 x2|c1");
+        }
+    }
+[[/code]]

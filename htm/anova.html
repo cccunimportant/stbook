@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#變異數分析-anova">變異數分析 (ANOVA)</a><ul>
+<li><a href="#簡介">簡介</a></li>
+<li><a href="#檢定兩樣本群的平均值是否相同">檢定兩樣本群的平均值是否相同</a></li>
+<li><a href="#變異數分析-analysis-of-variance-anova">變異數分析 (Analysis of Variance, ANOVA)</a></li>
+<li><a href="#兩兩之間的均值比較">兩兩之間的均值比較</a></li>
+<li><a href="#結語">結語</a></li>
+<li><a href="#參考文獻">參考文獻</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="變異數分析-anova"><a href="#變異數分析-anova">變異數分析 (ANOVA)</a></h1>
+<h2 id="簡介"><a href="#簡介">簡介</a></h2>
+<p>在前兩章當中，我們曾經探討過「兩組樣本的平均值檢定」問題，當兩組樣本互相獨立時， 我們可以透過檢定 <img src="../timg/20cd69035be5.jpg" /> 的信賴區間，採用 T 分布去檢定 <img src="../timg/40853c87a0e1.jpg" /> 是否為真， 這種方法稱為合併 T 檢定 (pooled T test)。</p>
+<p>在此、先讓我們再次透過 R 軟體，進行一次 T 檢定，以便喚起讀者的記憶。</p>
+<h2 id="檢定兩樣本群的平均值是否相同"><a href="#檢定兩樣本群的平均值是否相同">檢定兩樣本群的平均值是否相同</a></h2>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dv">5</span>, <span class="dv">1</span>)
+&gt;<span class="st"> </span>x
+ [<span class="dv">1</span>] <span class="fl">6.240855</span> <span class="fl">4.229226</span> <span class="fl">5.349843</span> <span class="fl">6.023241</span> <span class="fl">5.613232</span> <span class="fl">5.300235</span> <span class="fl">4.696128</span> <span class="fl">5.452365</span>
+ [<span class="dv">9</span>] <span class="fl">4.567735</span> <span class="fl">5.260747</span> <span class="fl">3.800322</span> <span class="fl">6.168725</span> <span class="fl">6.196059</span> <span class="fl">4.969572</span> <span class="fl">6.251078</span> <span class="fl">3.549983</span>
+[<span class="dv">17</span>] <span class="fl">6.432844</span> <span class="fl">5.308146</span> <span class="fl">4.978811</span> <span class="fl">4.944134</span>
+&gt;<span class="st"> </span>y =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dv">5</span>, <span class="dv">1</span>)
+&gt;<span class="st"> </span>y
+ [<span class="dv">1</span>] <span class="fl">5.969639</span> <span class="fl">5.400434</span> <span class="fl">4.231995</span> <span class="fl">4.804537</span> <span class="fl">3.098015</span> <span class="fl">5.481365</span> <span class="fl">6.016810</span> <span class="fl">2.769489</span>
+ [<span class="dv">9</span>] <span class="fl">6.687201</span> <span class="fl">4.240217</span> <span class="fl">6.602660</span> <span class="fl">4.777928</span> <span class="fl">4.825274</span> <span class="fl">4.110038</span> <span class="fl">5.651073</span> <span class="fl">5.829578</span>
+[<span class="dv">17</span>] <span class="fl">4.651262</span> <span class="fl">6.036818</span> <span class="fl">3.459562</span> <span class="fl">5.993473</span>
+&gt;<span class="st"> </span><span class="kw">t.test</span>(x, y, <span class="dt">var.equal=</span><span class="ot">TRUE</span>)
+
+        Two Sample t-test
+
+data:<span class="st">  </span>x and y
+t =<span class="st"> </span><span class="fl">0.7519</span>, df =<span class="st"> </span><span class="dv">38</span>, p-value =<span class="st"> </span><span class="fl">0.4567</span>
+alternative hypothesis:<span class="st"> </span>true difference in means is not equal to <span class="dv">0</span>
+<span class="dv">95</span> percent confidence interval:
+<span class="st"> </span>-<span class="fl">0.3973599</span>  <span class="fl">0.8669515</span>
+sample estimates:
+mean of x mean of y 
+ <span class="fl">5.266664</span>  <span class="fl">5.031868</span> 
+
+&gt;<span class="st"> </span>z =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dv">4</span>, <span class="dv">1</span>)
+&gt;<span class="st"> </span><span class="kw">t.test</span>(x, z, <span class="dt">var.equal=</span><span class="ot">TRUE</span>)
+
+        Two Sample t-test
+
+data:<span class="st">  </span>x and z
+t =<span class="st"> </span><span class="fl">5.9399</span>, df =<span class="st"> </span><span class="dv">38</span>, p-value =<span class="st"> </span><span class="fl">6.883e-07</span>
+alternative hypothesis:<span class="st"> </span>true difference in means is not equal to <span class="dv">0</span>
+<span class="dv">95</span> percent confidence interval:
+<span class="st"> </span><span class="fl">1.079955</span> <span class="fl">2.196671</span>
+sample estimates:
+mean of x mean of y 
+ <span class="fl">5.266664</span>  <span class="fl">3.628351</span> 
+
+&gt;<span class="st"> </span></code></pre>
+<p>在以上檢定中， x, y 兩者都是由 rnorm(20, 5, 1) 這個指令 (平均值 5，標準差為 1) 產生的樣本，所以檢定的結果 t.test(x, y, var.equal=TRUE) 之 p-value = 0.4567 ，由於該值遠大於 1-95% = 0.05，所以檢定結果無法否認虛無假設 <img src="../timg/8ece14977518.jpg" /> ，而且信賴區間為 (-0.3973599, 0.8669515) 包含 <img src="../timg/5efeebd0f700.jpg" /> ，這兩者都代表我們無法否認 H0。</p>
+<p>但是、在 t.test(x, z, var.equal=TRUE) 這個檢定中，由於 z 是 rnorm(20, 4, 1) 這個指令 (平均值 4，標準差為 1) 產生的樣本，檢定的結果 p-value = 6.883e-07 也遠小於 0.05，因此強力的否決了 <img src="../timg/8ece14977518.jpg" /> 的可能性， 這點從信賴區間 (1.079955, 2.196671) 不包含 0 這件事情上，也可以清楚的看到。</p>
+<h2 id="變異數分析-analysis-of-variance-anova"><a href="#變異數分析-analysis-of-variance-anova">變異數分析 (Analysis of Variance, ANOVA)</a></h2>
+<p>但是、如果樣本群的數目變多了，不是兩組樣本，而是 k 組樣本的話，事情就會變得比較麻煩！</p>
+<p>如果要用上述的合併 T 檢定對 <img src="../timg/0a55ffecc693.jpg" /> 中的每個配對都作檢定，那麼就要對 (1, 2), (1, 3), ... (1, k), (2, 3), (2,4), ... (2, k), .... (k-1, k) 等 <img src="../timg/a918f5a94a3f.jpg" /> 種配對都進行一次檢定，這樣的方式有點太麻煩了。</p>
+<p>此時、我們可以採用變異數分析 (中國大陸稱為方差分析) 的方法，來檢定假設 H0 是否成立，也就是檢驗是否所有樣本群的平均值都相同。</p>
+<p>讓我們暫時不去探討背後的數學，直接用 R 軟體進行一次變異數分析的檢定，看看這種檢定是如何進行的，以下是一個簡單的操作過程。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>X =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">40</span>, <span class="dv">5</span>, <span class="dv">1</span>) <span class="co"># 產生四十個樣本 (平均值 5，標準差 1)</span>
+&gt;<span class="st"> </span>X
+ [<span class="dv">1</span>] <span class="fl">5.584603</span> <span class="fl">4.052913</span> <span class="fl">4.434469</span> <span class="fl">5.844309</span> <span class="fl">5.286695</span> <span class="fl">5.188169</span> <span class="fl">4.796683</span> <span class="fl">3.913132</span>
+ [<span class="dv">9</span>] <span class="fl">5.467150</span> <span class="fl">5.740397</span> <span class="fl">4.528423</span> <span class="fl">4.395270</span> <span class="fl">4.994147</span> <span class="fl">4.014513</span> <span class="fl">6.259213</span> <span class="fl">6.898331</span>
+[<span class="dv">17</span>] <span class="fl">3.792135</span> <span class="fl">3.879688</span> <span class="fl">5.334643</span> <span class="fl">5.887895</span> <span class="fl">5.647250</span> <span class="fl">5.603816</span> <span class="fl">5.465186</span> <span class="fl">6.703394</span>
+[<span class="dv">25</span>] <span class="fl">5.153999</span> <span class="fl">4.855386</span> <span class="fl">2.129850</span> <span class="fl">5.477026</span> <span class="fl">4.785934</span> <span class="fl">4.138114</span> <span class="fl">5.726216</span> <span class="fl">3.581281</span>
+[<span class="dv">33</span>] <span class="fl">5.255695</span> <span class="fl">4.515353</span> <span class="fl">6.391714</span> <span class="fl">3.726963</span> <span class="fl">5.744328</span> <span class="fl">5.314164</span> <span class="fl">4.647955</span> <span class="fl">4.848313</span>
+&gt;<span class="st"> </span>A =<span class="st"> </span><span class="kw">factor</span>(<span class="kw">rep</span>(<span class="dv">1</span>:<span class="dv">4</span>, <span class="dt">each=</span><span class="dv">10</span>)) <span class="co"># 產生標記 1, 2, 3, 4 各 10 份</span>
+&gt;<span class="st"> </span>A
+ [<span class="dv">1</span>] <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">4</span> <span class="dv">4</span> <span class="dv">4</span> <span class="dv">4</span> <span class="dv">4</span>
+[<span class="dv">37</span>] <span class="dv">4</span> <span class="dv">4</span> <span class="dv">4</span> <span class="dv">4</span> 
+&gt;<span class="st"> </span>XA =<span class="st"> </span><span class="kw">data.frame</span>(X, A) <span class="co"># 建立框架變數 XA，為每個 X 樣本分別標上 1, 2, 3, 4 等標記。</span>
+&gt;<span class="st"> </span>aov.XA =<span class="st"> </span><span class="kw">aov</span>(X~A, <span class="dt">data=</span>XA) <span class="co"># 進行「變異數分析」，看看 X 與 A 之間是否有相關。</span>
+&gt;<span class="st"> </span><span class="kw">summary</span>(aov.XA) <span class="co"># 印出「變異數分析」的結果報表</span>
+            Df Sum Sq Mean Sq F value <span class="kw">Pr</span>(&gt;F)
+A            <span class="dv">3</span>  <span class="fl">5.015</span>  <span class="fl">1.6718</span>   <span class="fl">2.119</span>  <span class="fl">0.115</span>
+Residuals   <span class="dv">36</span> <span class="fl">28.408</span>  <span class="fl">0.7891</span>               
+&gt;<span class="st"> </span><span class="kw">plot</span>(XA$X~XA$A) <span class="co"># 繪出 X~A 的盒狀圖</span></code></pre>
+<p>在上述操作中，我們用 X = rnorm(40, 5, 1) 產生四十個樣本，然後用 A = factor(rep(1:4, each=10)) 與 XA = data.frame(X, A) 這個指令將這四十個樣本分為四群，每群 10 個，分別標以 1, 2, 3, 4 的標記，成為 XA 這個框架 (frame) 變數，然後利用 `aov.XA = aov(X~A, data=XA)' 這個指令進行「變異數分析」，並用 summary(aov.XA) 指令印出分析結果。</p>
+<p>您可以看到在分析結果中，Pr(&gt;F) = 0.115 ，並沒有低於 (1-95%) 的 0.05 範圍，因此各組的平均值間沒有明顯差異，我們無法否認 H0。</p>
+<p>最後我們用 <code>plot(XA$X~XA$A)</code> 這個指令匯出盒狀圖，就可以大致看到四組分佈的情況。</p>
+<div class="figure">
+<img src="../img/aovXA.jpg" alt="圖、X 與 A 之間關係的盒狀圖" /><p class="caption">圖、X 與 A 之間關係的盒狀圖</p>
+</div>
+<p>但是、如果我們再用 rnorm(10, 4, 1) 這個指令產生一組樣本群加入上述資料 X 中，並將這組新產生的樣本群標示為編號 5 ，由於 此組新樣本群的母體平均值為 4 (而不是 5)，因此應該會有明顯不同，以下是我們的實驗操作過程。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>Y =<span class="st"> </span><span class="kw">c</span>(X, <span class="kw">rnorm</span>(<span class="dv">10</span>, <span class="dv">4</span>, <span class="dv">1</span>)) <span class="co"># 將 X 補上 10 個均值為 4 的隨機樣本，成為 Y</span>
+&gt;<span class="st"> </span>Y
+ [<span class="dv">1</span>] <span class="fl">5.584603</span> <span class="fl">4.052913</span> <span class="fl">4.434469</span> <span class="fl">5.844309</span> <span class="fl">5.286695</span> <span class="fl">5.188169</span> <span class="fl">4.796683</span> <span class="fl">3.913132</span>
+ [<span class="dv">9</span>] <span class="fl">5.467150</span> <span class="fl">5.740397</span> <span class="fl">4.528423</span> <span class="fl">4.395270</span> <span class="fl">4.994147</span> <span class="fl">4.014513</span> <span class="fl">6.259213</span> <span class="fl">6.898331</span>
+[<span class="dv">17</span>] <span class="fl">3.792135</span> <span class="fl">3.879688</span> <span class="fl">5.334643</span> <span class="fl">5.887895</span> <span class="fl">5.647250</span> <span class="fl">5.603816</span> <span class="fl">5.465186</span> <span class="fl">6.703394</span>
+[<span class="dv">25</span>] <span class="fl">5.153999</span> <span class="fl">4.855386</span> <span class="fl">2.129850</span> <span class="fl">5.477026</span> <span class="fl">4.785934</span> <span class="fl">4.138114</span> <span class="fl">5.726216</span> <span class="fl">3.581281</span>
+[<span class="dv">33</span>] <span class="fl">5.255695</span> <span class="fl">4.515353</span> <span class="fl">6.391714</span> <span class="fl">3.726963</span> <span class="fl">5.744328</span> <span class="fl">5.314164</span> <span class="fl">4.647955</span> <span class="fl">4.848313</span>
+[<span class="dv">41</span>] <span class="fl">3.516310</span> <span class="fl">4.174873</span> <span class="fl">2.541251</span> <span class="fl">2.851404</span> <span class="fl">4.862902</span> <span class="fl">2.739729</span> <span class="fl">2.848565</span> <span class="fl">3.169462</span>
+[<span class="dv">49</span>] <span class="fl">4.245488</span> <span class="fl">3.543660</span>
+&gt;<span class="st"> </span>B =<span class="st"> </span><span class="kw">c</span>(A, <span class="kw">rep</span>(<span class="dv">5</span>, <span class="dv">10</span>)) <span class="co"># 產生 10 個編號 5 的標號，將 A 擴充為 B，為新的 10 個樣本標號。</span>
+&gt;<span class="st"> </span>B
+ [<span class="dv">1</span>] <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">4</span> <span class="dv">4</span> <span class="dv">4</span> <span class="dv">4</span> <span class="dv">4</span>
+[<span class="dv">37</span>] <span class="dv">4</span> <span class="dv">4</span> <span class="dv">4</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">5</span> <span class="dv">5</span> <span class="dv">5</span> <span class="dv">5</span> <span class="dv">5</span> <span class="dv">5</span> <span class="dv">5</span> <span class="dv">5</span> <span class="dv">5</span>
+&gt;<span class="st"> </span>YB =<span class="st"> </span><span class="kw">data.frame</span>(Y, B) <span class="co"># 建立框架變數 YB，為 XA 補上 10 個新樣本的結果</span>
+&gt;<span class="st"> </span>aov.YB =<span class="st"> </span><span class="kw">aov</span>(Y~B, <span class="dt">data=</span>YB)  <span class="co"># 進行「變異數分析」，看看 Y 與 B 之間是否有相關。</span>
+&gt;<span class="st"> </span><span class="kw">summary</span>(aov.YB) <span class="co"># 印出「變異數分析」的結果報表</span>
+            Df Sum Sq Mean Sq F value  <span class="kw">Pr</span>(&gt;F)   
+B            <span class="dv">1</span>  <span class="fl">10.15</span>  <span class="fl">10.152</span>    <span class="fl">9.84</span> <span class="fl">0.00292</span> **
+Residuals   <span class="dv">48</span>  <span class="fl">49.52</span>   <span class="fl">1.032</span>                   
+---
+Signif. codes:<span class="st">  </span><span class="dv">0</span> ‘**<span class="er">*</span>’ <span class="fl">0.001</span> ‘**’ <span class="fl">0.01</span> ‘*’ <span class="fl">0.05</span> ‘.’ <span class="fl">0.1</span> ‘ ’ <span class="dv">1</span>
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span><span class="kw">plot</span>(YB$Y~YB$B) <span class="co"># 繪出 Y~B 的盒狀圖</span></code></pre>
+<p>於是當我們用 aov.YB = aov(Y~B, data=YB) 這個指令去進行「變異數分析」時，就會發現 Pr(&gt;F) 為 0.00292，遠低於 0.05，所以我們可以否認假設 <img src="../timg/474abe12bfc3.jpg" /> ，也就是認為應該至少有一樣本群與其他樣本群的平均值有顯著的不同。</p>
+<p>以下是我們用上述 <code>plot()</code> 指令所繪出的結果，您可以發現第五群樣本明顯的偏低。</p>
+<div class="figure">
+<img src="../img/aovYB.jpg" alt="圖、Y 與 B 之間關係的盒狀圖" /><p class="caption">圖、Y 與 B 之間關係的盒狀圖</p>
+</div>
+<p>這也是為何 aov(Y~B, data=YB) 的結果會認為應該否認虛無假設 H0 的原因。</p>
+<p>那麼、以上變異數分析的數學原理是甚麼呢？為何一次的計算就可以檢定這麼多組的樣本的平均值是否相同呢？以下是其數學推論。</p>
+<p>假如所有的樣本用 X 表示，則第一組樣本群用 <img src="../timg/0d5fa3f33533.jpg" /> 表示，第二組樣本群用 <img src="../timg/e209e24a3d42.jpg" /> 表示，....，第 k 組樣本群用 <img src="../timg/9ea3e18c1596.jpg" /> 表示。</p>
+<p>那麼第一組的第一個樣本可用 <img src="../timg/da7ec511db3e.jpg" /> 表示， ... 弟 i 組的第 j 個樣本可用 <img src="../timg/b984431eec20.jpg" /> 表示。</p>
+<p>如果我們用 <img src="../timg/c9faf6ead2cd.jpg" /> 代表所有 X 中樣本的平均值，<span class="math"><em>μ</em> + <em>α</em><sub><em>i</em></sub></span> 代表第 i 組樣本群的平均值，那麼我們可以寫出下列數學模型：</p>
+<blockquote>
+<p><img src="../timg/88b93b034ceb.jpg" /> ;</p>
+<p><img src="../timg/bff2b0fb7587.jpg" /> ; 且各個 <img src="../timg/edf09c052893.jpg" /> 相互獨立。</p>
+<p><img src="../timg/6c37d32d9c37.jpg" /> ;</p>
+</blockquote>
+<p>其中的 <img src="../timg/cd0f1069db14.jpg" /> 代表第 i 組平均與總平均的差異，而 <img src="../timg/edf09c052893.jpg" /> 則是每個樣本與組平均的差異。</p>
+<p>我們想測試的是 <img src="../timg/0a55ffecc693.jpg" /> ，也可以改寫成 <img src="../timg/d8dbd110a81b.jpg" /> ， 檢定背後的數學想法是將「方差」(變異數) 分為兩部份如下：</p>
+<blockquote>
+<p><img src="../timg/924a4164e8bb.jpg" /> ;</p>
+<p>其中</p>
+<p><img src="../timg/a2ccd28677ab.jpg" /> ; 描述總差異。</p>
+<p><img src="../timg/7f59fb08422e.jpg" /> ; 描述 <img src="../timg/cd0f1069db14.jpg" /> .</p>
+<p><img src="../timg/f3949a42bfb1.jpg" /> ; 描述 <img src="../timg/edf09c052893.jpg" /> .</p>
+</blockquote>
+<p>數學上可以證明，當 H0 成立時，以下算式也會成立：</p>
+<blockquote>
+<p><img src="../timg/671fbbed1066.jpg" /> ;</p>
+</blockquote>
+<p>而且 SS_A 與 SS_E 之間有獨立性，於是得到：</p>
+<blockquote>
+<p><img src="../timg/91f410df24a5.jpg" /> ;</p>
+</blockquote>
+<p>因此就可以用 F 分布來進行變異數的檢定了，這就是「變異數分析」的數學原理。</p>
+<h2 id="兩兩之間的均值比較"><a href="#兩兩之間的均值比較">兩兩之間的均值比較</a></h2>
+<p>雖然在上述分析 Y~B 的過程當中，我們否認了 <img src="../timg/474abe12bfc3.jpg" /> 這個假設，但是從分析結果中卻無法得知到底哪一個樣本群有明顯的不同。</p>
+<p>此時我們可以用 pairwise.t.test 這個函數，來比較兩兩間的不同，以下是我們的比較過程：</p>
+<p>首先我們對 X~A 兩者之間進行兩兩比較，您可以看到下列結果。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">pairwise.t.test</span>(X, A)
+
+        Pairwise comparisons using t tests with pooled SD 
+
+data:<span class="st">  </span>X and A 
+
+  <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span>
+<span class="dv">2</span> <span class="dv">1</span> -<span class="st"> </span>-
+<span class="dv">3</span> <span class="dv">1</span> <span class="dv">1</span> -
+<span class="dv">4</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span>
+
+P value adjustment method:<span class="st"> </span>holm </code></pre>
+<p>上述結果發現 (1, 2) (1,3), (1,4), (2,3), (2,4), (3,4) 之間是相同的，所以其矩陣內容值都是 1。</p>
+<p>但是如果我們用 pairwise.t.test(Y, B) 指令來檢定 Y 與 B 之間的關係，那就會得到如下結果。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">pairwise.t.test</span>(Y, B)
+
+        Pairwise comparisons using t tests with pooled SD 
+
+data:<span class="st">  </span>Y and B 
+
+  <span class="dv">1</span>      <span class="dv">2</span>      <span class="dv">3</span>      <span class="dv">4</span>     
+<span class="dv">2</span> <span class="fl">1.0000</span> -<span class="st">      </span>-<span class="st">      </span>-<span class="st">     </span>
+<span class="dv">3</span> <span class="fl">1.0000</span> <span class="fl">1.0000</span> -<span class="st">      </span>-<span class="st">     </span>
+<span class="dv">4</span> <span class="fl">1.0000</span> <span class="fl">1.0000</span> <span class="fl">1.0000</span> -<span class="st">     </span>
+<span class="dv">5</span> <span class="fl">0.0053</span> <span class="fl">0.0060</span> <span class="fl">0.0060</span> <span class="fl">0.0060</span>
+
+P value adjustment method:<span class="st"> </span>holm </code></pre>
+<p>從上述的結果中，您可以看到第 5 列的內容為「0.0053 0.0060 0.0060 0.0060」，明顯的較低，這代表第 5 列的平均值有顯著的不同。</p>
+<p>不過、您看到的比較結果，是透過 holm 這個調整方法對顯著值 (P) 進行調整過的，如果沒有調整過，則 (X,A) 及 (Y,B) 的兩兩比較結果將會如下所示。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">pairwise.t.test</span>(X, A, <span class="dt">p.adjust.method=</span><span class="st">&quot;none&quot;</span>)
+
+        Pairwise comparisons using t tests with pooled SD 
+
+data:<span class="st">  </span>X and A 
+
+  <span class="dv">1</span>    <span class="dv">2</span>    <span class="dv">3</span>   
+<span class="dv">2</span> <span class="fl">0.94</span> -<span class="st">    </span>-<span class="st">   </span>
+<span class="dv">3</span> <span class="fl">0.94</span> <span class="fl">1.00</span> -<span class="st">   </span>
+<span class="dv">4</span> <span class="fl">0.90</span> <span class="fl">0.96</span> <span class="fl">0.96</span>
+
+P value adjustment method:<span class="st"> </span>none 
+&gt;<span class="st"> </span><span class="kw">pairwise.t.test</span>(Y, B, <span class="dt">p.adjust.method=</span><span class="st">&quot;none&quot;</span>)
+
+        Pairwise comparisons using t tests with pooled SD 
+
+data:<span class="st">  </span>Y and B 
+
+  <span class="dv">1</span>       <span class="dv">2</span>       <span class="dv">3</span>       <span class="dv">4</span>      
+<span class="dv">2</span> <span class="fl">0.93936</span> -<span class="st">       </span>-<span class="st">       </span>-<span class="st">      </span>
+<span class="dv">3</span> <span class="fl">0.93482</span> <span class="fl">0.99545</span> -<span class="st">       </span>-<span class="st">      </span>
+<span class="dv">4</span> <span class="fl">0.89612</span> <span class="fl">0.95654</span> <span class="fl">0.96108</span> -<span class="st">      </span>
+<span class="dv">5</span> <span class="fl">0.00053</span> <span class="fl">0.00067</span> <span class="fl">0.00068</span> <span class="fl">0.00079</span>
+
+P value adjustment method:<span class="st"> </span>none </code></pre>
+<p>您仍然可以看到第 5 列的內容「0.00053 0.00067 0.00068 0.00079」明顯的較低，而且幾乎都低於 0.05，因此樣本群 5 的平均值明顯與其他四群有所不同。</p>
+<h2 id="結語"><a href="#結語">結語</a></h2>
+<p>在以上的實驗中，我們可以透過 R 軟體中的「變異數分析」函數 aov() 進行多組樣本的平均值比較，瞭解這些樣本的母體平均值是否相同。</p>
+<p>假如「變異數分析」的結果認為有所不同，那麼我們就可以利用 pairwise.t.test() 函數，去檢驗看看到底哪些群體之間有所不同，以便找出明顯不同的樣本群。</p>
+<p>這種方法在很多「自然科學與社會科學」的實驗當中，都會是很有用的，例如我們可以用「變異數分析」來檢驗「幾種銷售方式之間」是否有明顯的差異，「幾種農藥的除草效果」間是否有明顯差異等等，這些分析對我們進行多組樣本的統計實驗可以提供很好的指引效果。</p>
+<h2 id="參考文獻"><a href="#參考文獻">參考文獻</a></h2>
+<ul>
+<li><a href="http://book.douban.com/subject/3337668/">R语言与统计分析</a>, 作者: 汤银才, ISBN: 9787040250626。</li>
+</ul>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+# http://www.r-project.org/
+# http://www.gnu.org/software/octave/
+# http://www.scilab.org/
+# http://rlab.sourceforge.net/
+# 朱孝 國的筆記本:GNU Octave 教學 -- http://irw.ncut.edu.tw/peterju/octave.html
+# "資訊人權貴" 之家:幾個可以處理矩陣的計算機: octave/rlab/R -- http://people.ofset.org/~ckhung/b/ma/linalg.php
+# GNU Octave Manual Version 3 -- http://www.network-theory.co.uk/docs/octave3/
+# Scientific Computing with MATLAB and Octave (repost) -- http://www.ebookee.com/Scientific-Computing-with-MATLAB-and-Octave-repost-_817182.html
+# http://zh.wikipedia.org/zh-tw/Gnuplot
+# http://octplot.sourceforge.net/
+# 文文的統計園地 -- http://tw.myblog.yahoo.com/wen-statistics/

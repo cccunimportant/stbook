@@ -1,0 +1,13 @@
++ 機率的解讀
+1. 個人方式：(personal approach) ：主觀的意見與猜測。
+2. 相對頻率：(relative frequency) ： 基於實驗，得到的機率只是一種近似值。
+
+[[math]]
+P[A] = \frac{f}{n} = \frac{事件 A 的出現的次數}{實驗進行的次數} 
+[[/math]]
+
+3. 古典方式：(classical approach) ： 等可能出像 (equally likely) 的假設。
+
+[[math]]
+P[A] = \frac{n(A)}{n(S)} = \frac{事件 A 的可能出現次數}{實驗可能進行的次數}
+[[/math]]

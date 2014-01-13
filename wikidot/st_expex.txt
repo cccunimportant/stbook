@@ -1,0 +1,52 @@
++ 期望值
+
+* 定義：
+
+[[math]]
+E[H(X)] = \sum_{x \in S} H(x) p(x)
+[[/math]]
+
+* 範例：X 的期望值
+[[math]]
+E[X] = \sum_{x \in S} x\;p(x)
+[[/math]]
+
+* 定理：
+
+[[math type="eqnarray"]]
+1. && E[c] = c \\
+2. && E[c X] = c E[X] \\
+3. && E[X + Y] = E[X] + E[Y]
+[[/math]]
+
++ 證明
+
+定理 1: E[c] = c
+
+[[math type="eqnarray"]]
+E[c] &=& \sum_{x \in S} (c *p(x)) &\;&; 根據期望值定義 \\
+         &=& c\;\sum_{x \in S} p(x) &\;&; 根據基本算術 \\
+         &=& c\; &\;&; 因為 p(x) 是機率密度函數
+[[/math]]
+
+定理 2: E[c X] = c E[X]
+
+[[math type="eqnarray"]]
+E[c X] &=& \sum_{x \in S} (c *x*p(x)) &\;&; 根據期望值定義 \\
+         &=& c\;\sum_{x \in S} (x*p(x)) &\;&; 根據基本算術 \\
+         &=& c\;E[X] &\;&; 根據期望值定義
+[[/math]]
+
+
+定理 3 : E[X + Y] = E[X] + E[Y]
+
+假如離散隨機變數 X, Y 的機率密度函數分別用 [[$ p_x(s) $]] , [[$ p_y(s) $]] 代表。
+
+[[math type="eqnarray"]]
+E[X+Y] &=& \sum_{s \in S} s (p_x(s) + p_y(s)) &\;&; 根據期望值定義 \\
+         &=& \sum_{s \in S} (s*p_x(s)) + \sum_{s \in S} (s*p_y(s)) &\;&; 根據乘法對加法的分配率 \\
+         &=& E(X) + E(Y)
+[[/math]]
+
+
+以上證明了離散的情況，連續的情況雷同，請比照上述寫法撰寫。

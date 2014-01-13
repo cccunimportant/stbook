@@ -1,0 +1,86 @@
++ 簡介
+
+Metropolis-Hasting (MH) 程序是用來學習馬可夫狀態轉移矩陣的一種演算法，假如我們用 S 代表所有可能的狀態， Q 代表狀態轉移矩陣，那麼 Q(x,y) 就代表由狀態 x 轉移到狀態 y 的機率。
+
+MH 程序用疊代的方式學習 Q(x,y) ，首先將 Q(x,y) 的初始值設定為平均的機率分布 Q(x,y) = 1/|S| ，然後就可以透過疊代程序不斷的修改 Q 矩陣，直到整個程序收斂為止，其疊代方法如下。
+
++ 馬可夫系統的平衡條件
+
+MH 疊代程序的想法如下，假如我們模擬機率性粒子在馬可夫鏈中的移動行為，最後這些移動將達到一個平衡。在達到平衡後，從 x 狀態流出去的粒子數，將會等於流回該狀態的粒子數，也就是必須滿足下列『平衡條件』的要求。
+
+[[math eq1]]
+\sum_y P(x) Q(x , y)  = \sum_y P(y) Q(y , x)
+[[/math]]
+
+當隨機的粒子移動時，如果從 x 流出的粒子較多，自然會讓 P(x) 下降，最後仍然達到平衡，如果流入 x 的粒子比流出的多，那麼 P(x) 自然就會上升，只要我們能模擬流出流入的程序，最後整個馬可夫系統將會達到平衡。
+
+但問題是，我們所想要學習的是狀態轉移矩陣 Q(x,y) 而非 P(x)，所以公式 [[eref eq1]] 的平衡條件是不夠的，我們需要如下的『細緻平衡條件』。
+
+[[math eq2]]
+P(x) Q(x , y)  = P(y) Q(y , x)
+[[/math]]
+
+只要符合公式 [[eref eq2]] 的細緻平衡條件要求，就能夠利用此一條件設計出學習程序，以便透過反覆的疊代運算找出讓 Q(x,y) 達成平衡的數值，這就是整個 MH 程序的想法。
+
++ Metropolis-Hasting 程序的原理
+
+MH 程序是一個不斷調整 Q(x,y) 的演算法，該算法所關注的焦點在於 (x, y) 通道上，假如從 x 流向 y 的粒子較多，那麼就應當讓粒子全部從 x 流向 y，也就是 Q(x,y) 的流量均可順利流出，假如從 y 流向 x 的粒子較多，那麼我們就讓某些粒子卡住，不要流出。但是究竟要流出多少粒子，卡住多少粒子呢？MH 方法利用下列的 A(x,y) 比例進行調節，以便能透過堵塞通道 Q(y,x) 的方法，讓系統趨向平衡。
+
+[[math]]
+ A(x,y) = \frac{P(x) Q(x,y)}{P(y) Q(y,x)}
+[[/math]]
+
+因此，Metropolis 設計出了下列通道流量的調整公式，以便用疊代的方式調整狀態轉移機率矩陣 Q。
+
+[[math]]
+Q_{t+1}(x,y) = \begin{cases}
+Q_t(x,y)           & \text{if $ x \neq y  , A(x,y) \geq 1$;}\\
+Q_t(x,y) A(x,y) & \text{if $x \neq y , A(x,y) < 1$;}\\
+Q_t(x,y) + \sum_{z:A(x,z) < 1} Q_t(x,z) (1 - A(x,z)) & \text{if $x = y  $.}
+\end{cases}
+[[/math]]
+
++ Metropolis-Hasting 算法
+
+在理解了平衡條件與 MH 程序的想法後，我們就可以正式撰寫出 Metropolis-Hasting 程序的演算法。
+
+Algorithm Metropolis-Hasting(P(S)) output Q(S,S)
+　Q(S, S) = 1/|S|
+　while not converge
+　　　foreach (x,y) in (S, S)
+　　　　　[[$ A(x,y) = \frac{P(x) Q(x,y)}{P(y) Q(y,x)} $]] 
+
+　　　foreach (x,y) in (S, S)
+　　　　　if x = y
+　　　　　　　[[$ Q'(x,y) = Q(x,y) + \sum_{z:A(x,z) < 1} Q(x,z) (1 - A(x,z)) $]] 
+　　　　　else
+　　　　　　　if A(x,y) >= 1
+　　　　　　　　[[$ Q'(x,y) = Q(x,y) $]] 
+　　　　　　　else
+　　　　　　　　[[$ Q'(x,y) = Q(x,y) A(x,y) $]]
+　　　Q = Q'
+　end while
+End Algorithm
+
++ MH 算法的進一步簡化
+
+在上述的 MH 程序中，[[$ Q'(x,y) = Q_t(x,y) + \sum_{z:A(x,z) < 1} Q_t(x,z) (1 - A(x,z)) $]]  的計算較為複雜，事實上，這個值就是為了讓 Q'(x,y) 能夠『規一化』的條件，也就是讓 [[$ \sum_y Q'(x,y)=1 $]] 的差額補償值。因此我們也可以將上述演算法改寫如下。
+
+Algorithm Metropolis-Hasting(P(S)) output Q(S,S)
+　Q(S, S) = 1/|S|
+　while not converge
+　　　foreach (x,y) in (S, S)
+　　　　　[[$ Q'(x,y) = Q(x,y) $]] 
+　　　　　[[$ A(x,y) = \frac{P(x) Q(x,y)}{P(y) Q(y,x)} $]] 
+
+　　　foreach (x,y) in (S, S)
+　　　　　if A(x,y) < 1
+　　　　　　　[[$ Q'(x,y) = Q(x,y) A(x,y) $]]
+　　　　　　　[[$ Q'(x,x) = Q'(x,x) +  Q(x,y) (1-A(x,y)) $]] 
+　　　Q = Q'
+　end while
+End Algorithm
+
++ 結語
+
+Metropolis-Hasting 程序可以用來學習具有『細緻平衡』特性的狀態轉移機率 Q(x,y)，一但取得了狀態轉移機率，整個系統的機率行為就確定下來了，透過這樣的程序，我們可以學習到一個馬可夫模型，然後再利用這個模型進行『預測』，以便讓程式的行為模擬該馬可夫系統的行為。Metropolis-Hasting 程序對這些可用隨機系統描述的行為而言，是一個重要的學習程序，因此被廣泛應用在機器翻譯、文件分類、分群或貝氏網路的學習等領域上，這是數學領域在電腦上應用的一個優良方法。

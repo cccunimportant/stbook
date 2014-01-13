@@ -1,0 +1,36 @@
++ 變異數 (Variance, 方差)
+
+* 定義：(變異數) [[$ Var(X) = \sigma^2 = E[(X-\mu)^2] $]], 其中 [[$ \mu $]] 為 X 的平均值，而 [[$ \sigma $]] 稱為標準差。
+
+* 定理：[[$ \sigma^2 = Var(X) = E[X^2] - E[X]^2 $]]
+
+* 定理：
+[[math type="eqnarray"]]
+1. Var(c) &=& 0 \\
+2. Var(c X) &=& c^2 Var(X) \\
+3. Var(X + Y) &=& Var(X) + Var(Y) ; 如果 X 與 Y 彼此獨立
+[[/math]]
+
+* 定義：(樣本變異數) [[$ S^2 = \sum_{i=1}^n \frac{(X_i - \bar{X})^2}{n-1} = \frac{n \sum_{i=1}^n X_i^2 - (\sum_{i=1}^n Xi)^2}{n (n-1)} $]] ; 其中 S 稱為樣本標準差。
+
+* 定理：
+
++ 共變異數 (Covariance, 協方差)
+
+[[math]]
+\sigma_{XY} = Cov(X, Y) = E[(X - \mu_X)(Y - \mu_Y)]
+[[/math]]
+
+* 定理：[[$ Cov(X, Y) = E[X Y] - E[X] E[Y] $]]
+
+* 定理：如果 X, Y 相互獨立 ，則 [[$ E[X Y] = E[X] E[Y] $]] 。
+
++ 相關係數 (Correlation)
+
+[[math]]
+\rho_{X Y} = \frac{Cov(X,Y)}{\sqrt{Var(X) Var(Y)}}
+[[/math]]
+
+* 定理：[[$ -1 \le \rho_{XY} \le 1 $]]
+
+* 定理：[[$ |\rho_{X Y}| = 1 \Leftrightarrow y = \beta_0 + \beta_1 X $]]

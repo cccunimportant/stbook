@@ -1,0 +1,376 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#抽樣與敘述統計">抽樣與敘述統計</a><ul>
+<li><a href="#統計數值">統計數值</a></li>
+<li><a href="#統計圖">統計圖</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="抽樣與敘述統計"><a href="#抽樣與敘述統計">抽樣與敘述統計</a></h1>
+<h2 id="統計數值"><a href="#統計數值">統計數值</a></h2>
+<p>敘述統計乃是隨機抽樣的樣本集合，進行某些計算與繪圖，以便忠實的呈現出樣本的某些特性。這些計算出的數值，以及呈現出來的圖形，可以反映出樣本的某些統計特性，讓統計者能透過數值或圖形，大致了解樣本的統計特徵。</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">中文名稱</th>
+<th align="left">英文名稱</th>
+<th align="left">數學公式 / 說明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">樣本平均數</td>
+<td align="left">Mean</td>
+<td align="left"><img src="../timg/178d1db69ac7.jpg" /></td>
+</tr>
+<tr class="even">
+<td align="left">樣本中位數</td>
+<td align="left">Median</td>
+<td align="left">樣本排序後最中間位置的數值</td>
+</tr>
+<tr class="odd">
+<td align="left">樣本變異數</td>
+<td align="left">Sample Variance</td>
+<td align="left"><img src="../timg/e7e0cbe68706.jpg" /></td>
+</tr>
+<tr class="even">
+<td align="left">樣本標準差</td>
+<td align="left">Sample Standard Deviation</td>
+<td align="left">樣本變異數中的 S 稱為樣本標準差，也就是 <img src="../timg/cc63171042d5.jpg" /></td>
+</tr>
+<tr class="odd">
+<td align="left">樣本全距</td>
+<td align="left">Range</td>
+<td align="left">樣本中最大的觀察值減去最小的觀察值 <img src="../timg/0b7b19ca31d5.jpg" /></td>
+</tr>
+<tr class="even">
+<td align="left">離群值</td>
+<td align="left">Outlier 或 Wild</td>
+<td align="left">離其他樣本很遠，特別大或特別小的樣本值</td>
+</tr>
+<tr class="odd">
+<td align="left">樣本四分數間距</td>
+<td align="left">InterQuartile Range, IQR</td>
+<td align="left">第 3 四分位數減掉第 1 四分位數 <img src="../timg/8287f5eaa0f7.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>注意：變異數的定義為 <img src="../timg/9db00d6dfc86.jpg" /> ，上述的樣本變異數必須除以 n-1 才是變異數的不偏估計量，而不是除以 n。</p>
+<h3 id="範例請寫出樣本序列-7-4-6-8-9-4-5-6-2-8-的以下敘述統計值與其計算過程"><a href="#範例請寫出樣本序列-7-4-6-8-9-4-5-6-2-8-的以下敘述統計值與其計算過程">範例：請寫出樣本序列 (7 4 6 8 9 4 5 6 2 8) 的以下敘述統計值與其計算過程。</a></h3>
+<ol style="list-style-type: decimal">
+<li>樣本平均數 (Mean)</li>
+<li>樣本變異數 (Sample Variance)</li>
+<li>樣本標準差 (Sample Standard Deviation)</li>
+<li>中位數 (Median)</li>
+<li>全距 (Range)</li>
+<li>第一四分位數 (q1)</li>
+<li>第三四分位數 (q3)</li>
+<li>樣本四分數間距 (iqr)</li>
+</ol>
+<p>解答：</p>
+<ol style="list-style-type: decimal">
+<li>樣本平均數 (Mean)</li>
+</ol>
+<p>mean(x) = (7+4+6+8+9+4+5+6+2+8)/10 = 5.9</p>
+<ol start="2" style="list-style-type: decimal">
+<li>樣本變異數 (Sample Variance)</li>
+</ol>
+<p>var(x) = ((7-5.9)<sup>2+(4-5.9)</sup>2+(6-5.9)<sup>2+(8-5.9)</sup>2+(9-5.9)<sup>2+(4-5.9)</sup>2+(5-5.9)<sup>2+(6-5.9)</sup>2+(2-5.9)<sup>2+(8-5.9)</sup>2)/(10-1) = 4.77</p>
+<ol start="3" style="list-style-type: decimal">
+<li>樣本標準差 (Sample Standard Deviation)</li>
+</ol>
+<p>S = sqrt(var(x)) = sqrt(4.77) =</p>
+<ol start="4" style="list-style-type: decimal">
+<li>中位數 (Median)</li>
+</ol>
+<p>M = (2 4 4 5 6 6 7 8 8 9) 最中間的值 = (6+6)/2 = 6</p>
+<ol start="5" style="list-style-type: decimal">
+<li>全距 (Range)</li>
+</ol>
+<p>range(x) = 9-2 = 7</p>
+<ol start="6" style="list-style-type: decimal">
+<li>第一四分位數 (q1)</li>
+</ol>
+<pre><code>順序 0 1 2 3 4 5 6 7 8 9
+樣本 2 4 4 5 6 6 7 8 8 9</code></pre>
+<p>q1 的位置 0.25 * 9/10 = 0.225</p>
+<p>所以 q1 = 4+0.25 * (5-4) = 4.25</p>
+<ol start="7" style="list-style-type: decimal">
+<li>第三四分位數 (q3)</li>
+</ol>
+<p>q3 的位置 0.75 * 9/10 = 0.675</p>
+<p>所以 q3 = 7+0.75 * (8-7) = 7.75</p>
+<ol start="8" style="list-style-type: decimal">
+<li>樣本四分數間距 (iqr)</li>
+</ol>
+<p>iqr(x) = q3-q1 = 7.75-4.25 = 3.5</p>
+<p>使用 R 軟體進行驗證</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x =<span class="st"> </span><span class="kw">c</span>(<span class="dv">7</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">8</span>)
+&gt;<span class="st"> </span><span class="kw">mean</span>(x)
+[<span class="dv">1</span>] <span class="fl">5.9</span>
+&gt;<span class="st"> </span>mx =<span class="st"> </span>(<span class="dv">7+4+6+8+9+4+5+6+2+8</span>)/<span class="dv">10</span>
+&gt;<span class="st"> </span>mx
+[<span class="dv">1</span>] <span class="fl">5.9</span>
+&gt;<span class="st"> </span><span class="kw">var</span>(x)
+[<span class="dv">1</span>] <span class="fl">4.766667</span>
+&gt;<span class="st"> </span>dx =<span class="st"> </span>x -<span class="st"> </span>mx
+&gt;<span class="st"> </span>dx
+ [<span class="dv">1</span>]  <span class="fl">1.1</span> -<span class="fl">1.9</span>  <span class="fl">0.1</span>  <span class="fl">2.1</span>  <span class="fl">3.1</span> -<span class="fl">1.9</span> -<span class="fl">0.9</span>  <span class="fl">0.1</span> -<span class="fl">3.9</span>  <span class="fl">2.1</span>
+&gt;<span class="st"> </span>dx*dx
+ [<span class="dv">1</span>]  <span class="fl">1.21</span>  <span class="fl">3.61</span>  <span class="fl">0.01</span>  <span class="fl">4.41</span>  <span class="fl">9.61</span>  <span class="fl">3.61</span>  <span class="fl">0.81</span>  <span class="fl">0.01</span> <span class="fl">15.21</span>  <span class="fl">4.41</span>
+&gt;<span class="st"> </span>dx*dx/<span class="dv">10</span>
+ [<span class="dv">1</span>] <span class="fl">0.121</span> <span class="fl">0.361</span> <span class="fl">0.001</span> <span class="fl">0.441</span> <span class="fl">0.961</span> <span class="fl">0.361</span> <span class="fl">0.081</span> <span class="fl">0.001</span> <span class="fl">1.521</span> <span class="fl">0.441</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(dx*dx/<span class="dv">10</span>)
+[<span class="dv">1</span>] <span class="fl">4.29</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(dx*dx/<span class="dv">9</span>)
+[<span class="dv">1</span>] <span class="fl">4.766667</span>
+&gt;<span class="st"> </span>sx =<span class="st"> </span><span class="kw">sort</span>(x)
+&gt;<span class="st"> </span>sx
+ [<span class="dv">1</span>] <span class="dv">2</span> <span class="dv">4</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">6</span> <span class="dv">7</span> <span class="dv">8</span> <span class="dv">8</span> <span class="dv">9</span>
+&gt;<span class="st"> </span><span class="kw">median</span>(sx)
+[<span class="dv">1</span>] <span class="dv">6</span>
+&gt;<span class="st"> </span><span class="kw">median</span>(x)
+[<span class="dv">1</span>] <span class="dv">6</span>
+&gt;<span class="st"> </span><span class="kw">range</span>(x)
+[<span class="dv">1</span>] <span class="dv">2</span> <span class="dv">9</span>
+&gt;<span class="st"> </span>rx =<span class="st"> </span><span class="dv">9-2</span>
+&gt;<span class="st"> </span>rx
+[<span class="dv">1</span>] <span class="dv">7</span>
+&gt;<span class="st"> </span>rx =<span class="st"> </span><span class="kw">max</span>(x)-<span class="kw">min</span>(x)
+&gt;<span class="st"> </span>rx
+[<span class="dv">1</span>] <span class="dv">7</span>
+&gt;<span class="st"> </span>q1 =<span class="st"> </span><span class="kw">quantile</span>(x, <span class="fl">0.25</span>)
+&gt;<span class="st"> </span>q1
+ <span class="dv">25</span>% 
+<span class="fl">4.25</span> 
+&gt;<span class="st"> </span>q3 =<span class="st"> </span><span class="kw">quantile</span>(x, <span class="fl">0.75</span>)
+&gt;<span class="st"> </span>q3
+ <span class="dv">75</span>% 
+<span class="fl">7.75</span> 
+&gt;<span class="st"> </span>q3-q1
+<span class="dv">75</span>% 
+<span class="fl">3.5</span> 
+&gt;<span class="st"> </span>iqrx =<span class="st"> </span><span class="kw">IQR</span>(x)
+&gt;<span class="st"> </span>iqrx
+[<span class="dv">1</span>] <span class="fl">3.5</span>
+&gt;<span class="st"> </span><span class="kw">summary</span>(x)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   <span class="fl">2.00</span>    <span class="fl">4.25</span>    <span class="fl">6.00</span>    <span class="fl">5.90</span>    <span class="fl">7.75</span>    <span class="fl">9.00</span> 
+&gt;<span class="st"> </span><span class="kw">sd</span>(x)
+[<span class="dv">1</span>] <span class="fl">2.18327</span>
+&gt;<span class="st"> </span>sdx =<span class="st"> </span><span class="kw">sd</span>(x)
+&gt;<span class="st"> </span>sdx*sdx
+[<span class="dv">1</span>] <span class="fl">4.766667</span>
+&gt;<span class="st"> </span></code></pre>
+<h3 id="r-操作範例敘述統計值"><a href="#r-操作範例敘述統計值">R 操作範例：敘述統計值</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">100</span>, <span class="dv">10</span>)
+&gt;<span class="st"> </span>x
+ [<span class="dv">1</span>] <span class="dv">12</span> <span class="dv">17</span> <span class="dv">50</span> <span class="dv">33</span> <span class="dv">98</span> <span class="dv">77</span> <span class="dv">39</span> <span class="dv">79</span>  <span class="dv">7</span> <span class="dv">26</span>
+&gt;<span class="st"> </span><span class="kw">mean</span>(x)
+[<span class="dv">1</span>] <span class="fl">43.8</span>
+&gt;<span class="st"> </span><span class="kw">median</span>(x)
+[<span class="dv">1</span>] <span class="dv">36</span>
+&gt;<span class="st"> </span><span class="kw">var</span>(x)
+[<span class="dv">1</span>] <span class="fl">984.1778</span>
+&gt;<span class="st"> </span><span class="kw">sd</span>(x)
+[<span class="dv">1</span>] <span class="fl">31.37161</span>
+&gt;<span class="st"> </span><span class="kw">range</span>(x)
+[<span class="dv">1</span>]  <span class="dv">7</span> <span class="dv">98</span>
+&gt;<span class="st"> </span><span class="kw">max</span>(x)
+[<span class="dv">1</span>] <span class="dv">98</span>
+&gt;<span class="st"> </span><span class="kw">min</span>(x)
+[<span class="dv">1</span>] <span class="dv">7</span>
+&gt;<span class="st"> </span><span class="kw">max</span>(x)-<span class="kw">min</span>(x)
+[<span class="dv">1</span>] <span class="dv">91</span>
+&gt;<span class="st"> </span>q1 =<span class="st"> </span><span class="kw">quantile</span>(x, <span class="fl">0.25</span>)
+&gt;<span class="st"> </span>q1
+  <span class="dv">25</span>% 
+<span class="fl">19.25</span> 
+&gt;<span class="st"> </span>q3 =<span class="st"> </span><span class="kw">quantile</span>(x, <span class="fl">0.75</span>)
+&gt;<span class="st"> </span>q3
+  <span class="dv">75</span>% 
+<span class="fl">70.25</span> 
+&gt;<span class="st"> </span>q3-q1
+<span class="dv">75</span>% 
+ <span class="dv">51</span> 
+&gt;<span class="st"> </span><span class="kw">iqr</span>(x)
+錯誤:<span class="st"> </span>沒有這個函數 <span class="st">&quot;iqr&quot;</span>
+&gt;<span class="st"> </span><span class="kw">IQR</span>(x)
+[<span class="dv">1</span>] <span class="dv">51</span>
+&gt;<span class="st"> </span><span class="kw">fivenum</span>(x)
+[<span class="dv">1</span>]  <span class="dv">7</span> <span class="dv">17</span> <span class="dv">36</span> <span class="dv">77</span> <span class="dv">98</span>
+&gt;<span class="st"> </span><span class="kw">summary</span>(x)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   <span class="fl">7.00</span>   <span class="fl">19.25</span>   <span class="fl">36.00</span>   <span class="fl">43.80</span>   <span class="fl">70.25</span>   <span class="fl">98.00</span> </code></pre>
+<h3 id="習題請用-r-軟體計算出樣本序列-8.9-4.5-3.7-10.0-11.5-8.9-5.6-15.4-16.6-1.0-的以下敘述統計值-必須寫出指令與結果"><a href="#習題請用-r-軟體計算出樣本序列-8.9-4.5-3.7-10.0-11.5-8.9-5.6-15.4-16.6-1.0-的以下敘述統計值-必須寫出指令與結果">習題：請用 R 軟體計算出樣本序列 (8.9 , 4.5 , 3.7 , 10.0 , 11.5 , 8.9 , 5.6 , 15.4 , 16.6 , 1.0) 的以下敘述統計值 (必須寫出指令與結果)。</a></h3>
+<ol style="list-style-type: decimal">
+<li><p>樣本平均數 (Mean)</p></li>
+<li><p>樣本變異數 (Sample Variance)</p></li>
+<li><p>樣本標準差 (Sample Standard Deviation)</p></li>
+<li><p>中位數 (Median)</p></li>
+<li><p>全距 (Range)</p></li>
+<li><p>第一四分位數 (q1)</p></li>
+<li><p>第三四分位數 (q3)</p></li>
+<li><p>樣本四分數間距 (iqr)</p></li>
+</ol>
+<p>解答：</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x=<span class="kw">c</span>(<span class="fl">8.9</span> , <span class="fl">4.5</span> , <span class="fl">3.7</span> , <span class="fl">10.0</span> , <span class="fl">11.5</span> , <span class="fl">8.9</span> , <span class="fl">5.6</span> , <span class="fl">15.4</span> , <span class="fl">16.6</span> , <span class="fl">1.0</span>)
+&gt;<span class="st"> </span><span class="kw">mean</span>(x)
+[<span class="dv">1</span>] <span class="fl">8.61</span>
+&gt;<span class="st"> </span><span class="kw">var</span>(x)
+[<span class="dv">1</span>] <span class="fl">25.37433</span>
+&gt;<span class="st"> </span><span class="kw">sd</span>(x)
+[<span class="dv">1</span>] <span class="fl">5.037294</span>
+&gt;<span class="st"> </span><span class="kw">median</span>(x)
+[<span class="dv">1</span>] <span class="fl">8.9</span>
+&gt;<span class="st"> </span><span class="kw">max</span>(x)-<span class="kw">min</span>(x)
+[<span class="dv">1</span>] <span class="fl">15.6</span>
+&gt;<span class="st"> </span>q1 =<span class="st"> </span><span class="kw">quantile</span>(<span class="fl">0.25</span>, x)
+錯誤在<span class="kw">quantile.default</span>(<span class="fl">0.25</span>, x) :<span class="st"> &#39;probs&#39;</span> outside [<span class="dv">0</span>,<span class="dv">1</span>]
+&gt;<span class="st"> </span><span class="dt">q1 =</span> <span class="kw">quantile</span>(x, <span class="fl">0.25</span>)
+&gt;<span class="st"> </span>q1
+  <span class="dv">25</span>% 
+<span class="fl">4.775</span> 
+&gt;<span class="st"> </span><span class="dt">q3 =</span> <span class="kw">quantile</span>(x, <span class="fl">0.75</span>)
+&gt;<span class="st"> </span>q3
+   <span class="dv">75</span>% 
+<span class="fl">11.125</span> 
+&gt;<span class="st"> </span>q3-q1
+ <span class="dv">75</span>% 
+<span class="fl">6.35</span> 
+&gt;<span class="st"> </span><span class="kw">IQR</span>(x)
+[<span class="dv">1</span>] <span class="fl">6.35</span>
+&gt;<span class="st"> </span></code></pre>
+<h2 id="統計圖"><a href="#統計圖">統計圖</a></h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left">中文名稱</th>
+<th align="left">英文名稱</th>
+<th align="left">說明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">直方圖</td>
+<td align="left">Histogram</td>
+<td align="left">根據每個區間的樣本出現次數繪製的長條圖。</td>
+</tr>
+<tr class="even">
+<td align="left">肩型圖 (累加分配圖)</td>
+<td align="left">Relative Cumulative Frequency Ogive</td>
+<td align="left">將累加次數繪製出來的圖形。</td>
+</tr>
+<tr class="odd">
+<td align="left">莖葉圖</td>
+<td align="left">Stem-and-Leaf Diagram</td>
+<td align="left">用主幹數字與分支數字表示分布情況的圖形。</td>
+</tr>
+<tr class="even">
+<td align="left">盒型圖</td>
+<td align="left">Boxplots</td>
+<td align="left">由平均值、內籬笆與外籬笆所形成的盒型圖，可看出中心點與離散程度。</td>
+</tr>
+</tbody>
+</table>
+<p>說明：盒型圖是由四分位數 q1, q3, 以及內籬笆 f1, f3 (inner fences), 連接值 a1, a3 與外籬笆 F1, F3 (outer fances) 所組成的圖形</p>
+<ul>
+<li>內籬笆：f1 = q1 - 1.5 iqr; f3 = q3 + 1.5 iqr;</li>
+<li>外籬笆：F1 = q1 - 3.0 iqr; F3 = q3 + 3.0 iqr;</li>
+<li>連接值：a1 是大於且最接近 f1 的數據點; a3 小於且最接近 f3 的數據點。</li>
+</ul>
+<h3 id="r-操作範例繪製統計圖"><a href="#r-操作範例繪製統計圖">R 操作範例：繪製統計圖</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>)
+&gt;<span class="st"> </span>x
+  [<span class="dv">1</span>]  <span class="fl">0.389381081</span> -<span class="fl">0.274522826</span>  <span class="fl">1.492670583</span> -<span class="fl">1.563228609</span>  <span class="fl">0.766405108</span>
+  [<span class="dv">6</span>]  <span class="fl">0.736573742</span>  <span class="fl">0.297407135</span> -<span class="fl">1.324130406</span> -<span class="fl">1.376598231</span>  <span class="fl">1.661727175</span>
+ [<span class="dv">11</span>] -<span class="fl">1.356590351</span>  <span class="fl">1.309122339</span> -<span class="fl">1.193821085</span>  <span class="fl">0.365801091</span> -<span class="fl">0.952034088</span>
+ [<span class="dv">16</span>] -<span class="fl">0.277610568</span> -<span class="fl">0.599980091</span> -<span class="fl">0.124105876</span> -<span class="fl">1.107713162</span>  <span class="fl">0.560637570</span>
+ [<span class="dv">21</span>]  <span class="fl">0.714449138</span>  <span class="fl">0.111969057</span>  <span class="fl">0.505171739</span> -<span class="fl">2.418297599</span>  <span class="fl">0.318797182</span>
+ [<span class="dv">26</span>]  <span class="fl">2.716646516</span>  <span class="fl">0.345289422</span>  <span class="fl">0.019434615</span>  <span class="fl">1.087758951</span>  <span class="fl">0.033917165</span>
+ [<span class="dv">31</span>] -<span class="fl">0.356786424</span> -<span class="fl">1.284809066</span>  <span class="fl">1.580411327</span>  <span class="fl">0.552931291</span> -<span class="fl">0.615928762</span>
+ [<span class="dv">36</span>] -<span class="fl">0.087069820</span> -<span class="fl">0.814632197</span> -<span class="fl">0.570882510</span> -<span class="fl">0.107731447</span> -<span class="fl">1.453838416</span>
+ [<span class="dv">41</span>] -<span class="fl">0.257115209</span>  <span class="fl">1.166866120</span>  <span class="fl">1.072692716</span> -<span class="fl">0.022594852</span>  <span class="fl">0.441221144</span>
+ [<span class="dv">46</span>]  <span class="fl">1.053900960</span> -<span class="fl">1.025193547</span> -<span class="fl">1.119200587</span>  <span class="fl">0.264668203</span>  <span class="fl">1.409504515</span>
+ [<span class="dv">51</span>]  <span class="fl">0.241644132</span> -<span class="fl">0.955407800</span>  <span class="fl">0.446297381</span>  <span class="fl">0.231887649</span>  <span class="fl">0.769308731</span>
+ [<span class="dv">56</span>]  <span class="fl">0.269624579</span>  <span class="fl">0.496109294</span>  <span class="fl">0.822638573</span> -<span class="fl">0.904380789</span> -<span class="fl">0.429527404</span>
+ [<span class="dv">61</span>] -<span class="fl">2.050582772</span> -<span class="fl">0.586973281</span> -<span class="fl">1.192753403</span>  <span class="fl">1.158321933</span> -<span class="fl">0.151319360</span>
+ [<span class="dv">66</span>]  <span class="fl">0.558858868</span> -<span class="fl">0.656174351</span> -<span class="fl">2.858964403</span>  <span class="fl">0.366785049</span>  <span class="fl">0.896958092</span>
+ [<span class="dv">71</span>]  <span class="fl">0.369315063</span> -<span class="fl">0.953560954</span> -<span class="fl">0.762608370</span> -<span class="fl">1.017449547</span> -<span class="fl">0.127738562</span>
+ [<span class="dv">76</span>] -<span class="fl">1.922030980</span> -<span class="fl">0.839897930</span>  <span class="fl">1.332972530</span> -<span class="fl">0.001151104</span>  <span class="fl">0.104336360</span>
+ [<span class="dv">81</span>] -<span class="fl">0.208907813</span>  <span class="fl">1.401335798</span>  <span class="fl">0.019330593</span> -<span class="fl">0.687559289</span>  <span class="fl">0.445371885</span>
+ [<span class="dv">86</span>]  <span class="fl">0.504532689</span>  <span class="fl">2.168626000</span> -<span class="fl">1.742886230</span>  <span class="fl">0.831058071</span>  <span class="fl">2.011604088</span>
+ [<span class="dv">91</span>]  <span class="fl">1.676059594</span>  <span class="fl">1.132849957</span> -<span class="fl">1.047073217</span> -<span class="fl">0.912548540</span> -<span class="fl">2.235854777</span>
+ [<span class="dv">96</span>] -<span class="fl">1.194104128</span>  <span class="fl">0.121106118</span> -<span class="fl">1.178415224</span>  <span class="fl">0.214196778</span>  <span class="fl">0.280714044</span>
+&gt;<span class="st"> </span><span class="kw">stem</span>(x)
+
+  The decimal point is at the |
+
+<span class="st">  </span>-<span class="dv">2</span> |<span class="st"> </span><span class="dv">9421</span>
+  -<span class="dv">1</span> |<span class="st"> </span><span class="dv">97654433222211000000</span>
+  -<span class="dv">0</span> |<span class="st"> </span><span class="dv">998887766664433322111100</span>
+   <span class="dv">0</span> |<span class="st"> </span><span class="dv">00011122233333344444445556667788889</span>
+   <span class="dv">1</span> |<span class="st"> </span><span class="dv">11112233445677</span>
+   <span class="dv">2</span> |<span class="st"> </span><span class="dv">027</span>
+
+&gt;<span class="st"> </span><span class="kw">hist</span>(x, <span class="dt">main=</span><span class="st">&quot;Frequency Histogram of x&quot;</span>)
+
+&gt;<span class="st"> </span><span class="kw">hist</span>(x, <span class="dt">main=</span><span class="st">&quot;Probability Histogram of x&quot;</span>, <span class="dt">freq=</span>F)
+
+&gt;<span class="st"> </span>Fx =<span class="st"> </span><span class="kw">ecdf</span>(x)
+
+&gt;<span class="st"> </span><span class="kw">plot</span>(x)
+
+&gt;<span class="st"> </span><span class="kw">plot</span>(Fx)
+
+&gt;<span class="st"> </span><span class="kw">boxplot</span>(x)</code></pre>
+<div class="figure">
+<img src="../img/DescriptiveGraph.jpg" alt="統計圖" /><p class="caption">統計圖</p>
+</div>
+<div class="figure">
+<img src="../img/BoxPlot.jpg" alt="盒狀圖" /><p class="caption">盒狀圖</p>
+</div>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

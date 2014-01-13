@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#主成分分析與因子分析">主成分分析與因子分析</a><ul>
+<li><a href="#簡介">簡介</a></li>
+<li><a href="#主成分分析範例-1-rank2">主成分分析範例 1 (Rank=2)</a></li>
+<li><a href="#主成分分析範例-2-rank3">主成分分析範例 2 (Rank=3)</a></li>
+<li><a href="#主成分分析範例-3-rank3-加上隨機誤差">主成分分析範例 3 (Rank=3 加上隨機誤差)</a></li>
+<li><a href="#因子分析">因子分析</a></li>
+<li><a href="#結語">結語</a></li>
+<li><a href="#參考文獻">參考文獻</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="主成分分析與因子分析"><a href="#主成分分析與因子分析">主成分分析與因子分析</a></h1>
+<h2 id="簡介"><a href="#簡介">簡介</a></h2>
+<p>雖然「主成分分析」(Principle Component Analysis) 通常出現在機率統計的課本當中，但事實上要理解這個技術 的核心數學知識，卻是線性代數。</p>
+<p>學過線性代數的朋友們通常會知道一個很重要但卻又難以理解的抽象概念，那就是「特徵值」與「特徵向量」， 其數學算式如下：</p>
+<p>　 <img src="../timg/0010fa7e4e1c.jpg" /></p>
+<p>符合這種條件的的 <img src="../timg/c6a6eb61fd9c.jpg" /> 就稱為特徵值，而 <img src="../timg/259132779c57.jpg" /> 則稱為特徵向量。</p>
+<p>表面上來看，所謂的特徵向量 <img src="../timg/259132779c57.jpg" /> 就是矩陣 [A] 乘法運算上的一個方向不動點，乘完之後只會在該向量上進行常數倍的縮放，但方向不變。</p>
+<p>不過、一個 n*n 矩陣的「特徵值」與「特徵向量」不止有一個，最大可以到達 n 個，假如共有 k 個特徵值，那我們可以列出下列運算式。</p>
+<p>　 <img src="../timg/9b7f5816221d.jpg" /><br />　 <img src="../timg/9a70096eafac.jpg" /><br />　 ...<br />　 <img src="../timg/e086b0976a2b.jpg" /></p>
+<p>基本上、特徵值 <img src="../timg/5614371f803f.jpg" /> 越大的，代表該特徵向量越能用來描述整個矩陣 (或者說越能代表該矩陣)，所以如果我們只用特徵值最大的幾個 代表整個矩陣，將特徵值小的去除，基本上不會對整個矩陣造成太大的失真。</p>
+<p>或許這樣講也不太精確，不過如果您還記得線性代數裏的 Rank 這個慨念，假如一個 3*3 矩陣的 rank 只有 2，那麼就代表三行當中，有一行可以用 其他兩行的線性組合取代，也就是 <img src="../timg/34a578b55cf6.jpg" /> 。</p>
+<p>在這種情況下，該矩陣只會有兩個不為零的特徵值 (也就是有一個特徵值為 0)，因此我們可以用兩組特徵值與特徵向量，就重建出整個矩陣。</p>
+<p>而所謂的主成分，就是那些對重建矩陣有強大影響力，特徵值較大的那些向量。而那些特徵值很小的，基本上就可以被忽略了。</p>
+<h2 id="主成分分析範例-1-rank2"><a href="#主成分分析範例-1-rank2">主成分分析範例 1 (Rank=2)</a></h2>
+<p>為了展示上述的數學論點，我們用 R 軟體建構出 4 組樣本，每組有 25 個元素，其中第 3, 4 組是第 1, 2 組的線性組合，因此這個 4*25 矩陣的 rank 將只有 2，所以透過主成分分析，我們應該會看到只有兩個主成分。</p>
+<p>以下是我們的範例程式。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x1=<span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">1</span>) <span class="co"># x1 是常態分布隨機產生的 25 個樣本</span>
+&gt;<span class="st"> </span>x2=<span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">1</span>) <span class="co"># x2 是常態分布隨機產生的 25 個樣本</span>
+&gt;<span class="st"> </span>x3=x1+x2                   <span class="co"># x3=x1+x2, 是 x1, x2 的線性組合</span>
+&gt;<span class="st"> </span>x4=x1<span class="dv">+2</span>*x3                 <span class="co"># x4=x1+2*x3=x1+2*(x1+x2)=3x1+2x2, 因此也是 x1, x2 的線性組合。</span>
+&gt;<span class="st"> </span>x14 =<span class="st"> </span><span class="kw">data.frame</span>(x1, x2, x3, x4) <span class="co"># 用這四組樣本建立一個 frame 變數 x14</span>
+&gt;<span class="st"> </span>pr =<span class="st"> </span><span class="kw">princomp</span>(x14, <span class="dt">cor=</span><span class="ot">TRUE</span>) <span class="co"># 開始進行主成分分析</span>
+&gt;<span class="st"> </span><span class="kw">summary</span>(pr, <span class="dt">loading=</span><span class="ot">TRUE</span>) <span class="co"># 顯示主成分分析的結果</span>
+Importance of components:
+<span class="st">                          </span>Comp<span class="fl">.1</span>    Comp<span class="fl">.2</span>       Comp<span class="fl">.3</span>       Comp<span class="fl">.4</span>
+Standard deviation     <span class="fl">1.7281767</span> <span class="fl">1.0066803</span> <span class="fl">4.712161e-08</span> <span class="fl">8.339758e-09</span>
+Proportion of Variance <span class="fl">0.7466487</span> <span class="fl">0.2533513</span> <span class="fl">5.551115e-16</span> <span class="fl">1.738789e-17</span>
+Cumulative Proportion  <span class="fl">0.7466487</span> <span class="fl">1.0000000</span> <span class="fl">1.000000e+00</span> <span class="fl">1.000000e+00</span>
+
+Loadings:
+<span class="st">   </span>Comp<span class="fl">.1</span> Comp<span class="fl">.2</span> Comp<span class="fl">.3</span> Comp<span class="fl">.4</span>
+x1 -<span class="fl">0.449</span>  <span class="fl">0.626</span>  <span class="fl">0.637</span>       
+x2 -<span class="fl">0.367</span> -<span class="fl">0.768</span>  <span class="fl">0.495</span>  <span class="fl">0.176</span>
+x3 -<span class="fl">0.576</span>        -<span class="fl">0.311</span> -<span class="fl">0.750</span>
+x4 -<span class="fl">0.576</span>        -<span class="fl">0.502</span>  <span class="fl">0.638</span>
+&gt;<span class="st"> </span></code></pre>
+<p>在上述分析結果中，我們看到累積貢獻比率 (Cumulative Proportion) 在第一主成分 Comp.1 上為 0.7466487， 而累積到第二主成分 Comp.2 時就達到 1.0 了，這代表只要用兩個主成分就可以建構出整個樣本集合。</p>
+<p>根據 Loadings 中的 Comp.1 那一列可知，第一主成分 Comp.1 = -0.449 x1 - 0.367 x2 - 0.576 x3 - 0.576 x4， 也就是我們用這個主成分就可以掌握整組資料的 7 成 (0.7466487)，而加上第二主成份 Comp.2 = 0.626 x1 - 0.768 x2 之後， 就可以掌握 100% 的資料，完全重建整個矩陣了。(因為這組資料的 rank 為 2)。</p>
+<h2 id="主成分分析範例-2-rank3"><a href="#主成分分析範例-2-rank3">主成分分析範例 2 (Rank=3)</a></h2>
+<p>為了驗證上述的「線性代數」想法，我們接著將 x3 改掉，成為獨立常態序列，然後讓 x4=3<em>x1+2</em>x2+x3，如下列程式所示。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x1=<span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">1</span>) <span class="co"># x1 是常態分布隨機產生的 25 個樣本</span>
+&gt;<span class="st"> </span>x2=<span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">1</span>) <span class="co"># x2 是常態分布隨機產生的 25 個樣本</span>
+&gt;<span class="st"> </span>x3=<span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">1</span>) <span class="co"># x3 是常態分布隨機產生的 25 個樣本</span>
+&gt;<span class="st"> </span>x4=<span class="dv">3</span>*x1<span class="dv">+2</span>*x2+x3            <span class="co"># x4=3*x1+2*x2+x3, 是 x1, x2, x3 的線性組合</span>
+&gt;<span class="st"> </span>x14 =<span class="st"> </span><span class="kw">data.frame</span>(x1, x2, x3, x4) <span class="co"># 用這四組樣本建立一個 frame 變數 x14</span>
+&gt;<span class="st"> </span>pr =<span class="st"> </span><span class="kw">princomp</span>(x14, <span class="dt">cor=</span><span class="ot">TRUE</span>) <span class="co"># 開始進行主成分分析</span>
+&gt;<span class="st"> </span><span class="kw">summary</span>(pr, <span class="dt">loading=</span><span class="ot">TRUE</span>)<span class="er">)</span> <span class="co"># 顯示主成分分析的結果</span>
+Importance of components:
+<span class="st">                          </span>Comp<span class="fl">.1</span>    Comp<span class="fl">.2</span>   Comp<span class="fl">.3</span>       Comp<span class="fl">.4</span>
+Standard deviation     <span class="fl">1.4659862</span> <span class="fl">1.1233489</span> <span class="fl">0.767445</span> <span class="fl">4.712161e-08</span>
+Proportion of Variance <span class="fl">0.5372789</span> <span class="fl">0.3154782</span> <span class="fl">0.147243</span> <span class="fl">5.551115e-16</span>
+Cumulative Proportion  <span class="fl">0.5372789</span> <span class="fl">0.8527570</span> <span class="fl">1.000000</span> <span class="fl">1.000000e+00</span>
+
+Loadings:
+<span class="st">   </span>Comp<span class="fl">.1</span> Comp<span class="fl">.2</span> Comp<span class="fl">.3</span> Comp<span class="fl">.4</span>
+x1  <span class="fl">0.634</span>  <span class="fl">0.104</span>  <span class="fl">0.458</span>  <span class="fl">0.615</span>
+x2  <span class="fl">0.310</span> -<span class="fl">0.669</span> -<span class="fl">0.625</span>  <span class="fl">0.259</span>
+x3  <span class="fl">0.194</span>  <span class="fl">0.736</span> -<span class="fl">0.632</span>  <span class="fl">0.146</span>
+x4  <span class="fl">0.682</span>               -<span class="fl">0.731</span></code></pre>
+<p>您可以看到在下列的累積貢獻比率 (Cumulative Proportion) 當中，要到第三個主成分才到達 1.0，而非第二個主成分。</p>
+<pre><code>Cumulative Proportion  0.5372789 0.8527570 1.000000 1.000000e+00</code></pre>
+<p>而且在標準差 (Standard deviation) 與 變異比率 (Proportion of Variance) 上也反映了類似的情況，必須要到 Comp.4 的時候， 這兩個數值才會突然下降到幾近為 0 的程度 (4.712161e-08, 5.551115e-16)。</p>
+<h2 id="主成分分析範例-3-rank3-加上隨機誤差"><a href="#主成分分析範例-3-rank3-加上隨機誤差">主成分分析範例 3 (Rank=3 加上隨機誤差)</a></h2>
+<p>接著、讓我們為 x4 加上一點隨機誤差，看看主成分分析的結果會有何改變。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x1=<span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">1</span>) <span class="co"># x1 是常態分布隨機產生的 25 個樣本</span>
+&gt;<span class="st"> </span>x2=<span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">1</span>) <span class="co"># x2 是常態分布隨機產生的 25 個樣本</span>
+&gt;<span class="st"> </span>x3=<span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">1</span>) <span class="co"># x3 是常態分布隨機產生的 25 個樣本</span>
+&gt;<span class="st"> </span>x4=<span class="dv">3</span>*x1<span class="dv">+2</span>*x2+x3+<span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>) <span class="co"># x4=3*x1+2*x2+x3, 是 x1, x2, x3 的線性組合加上常態隨機誤差</span>
+&gt;<span class="st"> </span>x14 =<span class="st"> </span><span class="kw">data.frame</span>(x1, x2, x3, x4) <span class="co"># 用這四組樣本建立一個 frame 變數 x14</span>
+&gt;<span class="st"> </span>pr =<span class="st"> </span><span class="kw">princomp</span>(x14, <span class="dt">cor=</span><span class="ot">TRUE</span>) <span class="co"># 開始進行主成分分析</span>
+&gt;<span class="st"> </span><span class="kw">summary</span>(pr, <span class="dt">loading=</span><span class="ot">TRUE</span>)<span class="er">)</span> <span class="co"># 顯示主成分分析的結果</span>
+Importance of components:
+<span class="st">                          </span>Comp<span class="fl">.1</span>    Comp<span class="fl">.2</span>    Comp<span class="fl">.3</span>      Comp<span class="fl">.4</span>
+Standard deviation     <span class="fl">1.4565751</span> <span class="fl">1.1233728</span> <span class="fl">0.7704314</span> <span class="fl">0.151189097</span>
+Proportion of Variance <span class="fl">0.5304027</span> <span class="fl">0.3154916</span> <span class="fl">0.1483911</span> <span class="fl">0.005714536</span>
+Cumulative Proportion  <span class="fl">0.5304027</span> <span class="fl">0.8458943</span> <span class="fl">0.9942855</span> <span class="fl">1.000000000</span>
+
+Loadings:
+<span class="st">   </span>Comp<span class="fl">.1</span> Comp<span class="fl">.2</span> Comp<span class="fl">.3</span> Comp<span class="fl">.4</span>
+x1 -<span class="fl">0.642</span>  <span class="fl">0.117</span>  <span class="fl">0.410</span>  <span class="fl">0.637</span>
+x2 -<span class="fl">0.306</span> -<span class="fl">0.662</span> -<span class="fl">0.645</span>  <span class="fl">0.228</span>
+x3 -<span class="fl">0.173</span>  <span class="fl">0.740</span> -<span class="fl">0.641</span>  <span class="fl">0.103</span>
+x4 -<span class="fl">0.681</span>               -<span class="fl">0.729</span>
+&gt;<span class="st"> </span></code></pre>
+<p>您可以看到在累積貢獻比率 (Cumulative Proportion) 當中，到了第三主成分時已經達到 99.4% (0.9942855)， 而到了第四主成分時才達到 100%，這代表若用前三個主成份重建仍然會有少許誤差。</p>
+<pre><code>Cumulative Proportion  0.5304027 0.8458943 0.9942855 1.000000000</code></pre>
+<p>上述的誤差量可以從標準差 (Standard deviation) 與 變異比率 (Proportion of Variance) 這兩組數字上看到。</p>
+<pre><code>                          Comp.1    Comp.2    Comp.3      Comp.4
+Standard deviation     1.4565751 1.1233728 0.7704314 0.151189097
+Proportion of Variance 0.5304027 0.3154916 0.1483911 0.005714536</code></pre>
+<h2 id="因子分析"><a href="#因子分析">因子分析</a></h2>
+<p>另外、還有一個與主成分分析用法相當類似的方法，稱為因子分析 (Factor Analysis)，這種方法的使用與主成分分析 之差異點，在於必須指定要事先指定使用多少因子，如果使用的因子過多，則會導致失敗的結果。</p>
+<p>以下是我們同樣針對上述範例所進行的因子分析結果，您可以發現在下列的分析中，只有指定一個因子的時候可以成功 的進行分析，而指定兩個以上的因子時，就會導致分析失敗的結果。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x1=<span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">1</span>) <span class="co"># x1 是常態分布隨機產生的 25 個樣本</span>
+&gt;<span class="st"> </span>x2=<span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">1</span>) <span class="co"># x2 是常態分布隨機產生的 25 個樣本</span>
+&gt;<span class="st"> </span>x3=<span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">1</span>) <span class="co"># x3 是常態分布隨機產生的 25 個樣本</span>
+&gt;<span class="st"> </span>x4=<span class="dv">3</span>*x1<span class="dv">+2</span>*x2+x3+<span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>) <span class="co"># x4=3*x1+2*x2+x3, 是 x1, x2, x3 的線性組合加上常態隨機誤差</span>
+&gt;<span class="st"> </span>x14 =<span class="st"> </span><span class="kw">data.frame</span>(x1, x2, x3, x4) <span class="co"># 用這四組樣本建立一個 frame 變數 x14</span>
+&gt;<span class="st"> </span>fa =<span class="st"> </span><span class="kw">factanal</span>(x14, <span class="dt">factors=</span><span class="dv">2</span>)
+錯誤在<span class="kw">factanal</span>(x14, <span class="dt">factors =</span> <span class="dv">2</span>) :<span class="st"> </span>
+<span class="st">  </span><span class="dv">2</span> factors is too many for <span class="dv">4</span> variables
+&gt;<span class="st"> </span><span class="dt">fa =</span> <span class="kw">factanal</span>(x14, <span class="dt">factors=</span><span class="dv">1</span>)
+&gt;<span class="st"> </span>fa
+
+Call:
+<span class="kw">factanal</span>(<span class="dt">x =</span> x14, <span class="dt">factors =</span> <span class="dv">1</span>)
+
+Uniquenesses:
+<span class="st">   </span>x1    x2    x3    x4 
+<span class="fl">0.126</span> <span class="fl">0.834</span> <span class="fl">0.951</span> <span class="fl">0.005</span> 
+
+Loadings:
+<span class="st">   </span>Factor1
+x1 <span class="fl">0.935</span>  
+x2 <span class="fl">0.407</span>  
+x3 <span class="fl">0.222</span>  
+x4 <span class="fl">0.998</span>  
+
+               Factor1
+SS loadings      <span class="fl">2.084</span>
+Proportion Var   <span class="fl">0.521</span>
+
+Test of the hypothesis that <span class="dv">1</span> factor is sufficient.
+The chi square statistic is <span class="fl">21.97</span> on <span class="dv">2</span> degrees of freedom.
+The p-value is <span class="fl">1.7e-05</span> 
+&gt;<span class="st"> </span><span class="dt">fa =</span> <span class="kw">factanal</span>(x14, <span class="dt">factors=</span><span class="dv">3</span>)
+錯誤在<span class="kw">factanal</span>(x14, <span class="dt">factors =</span> <span class="dv">3</span>) :<span class="st"> </span>
+<span class="st">  </span><span class="dv">3</span> factors is too many for <span class="dv">4</span> variables</code></pre>
+<h2 id="結語"><a href="#結語">結語</a></h2>
+<p>從主成分分析這個案例中，我們可以看到「機率統計」技術背後的原理，竟然是「線性代數」，數學果然是一門博大精深的學問啊！</p>
+<p>事實上、上一期的「迴歸分析」主題，背後的原理乃是「最小平方法」，必須用到「微積分」與「線性代數」進行理論解釋。</p>
+<p>我想、這也是為甚麼大學資工系的課程當中，「微積分、線性代數、離散數學、機率統計」通常是必修的原因啊！</p>
+<h2 id="參考文獻"><a href="#參考文獻">參考文獻</a></h2>
+<ul>
+<li><a href="http://book.douban.com/subject/3337668/">R语言与统计分析</a>, 作者: 汤银才, ISBN: 9787040250626。</li>
+</ul>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

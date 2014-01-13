@@ -1,0 +1,43 @@
+++ 柯莫果洛夫 (Kolmogorove) 公理體系
+
+[[math type="eqnarray"]]
+1. && 0 \leq P(a) \leq 1 \\
+2. && P(true) = 1, p(false) = 0 \\
+3. && P(a \vee b) = P(a) + P(b) - P(a \wedge b)
+[[/math]]
+
+範例：利用柯氏公理體系的進行證明
+
+[[math type="eqnarray"]]
+P(a \vee -a) & =&  P(a)+P(-a) - P(a \wedge -a) \\
+P(true) & = &  P(a) + P(-a) - P(false) \\
+1 & = & P(a) + P(-a) \\
+P(-a) & = & 1-P(a)
+[[/math]]
+
+++ 條件機率
+
+條件獨立的定義
+
+[[math type="eqnarray"]]
+1. && P(a \wedge b) = P(a) P(b) \\
+2. && P(X \wedge Y) = P(X) P(Y)
+[[/math]]
+
+邊緣化 (加總消去) (因為保險精算師會將此數字寫在該頁的邊緣上)
+[[math type="eqnarray"]]
+P(Y) = \sum_{z} P(Y, z)
+[[/math]]
+
+正規化 (或稱規一化, Normalization)
+
+[[math type="eqnarray"]]
+P(A | b) = \alpha P(A , b)
+[[/math]]
+
+其中的 [[$ \alpha $]] 稱為規一化系數
+
+
++ 離散機率分布 (Discrete Probability Distribution) : 
+
++ 連續機率分布 (Continuous Probability Distribution) :

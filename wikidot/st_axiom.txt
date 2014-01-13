@@ -1,0 +1,124 @@
++ 機率的公理
+
+[[math type="eqnarray"]]
+(1)  & & P(S) = 1 \\
+(2)  & & P(A) \ge 0 \\
+(3)  & & P(A1 \cup A2) = P(A1) + P(A2) \; ; \; if \; A1 \cap A2 = \emptyset \\
+[[/math]]
+
++ 凡氏圖 (Venn Diagram)
+
+[[=image VennsDiagram.jpg]]
+
++ 請證明以下定理
+
+[[math type="eqnarray"]]
+(1)  & & P(\emptyset) = 0 \\
+(2)  & & P(A') = 1-P(A) \\
+(3)  & & P(A1 \cup A2) = P(A1) + P(A2) - P(A1 \cap A2) \\
+[[/math]]
+
++ 證明
+
+定理 (1) ：P(∅) = 0 的證明
+
+[[code]]
+因為 
+
+P(S∪∅) = P(S)+P(∅) ; 根據公理 3
+
+S = S∪∅ ; 根據集合論
+
+P(S) = 1 ; 根據公理 1
+
+推論
+
+1 = P(S) = P(S∪∅) = P(S)+P(∅)
+
+所以
+
+P(∅) = 1-P(S) = 1-1 = 0
+
+[[/code]]
+
+定理 (2) ：P(A') = 1-P(A)  的證明
+
+[[code]]
+因為 
+
+A'∪A = S 且 A'∩A=∅ ; 根據集合論
+
+P(A'∪A) = P(A') + P(A) ; 根據公理 3
+
+推論
+
+P(A') + P(A) = P(A'∪A) = P(S) = 1
+
+所以 
+
+P(A') = 1-P(A)
+[[/code]]
+
+定理 (3) ：P(A1 ∪ A2) = P(A1) + P(A2) - P(A1 ∩ A2) 的證明
+
+[[code]]
+因為 
+
+A1 ∪ A2 = (A1-(A1 ∩ A2)) ∪ A2  ; 根據集合論 (用文氏圖理解，只是為了方便)
+
+(A1-(A1 ∩ A2)) ∩ A2 =  ∅  ; 根據集合論 (用文氏圖理解，只是為了方便)
+
+P(A1) = P((A1-(A1 ∩ A2))∪ (A1∩A2) ) = P(A1-(A1 ∩ A2)) + P (A1∩A2) ; 根據公理 3
+
+所以 P(A1-(A1 ∩ A2)) = P(A1) -  P (A1∩A2)
+
+推論
+
+P(A1 ∪ A2) = P((A1-(A1 ∩ A2)) ∪ A2) = P(A1-(A1 ∩ A2)) + P(A2) 
+=  P(A1) -  P (A1∩A2) + P(A2) = P(A1) + P(A2) -  P (A1∩A2)
+
+所以
+
+P(A1 ∪ A2)= P(A1) + P(A2) -  P (A1∩A2)
+[[/code]]
+
++ 另一種機率公理體系的寫法
+
+++ 柯莫果洛夫 (Kolmogorove) 公理體系
+
+[[math type="eqnarray"]]
+1. && 0 \leq P(a) \leq 1 \\
+2. && P(true) = 1, p(false) = 0 \\
+3. && P(a \vee b) = P(a) + P(b) - P(a \wedge b)
+[[/math]]
+
+範例：利用柯氏公理體系的進行證明
+
+[[math type="eqnarray"]]
+P(a \vee -a) & =&  P(a)+P(-a) + P(a \wedge -a) \\
+P(true) & = &  P(a) + P(-a) - P(false) \\
+1 & = & P(a) + P(-a) \\
+P(-a) & = & 1-P(a)
+[[/math]]
+
+++ 條件機率
+
+條件獨立的定義
+
+[[math type="eqnarray"]]
+1. && P(a \wedge b) = P(a) P(b) \\
+2. && P(X \wedge Y) = P(X) P(Y)
+[[/math]]
+
+邊緣化 (加總消去) (因為保險精算師會將此數字寫在該夜的邊緣上)
+[[math type="eqnarray"]]
+P(Y) = \sum_{z} P(Y, z)
+[[/math]]
+
+正規化 (或稱規一化, Normalization)
+
+[[math type="eqnarray"]]
+P(A | b) = \alpha P(A , b)
+[[/math]]
+
+其中的 [[$ \alpha $]] 稱為規一化系數

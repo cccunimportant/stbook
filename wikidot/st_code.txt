@@ -1,0 +1,6 @@
++ 機率統計
+* 專案下載：[[file Statistics.zip]]
+# [[[st:basecode | 基本的機率物件]]] -- 樣本點、機率源、機率分布、隨機變數等數學概念的介面定義。
+# [[[st:probcode | 機率模型]]] -- 統計、機率表、機率模型、機率問題的程式實作。
+# [[[st:bayesclassifiercode | 簡單貝氏分類]]] -- Naive Bayes Model for Classification。
+# [[[code:bayesnetcode | 貝氏網路]]] -- Bayes Network Model.

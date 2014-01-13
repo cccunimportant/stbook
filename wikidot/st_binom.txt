@@ -1,0 +1,150 @@
++ 二項分布 (Binomial distribution)
+
+[[math]]
+f(x) =  {n \choose x} p^x (1-p)^{n-x}
+[[/math]]
+
+* 意義：dbinom(x; n, p)：在 n 次柏努力試驗中有 x 次成功的機率 (已知單次試驗成功機率為 p)。
+* R 的公式：dbinom(x; n, p) = p(x) = choose(n,x) p^x (1-p)^(n-x)
+ * R 函數：binom(size=n:樣本數, prob=p:成功機率)
+ * http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Binomial.html
+
++ 二項定理
+
+[[math]]
+(a+b)^n = \sum^{n}_{k=0} {n \choose k} a^k b^{n-k}
+[[/math]]
+
++ 特性
+
+[[math type="eqnarray"]]
+1. && E(X) = \mu = np \\
+2. && Var(X) = \sigma^2 = np (1-p) = npq
+[[/math]]
+
++ 動差生成函數
+
+[[math]]
+m_x(t) = ((1-p)+pe^t)^n = (q+pe^t)^n
+[[/math]]
+
++ R 程式範例一：二項分布的圖形
+
+[[code]]
+> n=10; p=0.3; k=seq(0,n)
+> plot(k, dbinom(k,n,p), type='h', main='dbinom(0:20, n=10, p=0.3)', xlab='k')
+> 
+[[/code]]
+
+[[=image dbinomPlot.jpg size="medium"]]
+
++ R 程式範例二：(定理) 常態分配可用來逼近二項分布
+[[math]]binom(n, p) \rightarrow norm(np, np(1-p)) \; ; \; 假如 n 夠大 (n*min(p, 1-p) > 5)[[/math]]
+原始程式：
+[[code]]
+op=par(mfrow=c(2,2))
+n=3; p=0.3; k=seq(0,n)
+plot(k, dbinom(k,n,p), type='h', main='dbinom(n=3, p=0.3)', xlab='k')
+curve(dnorm(x,n*p,sqrt(n*p*(1-p))), add=T, col='blue')
+
+n=5; p=0.3; k=seq(0,n)
+plot(k, dbinom(k,n,p), type='h', main='dbinom(n=5, p=0.3)', xlab='k')
+curve(dnorm(x,n*p,sqrt(n*p*(1-p))), add=T, col='blue')
+
+n=10; p=0.3; k=seq(0,n)
+plot(k, dbinom(k,n,p), type='h', main='dbinom(n=10, p=0.3)', xlab='k')
+curve(dnorm(x,n*p,sqrt(n*p*(1-p))), add=T, col='blue')
+
+n=100; p=0.3; k=seq(0,n)
+plot(k, dbinom(k,n,p), type='h', main='dbinom(n=100, p=0.3)', xlab='k')
+curve(dnorm(x,n*p,sqrt(n*p*(1-p))), add=T, col='blue')
+
+
+[[/code]]
+
+輸出圖形：
+[[=image dbinomPlot4.jpg size="medium"]]
+
++ R 程式範例三
+
+[[code]]
+> x = rbinom(100000, 100, 0.8)
+> hist(x, nclas=max(x)-min(x)+1)
+> 
+[[/code]]
+
+[[=image rbinomHist.jpg size="medium"]]
+
++ R 程式範例四
+
+[[code]]
+> y <- rbinom(50, 25, .4)
+> m1 <- mean(y)
+> m2 <- sum(y) / 25
+> y
+ [1] 12  9  9  9 12 11 10 11  5  7  8  7 16  6 12 13  9 12  9 13  7 12 15  8
+[25]  9  7 10  4 10 10  9 10 13  8 10 14  8 11 11 10 10  9  7 13  5  5 11 13
+[49]  9  8
+> m1
+[1] 9.72
+> m2
+[1] 19.44
+> m3 <- sum ( (y-m1)^2 ) / 50
+> m3
+[1] 6.8816
+> 
+
+[[/code]]
+
+說明： y 中的每個數字，代表模擬投擲 25 次白努力試驗後，成功的次數有幾次。因此  rbinom(50, 25, .4) 總共進行了 50*25 次白努力試驗。
+
+[!--
++ R 程式範例
+
+[[code]]
+require(graphics)
+# Compute P(45 < X < 55) for X Binomial(100,0.5)
+sum(dbinom(46:54, 100, 0.5))
+
+## Using "log = TRUE" for an extended range :
+n <- 2000
+k <- seq(0, n, by = 20)
+plot (k, dbinom(k, n, pi/10, log=TRUE), type='l', ylab="log density",
+      main = "dbinom(*, log=TRUE) is better than  log(dbinom(*))")
+lines(k, log(dbinom(k, n, pi/10)), col='red', lwd=2)
+## extreme points are omitted since dbinom gives 0.
+mtext("dbinom(k, log=TRUE)", adj=0)
+mtext("extended range", adj=0, line = -1, font=4)
+mtext("log(dbinom(k))", col="red", adj=1)
+
+[[/code]]
+
+執行結果：
+
+[[code]]
+> require(graphics)
+> # Compute P(45 < X < 55) for X Binomial(100,0.5)
+> sum(dbinom(46:54, 100, 0.5))
+[1] 0.6317984
+> 
+> ## Using "log = TRUE" for an extended range :
+> n <- 2000
+> k <- seq(0, n, by = 20)
+> plot (k, dbinom(k, n, pi/10, log=TRUE), type='l', ylab="log density",
++       main = "dbinom(*, log=TRUE) is better than  log(dbinom(*))")
+> lines(k, log(dbinom(k, n, pi/10)), col='red', lwd=2)
+> ## extreme points are omitted since dbinom gives 0.
+> mtext("dbinom(k, log=TRUE)", adj=0)
+> mtext("extended range", adj=0, line = -1, font=4)
+> mtext("log(dbinom(k))", col="red", adj=1)
+> 
+[[/code]]
+
+繪圖結果：
+
+[[=image dbinom.jpg]]
+--]
+
++ 參考
+# [http://zh.wikipedia.org/wiki/%E4%BA%8C%E9%A0%85%E5%88%86%E4%BD%88 Wikipedia:二項分佈]
+# [http://en.wikipedia.org/wiki/Binomial_distribution Wikipedia:Binomial_distribution]

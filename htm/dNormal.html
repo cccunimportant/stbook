@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#常態分布-normal-distribution">常態分布 (Normal Distribution)</a></li>
+</ul>
+</div>
+<h2 id="常態分布-normal-distribution"><a href="#常態分布-normal-distribution">常態分布 (Normal Distribution)</a></h2>
+<p>意義：有誤差的對稱性分布形式，中央高兩邊低的形式。</p>
+<p>繪圖：用 R 繪製標準差為 1, 2, 3, 的常態分布。</p>
+<pre class="sourceCode R"><code class="sourceCode r"><span class="kw">curve</span>(<span class="kw">dnorm</span>(x), -<span class="dv">5</span>, <span class="dv">5</span>, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>)
+<span class="kw">curve</span>(<span class="kw">dnorm</span>(x, <span class="dt">sd=</span><span class="dv">2</span>), -<span class="dv">5</span>, <span class="dv">5</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">add=</span>T)
+<span class="kw">curve</span>(<span class="kw">dnorm</span>(x, <span class="dt">sd=</span><span class="dv">3</span>), -<span class="dv">5</span>, <span class="dv">5</span>, <span class="dt">col=</span><span class="st">&quot;green&quot;</span>, <span class="dt">add=</span>T)</code></pre>
+<div class="figure">
+<img src="../img/normal3.jpg" />
+</div>
+<p>R 函數：<a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Normal.html">norm(mean, sd)</a></p>
+<p>公式： <img src="../timg/b0aca724e39e.jpg" /></p>
+<p>R 的公式：f(x) = 1/(√(2 π) σ) e^-((x - μ)^2/(2 σ^2))</p>
+<p>重要性：根據中央極限定理，任何 n 個獨立樣本的平均值趨近於常態分布。</p>
+<p>中央極限定理： <img src="../timg/7c727498181a.jpg" /></p>
+<h3 id="標準差"><a href="#標準差">標準差</a></h3>
+<p>1 標準差： <img src="../timg/9c0690deaf54.jpg" /> .</p>
+<p>2 標準差： <img src="../timg/318b64e6a167.jpg" /> .</p>
+<p>3 標準差： <img src="../timg/2b9593bad9ca.jpg" /> .</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">1</span>)-<span class="kw">pnorm</span>(-<span class="dv">1</span>)
+[<span class="dv">1</span>] <span class="fl">0.6826895</span>
+&gt;<span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">2</span>)-<span class="kw">pnorm</span>(-<span class="dv">2</span>)
+[<span class="dv">1</span>] <span class="fl">0.9544997</span>
+&gt;<span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">3</span>)-<span class="kw">pnorm</span>(-<span class="dv">3</span>)
+[<span class="dv">1</span>] <span class="fl">0.9973002</span>
+&gt;<span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">4</span>)-<span class="kw">pnorm</span>(-<span class="dv">4</span>)
+[<span class="dv">1</span>] <span class="fl">0.9999367</span>
+&gt;<span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">5</span>)-<span class="kw">pnorm</span>(-<span class="dv">5</span>)
+[<span class="dv">1</span>] <span class="fl">0.9999994</span>
+&gt;<span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">6</span>)-<span class="kw">pnorm</span>(-<span class="dv">6</span>)
+[<span class="dv">1</span>] <span class="dv">1</span></code></pre>
+<p>所以現在大家應該知道「工業管理學」上「六標準差」的要求，是很嚴苛的了吧！</p>
+<h3 id="r-程式範例"><a href="#r-程式範例">R 程式範例</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>)
+[<span class="dv">1</span>] <span class="fl">0.3989423</span>
+&gt;<span class="st"> </span><span class="kw">dnorm</span>(<span class="fl">0.5</span>)
+[<span class="dv">1</span>] <span class="fl">0.3520653</span>
+&gt;<span class="st"> </span><span class="kw">dnorm</span>(<span class="fl">2.5</span>)
+[<span class="dv">1</span>] <span class="fl">0.0175283</span>
+&gt;<span class="st"> </span><span class="kw">curve</span>(<span class="kw">dnorm</span>(x), <span class="dt">from =</span> -<span class="fl">3.5</span>, <span class="dt">to =</span> <span class="fl">3.5</span>, <span class="dt">ylab=</span><span class="st">&quot;pdf&quot;</span>, <span class="dt">main=</span><span class="st">&quot;N(0,1)&quot;</span>)
+&gt;<span class="st"> </span></code></pre>
+<div class="figure">
+<img src="../img/norm_curve.jpg" />
+</div>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>)
+&gt;<span class="st"> </span><span class="kw">hist</span>(x, <span class="dt">nclass=</span><span class="dv">8</span>)
+&gt;<span class="st"> </span></code></pre>
+<div class="figure">
+<img src="../img/norm_hist.jpg" />
+</div>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1000</span>)
+&gt;<span class="st"> </span><span class="kw">hist</span>(x, <span class="dt">nclass=</span><span class="dv">50</span>)
+&gt;<span class="st"> </span></code></pre>
+<div class="figure">
+<img src="../img/norm_hist2.jpg" />
+</div>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+相關文章一：[[[ma:taylor | 泰勒展開式 (Taylor Series) 與函數逼近論]]]
+相關文章二：[[[ma:fourier | 傅立葉轉換在影像處理中的用途]]]
+
++ 定義：k 階一般動差 
+
+令 X 為隨機變數，則 X 的k 階一般動差定義為 [[$ E[X^k] $]]
+
++ 動差生成函數 (Moment Generation Function, MGF)
+
+[[math]]
+m_x(t) = E(e^{t X}) = E(1+ t X + \frac{(t X)^2}{2!} + .... + \frac{(t X)^k}{k!}+ .....)
+[[/math]]
+
+回到期望值的定義：
+[[math type="eqnarray"]]
+離散情況： && E(e^{t X}) = \sum_{x \in S} {e^{t x}} p(x) \\
+連續情況： && E(e^{t X}) = \int_{-\infty}^{\infty} {e^{t x}} f(x) dx \\
+[[/math]]
+
++ 動差生成函數的用途
+
+動差生成函數可以作為一個隨機變數的「指紋」，意思是如果兩個隨機變數 X, Y 的動差生成函數 [[$ E(e^{t X}), E(e^{t Y}) $]] 相同，則這兩個隨機變數必然相同。
+
+(回顧一)：f(x) 在 0 點的泰勒展開式 (麥克羅林級數) 可以作為一個函數的指紋，意思是如果兩個函數的泰勒展開式相同，則這兩個函數必然相同 (這點是高等微積分課程的核心)。
+
+(回顧二)：函數 f(x) 的特徵函數 (Characteristic function) 為 [[$ E(e^{i t X}) = e^i E(e^{t X}) = e^i  E(1+ t X + \frac{(t X)^2}{2!} + .... + \frac{(t X)^k}{k!}+ .....) $]]
+
++ 參考文獻
+# http://en.wikipedia.org/wiki/Characteristic_function_(probability_theory)
+# http://en.wikipedia.org/wiki/Moment-generating_function

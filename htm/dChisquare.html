@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#卡方分布-chi-square-distribution">卡方分布 (Chi-Square distribution)</a></li>
+</ul>
+</div>
+<h2 id="卡方分布-chi-square-distribution"><a href="#卡方分布-chi-square-distribution">卡方分布 (Chi-Square distribution)</a></h2>
+<p>公式： <img src="../timg/1c1902be8fc6.jpg" /></p>
+<p>R 的公式： <img src="../timg/76c0988b24c7.jpg" /></p>
+<p>Ｒ函數：chisq(df=n, ncp=λ)</p>
+<ul>
+<li>公式： f(x) = exp(-λ/2) SUM_{r=0}^∞ ((λ/2)^r / r!) dchisq(x, df + 2r)</li>
+<li>網址：http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Chisquare.html</li>
+</ul>
+<p>特性</p>
+<p>卡方分配主要用途是在「利用樣本推斷母體變異數」時使用的。</p>
+<p>卡方分配是伽瑪分布的特例，只要將 Gamma 分配中設定 <img src="../timg/10fe70a365dc.jpg" /> 就是卡方分布了。</p>
+<p>R 程式範例</p>
+<pre class="sourceCode R"><code class="sourceCode r">op=<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
+<span class="kw">curve</span>(<span class="kw">dchisq</span>(x, <span class="dv">1</span>), <span class="dv">0</span>, <span class="dv">100</span>)
+<span class="kw">curve</span>(<span class="kw">dchisq</span>(x, <span class="dv">5</span>), <span class="dv">0</span>, <span class="dv">100</span>)
+<span class="kw">curve</span>(<span class="kw">dchisq</span>(x, <span class="dv">10</span>), <span class="dv">0</span>, <span class="dv">100</span>)
+<span class="kw">curve</span>(<span class="kw">dchisq</span>(x, <span class="dv">50</span>), <span class="dv">0</span>, <span class="dv">100</span>)</code></pre>
+<div class="figure">
+<img src="../img/dChisquare.jpg" />
+</div>
+<p>R 程式範例二</p>
+<pre class="sourceCode R"><code class="sourceCode r"><span class="kw">dchisq</span>(<span class="dv">1</span>, <span class="dt">df=</span><span class="dv">1</span>:<span class="dv">3</span>)
+<span class="kw">pchisq</span>(<span class="dv">1</span>, <span class="dt">df=</span> <span class="dv">3</span>)
+<span class="kw">pchisq</span>(<span class="dv">1</span>, <span class="dt">df=</span> <span class="dv">3</span>, <span class="dt">ncp =</span> <span class="dv">0</span>:<span class="dv">4</span>)<span class="co"># includes the above</span>
+
+x &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="dv">10</span>
+## Chi-squared(df = 2) is a special exponential distribution
+<span class="kw">all.equal</span>(<span class="kw">dchisq</span>(x, <span class="dt">df=</span><span class="dv">2</span>), <span class="kw">dexp</span>(x, <span class="dv">1</span>/<span class="dv">2</span>))
+<span class="kw">all.equal</span>(<span class="kw">pchisq</span>(x, <span class="dt">df=</span><span class="dv">2</span>), <span class="kw">pexp</span>(x, <span class="dv">1</span>/<span class="dv">2</span>))
+
+## non-central RNG -- df=0 with ncp &gt; 0:  Z0 has point mass at 0!
+Z0 &lt;-<span class="st"> </span><span class="kw">rchisq</span>(<span class="dv">100</span>, <span class="dt">df =</span> <span class="dv">0</span>, <span class="dt">ncp =</span> <span class="dv">2</span>.)
+graphics::<span class="kw">stem</span>(Z0)
+
+## Not run: ## visual testing
+## do P-P plots for 1000 points at various degrees of freedom
+L &lt;-<span class="st"> </span><span class="fl">1.2</span>; n &lt;-<span class="st"> </span><span class="dv">1000</span>; pp &lt;-<span class="st"> </span><span class="kw">ppoints</span>(n)
+op &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">3</span>), <span class="dt">mar=</span> <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">1</span>)+.<span class="dv">1</span>, <span class="dt">mgp=</span> <span class="kw">c</span>(<span class="fl">1.5</span>,.<span class="dv">6</span>,<span class="dv">0</span>),
+          <span class="dt">oma =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">3</span>,<span class="dv">0</span>))
+for(df in <span class="dv">2</span>^(<span class="dv">4</span>*<span class="kw">rnorm</span>(<span class="dv">9</span>))) {
+  <span class="kw">plot</span>(pp, <span class="kw">sort</span>(<span class="kw">pchisq</span>(rr &lt;-<span class="st"> </span><span class="kw">rchisq</span>(n,<span class="dt">df=</span>df, <span class="dt">ncp=</span>L), <span class="dt">df=</span>df, <span class="dt">ncp=</span>L)),
+       <span class="dt">ylab=</span><span class="st">&quot;pchisq(rchisq(.),.)&quot;</span>, <span class="dt">pch=</span><span class="st">&quot;.&quot;</span>)
+  <span class="kw">mtext</span>(<span class="kw">paste</span>(<span class="st">&quot;df = &quot;</span>,<span class="kw">formatC</span>(df, <span class="dt">digits =</span> <span class="dv">4</span>)), <span class="dt">line=</span> -<span class="dv">2</span>, <span class="dt">adj=</span><span class="fl">0.05</span>)
+  <span class="kw">abline</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">col=</span><span class="dv">2</span>)
+}
+<span class="kw">mtext</span>(<span class="kw">expression</span>(<span class="st">&quot;P-P plots : Noncentral  &quot;</span>*
+<span class="st">                 </span>chi^<span class="dv">2</span> *<span class="st">&quot;(n=1000, df=X, ncp= 1.2)&quot;</span>),
+      <span class="dt">cex =</span> <span class="fl">1.5</span>, <span class="dt">font =</span> <span class="dv">2</span>, <span class="dt">outer=</span><span class="ot">TRUE</span>)
+<span class="kw">par</span>(op)
+## End(Not run)
+
+## &quot;analytical&quot; test
+lam &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>, <span class="dt">by=</span>.<span class="dv">25</span>)
+p00 &lt;-<span class="st"> </span><span class="kw">pchisq</span>(<span class="dv">0</span>,      <span class="dt">df=</span><span class="dv">0</span>, <span class="dt">ncp=</span>lam)
+p<span class="fl">.0</span> &lt;-<span class="st"> </span><span class="kw">pchisq</span>(<span class="fl">1e-300</span>, <span class="dt">df=</span><span class="dv">0</span>, <span class="dt">ncp=</span>lam)
+<span class="kw">stopifnot</span>(<span class="kw">all.equal</span>(p00, <span class="kw">exp</span>(-lam/<span class="dv">2</span>)),
+          <span class="kw">all.equal</span>(p<span class="fl">.0</span>, <span class="kw">exp</span>(-lam/<span class="dv">2</span>)))</code></pre>
+<p>執行結果：</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">dchisq</span>(<span class="dv">1</span>, <span class="dt">df=</span><span class="dv">1</span>:<span class="dv">3</span>)
+[<span class="dv">1</span>] <span class="fl">0.2419707</span> <span class="fl">0.3032653</span> <span class="fl">0.2419707</span>
+&gt;<span class="st"> </span><span class="kw">pchisq</span>(<span class="dv">1</span>, <span class="dt">df=</span> <span class="dv">3</span>)
+[<span class="dv">1</span>] <span class="fl">0.198748</span>
+&gt;<span class="st"> </span><span class="kw">pchisq</span>(<span class="dv">1</span>, <span class="dt">df=</span> <span class="dv">3</span>, <span class="dt">ncp =</span> <span class="dv">0</span>:<span class="dv">4</span>)<span class="co"># includes the above</span>
+[<span class="dv">1</span>] <span class="fl">0.19874804</span> <span class="fl">0.13229855</span> <span class="fl">0.08787311</span> <span class="fl">0.05824691</span> <span class="fl">0.03853592</span>
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span>x &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="dv">10</span>
+&gt;<span class="st"> </span>## Chi-squared(df = 2) is a special exponential distribution
+<span class="er">&gt;</span><span class="st"> </span><span class="kw">all.equal</span>(<span class="kw">dchisq</span>(x, <span class="dt">df=</span><span class="dv">2</span>), <span class="kw">dexp</span>(x, <span class="dv">1</span>/<span class="dv">2</span>))
+[<span class="dv">1</span>] <span class="ot">TRUE</span>
+&gt;<span class="st"> </span><span class="kw">all.equal</span>(<span class="kw">pchisq</span>(x, <span class="dt">df=</span><span class="dv">2</span>), <span class="kw">pexp</span>(x, <span class="dv">1</span>/<span class="dv">2</span>))
+[<span class="dv">1</span>] <span class="ot">TRUE</span>
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span>## non-central RNG -- df=0 with ncp &gt; 0:  Z0 has point mass at 0!
+<span class="er">&gt;</span><span class="st"> </span>Z0 &lt;-<span class="st"> </span><span class="kw">rchisq</span>(<span class="dv">100</span>, <span class="dt">df =</span> <span class="dv">0</span>, <span class="dt">ncp =</span> <span class="dv">2</span>.)
+&gt;<span class="st"> </span>graphics::<span class="kw">stem</span>(Z0)
+
+  The decimal point is at the |
+
+<span class="st">   </span><span class="dv">0</span> |<span class="st"> </span><span class="dv">0000000000000000000000000000001122334455668903344577888899999</span>
+   <span class="dv">2</span> |<span class="st"> </span><span class="dv">1345667788899234689</span>
+   <span class="dv">4</span> |<span class="st"> </span><span class="dv">14813556</span>
+   <span class="dv">6</span> |<span class="st"> </span><span class="dv">2477733</span>
+   <span class="dv">8</span> |<span class="st"> </span><span class="dv">047</span>
+  <span class="dv">10</span> |<span class="st"> </span><span class="dv">3</span>
+  <span class="dv">12</span> |<span class="st"> </span>
+<span class="st">  </span><span class="dv">14</span> |<span class="st"> </span>
+<span class="st">  </span><span class="dv">16</span> |<span class="st"> </span><span class="dv">6</span>
+
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span>## Not run: ## visual testing
+<span class="er">&gt;</span><span class="st"> </span>## do P-P plots for 1000 points at various degrees of freedom
+<span class="er">&gt;</span><span class="st"> </span>L &lt;-<span class="st"> </span><span class="fl">1.2</span>; n &lt;-<span class="st"> </span><span class="dv">1000</span>; pp &lt;-<span class="st"> </span><span class="kw">ppoints</span>(n)
+&gt;<span class="st"> </span>op &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">3</span>), <span class="dt">mar=</span> <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">1</span>)+.<span class="dv">1</span>, <span class="dt">mgp=</span> <span class="kw">c</span>(<span class="fl">1.5</span>,.<span class="dv">6</span>,<span class="dv">0</span>),
++<span class="st">           </span><span class="dt">oma =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">3</span>,<span class="dv">0</span>))
+&gt;<span class="st"> </span>for(df in <span class="dv">2</span>^(<span class="dv">4</span>*<span class="kw">rnorm</span>(<span class="dv">9</span>))) {
++<span class="st">   </span><span class="kw">plot</span>(pp, <span class="kw">sort</span>(<span class="kw">pchisq</span>(rr &lt;-<span class="st"> </span><span class="kw">rchisq</span>(n,<span class="dt">df=</span>df, <span class="dt">ncp=</span>L), <span class="dt">df=</span>df, <span class="dt">ncp=</span>L)),
++<span class="st">        </span><span class="dt">ylab=</span><span class="st">&quot;pchisq(rchisq(.),.)&quot;</span>, <span class="dt">pch=</span><span class="st">&quot;.&quot;</span>)
++<span class="st">   </span><span class="kw">mtext</span>(<span class="kw">paste</span>(<span class="st">&quot;df = &quot;</span>,<span class="kw">formatC</span>(df, <span class="dt">digits =</span> <span class="dv">4</span>)), <span class="dt">line=</span> -<span class="dv">2</span>, <span class="dt">adj=</span><span class="fl">0.05</span>)
++<span class="st">   </span><span class="kw">abline</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">col=</span><span class="dv">2</span>)
++<span class="st"> </span>}
+&gt;<span class="st"> </span><span class="kw">mtext</span>(<span class="kw">expression</span>(<span class="st">&quot;P-P plots : Noncentral  &quot;</span>*
++<span class="st">                  </span>chi^<span class="dv">2</span> *<span class="st">&quot;(n=1000, df=X, ncp= 1.2)&quot;</span>),
++<span class="st">       </span><span class="dt">cex =</span> <span class="fl">1.5</span>, <span class="dt">font =</span> <span class="dv">2</span>, <span class="dt">outer=</span><span class="ot">TRUE</span>)
+&gt;<span class="st"> </span><span class="kw">par</span>(op)
+&gt;<span class="st"> </span>## End(Not run)
+<span class="er">&gt;</span><span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span>## &quot;analytical&quot; test
+<span class="er">&gt;</span><span class="st"> </span>lam &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>, <span class="dt">by=</span>.<span class="dv">25</span>)
+&gt;<span class="st"> </span>p00 &lt;-<span class="st"> </span><span class="kw">pchisq</span>(<span class="dv">0</span>,      <span class="dt">df=</span><span class="dv">0</span>, <span class="dt">ncp=</span>lam)
+&gt;<span class="st"> </span>p<span class="fl">.0</span> &lt;-<span class="st"> </span><span class="kw">pchisq</span>(<span class="fl">1e-300</span>, <span class="dt">df=</span><span class="dv">0</span>, <span class="dt">ncp=</span>lam)
+&gt;<span class="st"> </span><span class="kw">stopifnot</span>(<span class="kw">all.equal</span>(p00, <span class="kw">exp</span>(-lam/<span class="dv">2</span>)),
++<span class="st">           </span><span class="kw">all.equal</span>(p<span class="fl">.0</span>, <span class="kw">exp</span>(-lam/<span class="dv">2</span>)))
+&gt;<span class="st"> </span></code></pre>
+<div class="figure">
+<img src="../img/ChisqPPlot.jpg" />
+</div>
+<h3 id="參考文獻"><a href="#參考文獻">參考文獻</a></h3>
+<ul>
+<li><a href="http://zh.wikipedia.org/wiki/%E5%8D%A1%E6%96%B9%E5%88%86%E4%BD%88">Wikipedia:卡方分布</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Chi-squared_distribution">Wikipedia:Chi-squared_distribution</a></li>
+</ul>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

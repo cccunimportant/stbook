@@ -1,0 +1,28 @@
+問題一：以下是用來示範中央極限定理的程式碼，請分別用以下各種分布取樣出 80000 個樣本，用 CLT 函數繪製統計圖，驗證中央極限定理是否成立？
+
+1. 二項分布。
+2. 均等分布
+3. 布瓦松分布。
+4. 幾何分布。
+5. 超幾何分布。
+6. 常態分布。
+7. 擲骰子。
+8. 丟銅板。
+
+[[code]]
+CLT = function(x) {
+  op<-par(mfrow=c(2,2))
+  hist(x, nclass=20)
+  m2 <- matrix(x, nrow=2, )
+  xbar2 <- apply(m2, 2, mean)
+  hist(xbar2, nclass=20)
+  m10 <- matrix(x, nrow=10, )
+  xbar10 <- apply(m10, 2, mean)
+  hist(xbar10, nclass=20)
+  m25 <- matrix(x, nrow=25, )
+  xbar25 <- apply(m25, 2, mean)
+  hist(xbar25, nclass=20)
+}
+[[/code]]
+
+參考：中央極限定理 -- http://ccckmit.wikidot.com/st:centraltheorem

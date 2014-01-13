@@ -1,0 +1,163 @@
++ 機率的解讀
+1. 個人方式：(personal approach) ：主觀的意見與猜測。
+2. 相對頻率：(relative frequency) ： 基於實驗，得到的機率只是一種近似值。
+
+[[math]]
+P[A] = \frac{f}{n} = \frac{事件 A 的出現的次數}{實驗進行的次數} 
+[[/math]]
+
+3. 古典方式：(classical approach) ： 等可能出像 (equally likely) 的假設。
+
+[[math]]
+P[A] = \frac{n(A)}{n(S)} = \frac{事件 A 的可能出現次數}{實驗可能進行的次數}
+[[/math]]
+
+
++ 機率公設
+
+[[math type="eqnarray"]]
+(1)  & & P(S) = 1 \\
+(2)  & & P(A) \ge 0 \\
+(3)  & & P(A1 \cup A2) = P(A1) + P(A2) \; ; \; if \; A1 \cap A2 = \emptyset \\
+[[/math]]
+
+* 說明：凡氏圖 (Venn Diagram)
+
+* 請證明以下定理
+
+[[math type="eqnarray"]]
+(1)  & & P(\emptyset) = 0 \\
+(2)  & & P(A') = 1-P(A) \\
+(3)  & & P(A1 \cup A2) = P(A1) + P(A2) - P(A1 \cap A2) \\
+[[/math]]
+
++ 條件機率
+
+* 定義：
+[[math]]
+P(B|A) = \frac{P(A \cap B)}{P(A)}
+[[/math]]
+
++ 獨立事件
+
+* 定義：事件 A 與 B 彼此獨立，則 A, B 兩事件同時出現的機率為
+
+[[math]]
+P(A \cap B) = P(A) P(B)
+[[/math]]
+
+* 請證明以下定理：
+ * 定理：A , B 彼此獨立 <=> [[$ P(A|B) = P(A)\;and\;P(B|A) = P(B) $]]
+ * 定理：A1, A2, ... , Ak 彼此獨立 <=> [[$ P(A1 \cap A2 ... \cap Ak) = P(A1) P(A2) ... P(Ak) $]]
+
++ 乘法規則
+
+[[math]]
+P(A \cap B) = \frac{P(A | B) } {P(B)}
+[[/math]]
+
+* 乘法規則的證明：
+
+[[math type="eqnarray"]]
+P(A \cap B)  = \frac{P(A \cap B)}{P(B)} P(B) = \frac{P(A | B) } {P(B)}
+[[/math]]
+
++ 貝氏定理
+
+[[math]]
+P(A | B) = P(B | A)  \frac{P(A)}{P(B)}
+[[/math]]
+
+* 貝氏定理的證明：
+
+[[math type="eqnarray"]]
+because && P(B | A) = \frac{P(A \cap B)}{P(A)} \\
+and && P(A | B) = \frac{P(A \cap B)}{P(B)} \\
+so && P(A \cap B) = P(B|A] P(A) = P(A|B) P(B) \\
+finally && P(A | B) = P(B | A)  \frac{P(A)}{P(B)}
+[[/math]]
+
++ 離散分配
+
+* 離散機率密度函數 (Discrete Probability Density) 
+ * 定義：[[$ P(X=x) $]]
+
+* 離散機率累加函數 (Discrete Cumulative Distribution Function) 
+ * 定義：[[$ P(X \le x) $]]
+
+* 相關數學公式：[[$ \sum^{\infty}_{k=1} a r^{k-1} = \frac{a}{1-r} $]]  當 |r| < 1 時。
+
+* 相關數學公式：[[$ \sum^{n}_{k=1} a r^{k-1} = \frac{a (1-r^n) }{1-r} $]]  當 [[$ |r| \ne 1 $]] 時。
+
++ 連續分配
+
+* 連續機率密度函數 (Discrete Probability Density) 
+ * 定義：我們用小寫的 p 代表連續機率密度函數
+
+[[math type="eqnarray"]]
+1. && p(x) \ge 0 \\
+2. && \int_{-\infty}^{\infty} p(x) dx = 1 \\
+3. && P(a \le X \le b) = \int_a^b p(x) dx
+[[/math]]
+
+定理：(轉換定理) [[$ p_Z(t) = p_X(g^{-1}(t)) \| \frac{d g^{-1}(t)}{d t} \| $]] ; 其中  Z = g(X),  g 必須是單調函數 (一直上升或一直下降)
+證明：如果 g 是單調上升函數 (下降的情況雷同)。
+
+[[math type="eqnarray"]]
+ p_Z(t) &=& \frac{d}{db} P[Z \in (a,b]] = \frac{d}{db} P[X \in (g^{-1}(a),g^{-1}(b)]] \\
+           &=&  \frac{d}{db} \int_{g^{-1}(a)}^{g^{-1}(b)} p_X(x) dx =  \frac{d}{dt} |_b * p_X(g^{-1}(b))
+[[/math]]
+
++ 期望值
+
+* 定義：期望值 [[$ E[H(X)] = \sum_{\forall x} H(x) p(x) $]]
+
+* 定理：
+[[math type="eqnarray"]]
+1. E[c] &=& c \\
+2. E[c X] &=& c E[X] \\
+3. E[X + Y] &=& E[X] + E[Y]
+[[/math]]
+
++ 變異數
+
+* 定義：(變異數) [[$ Var(X) = \sigma^2 = E[(X-\mu)^2] $]], 其中 [[$ \mu $]] 為 X 的平均值，而 [[$ \sigma $]] 稱為標準差。
+
+* 定理：[[$ \sigma^2 = Var(X) = E[X^2] - E[X]^2 $]]
+
+* 定理：
+[[math type="eqnarray"]]
+1. Var(c) &=& 0 \\
+2. Var(c X) &=& c^2 Var(X) \\
+3. Var(X + Y) &=& Var(X) + Var(Y) ; 如果 X 與 Y 彼此獨立
+[[/math]]
+
+* 定義：(樣本變異數) [[$ S^2 = \sum_{i=1}^n \frac{(X_i - \bar{X})^2}{n-1} = \frac{n \sum_{i=1}^n X_i^2 - (\sum_{i=1}^n Xi)^2}{n (n-1)} $]] ; 其中 S 稱為樣本標準差。
+
+* 定理：
+
++ 動差生成函數 (Moment Generation Function)
+
+[[math]]
+m_x(t) = E(e^{t X}) = E(1+ t X + \frac{(t X)^2}{2!} + .... + \frac{(t X)^k}{k!}+ .....)
+[[/math]]
+
++ 共變異數
+
+[[math]]
+\sigma_{XY} = Cov(X, Y) = E[(X - \mu_X)(Y - \mu_Y)]
+[[/math]]
+
+* 定理：[[$ Cov(X, Y) = E[X Y] - E[X] E[Y] $]]
+
+* 定理：如果 X, Y 相互獨立 ，則 [[$ E[X Y] = E[X] E[Y] $]] 。
+
++ 相關係數
+
+[[math]]
+\rho_{X Y} = \frac{Cov(X,Y)}{\sqrt{Var(X) Var(Y)}}
+[[/math]]
+
+* 定理：[[$ -1 \le \rho_{XY} \le 1 $]]
+
+* 定理：[[$ |\rho_{X Y}| = 1 \Leftrightarrow y = \beta_0 + \beta_1 X $]]

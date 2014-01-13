@@ -1,0 +1,337 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#單組樣本的估計">單組樣本的估計</a><ul>
+<li><a href="#估計的參數種類">估計的參數種類</a></li>
+<li><a href="#平均值的估計">平均值的估計</a></li>
+<li><a href="#比例的估計">比例的估計</a></li>
+<li><a href="#變異數的估計">變異數的估計</a></li>
+</ul></li>
+<li><a href="#兩組樣本的估計">兩組樣本的估計</a></li>
+</ul>
+</div>
+<h1 id="單組樣本的估計"><a href="#單組樣本的估計">單組樣本的估計</a></h1>
+<h2 id="估計的參數種類"><a href="#估計的參數種類">估計的參數種類</a></h2>
+<p>根據單一母體所抽出的樣本，推論統計可以猜測母體中隨機變數 X 的下列特性：</p>
+<ul>
+<li>可能屬於哪一類型的分布？ (distribution, 二項、布瓦松、均等、常態、指數、卡方....)</li>
+<li>其平均值的可能點預估？ ([[ <img src="../timg/c9faf6ead2cd.jpg" /> ]]:mean 的點估計)</li>
+<li>其變異數的可能點預估？ ([[ <img src="../timg/77a3b715842b.jpg" /> ]]:variance 的點估計)</li>
+<li>機率 p 的可能點預估？ (p 的點估計)</li>
+<li>各種分布參數的可能點預估？ (parameters, [[ <img src="../timg/25bc87099312.jpg" /> ]])</li>
+<li>平均數的可能範圍？ ([[ <img src="../timg/c9faf6ead2cd.jpg" /> ]]:mean 的區間估計)</li>
+<li>變異數的可能範圍？ ([[ <img src="../timg/77a3b715842b.jpg" /> ]]:variance 的區間估計)</li>
+<li>機率 p 的可能範圍？ (p 的區間估計)</li>
+<li>各種分布參數的可能範圍預估？ (parameters, [[ <img src="../timg/25bc87099312.jpg" /> ]] 的區間估計)</li>
+</ul>
+<h2 id="平均值的估計"><a href="#平均值的估計">平均值的估計</a></h2>
+<ul>
+<li><p>定理：[[ <img src="../timg/a1c233438b21.jpg" /> ]] 為 [[ <img src="../timg/e6e3b9a5862e.jpg" /> ]] 的不偏估計式。</p></li>
+<li><p>定理：[[ <img src="../timg/0cbcfdb432aa.jpg" /> ]] 服從標準常態分布。(條件是樣本數夠多，根據中央極限定理)</p></li>
+</ul>
+<h3 id="平均值的信賴區間"><a href="#平均值的信賴區間">平均值的信賴區間</a></h3>
+<h3 id="第一種情況變異數已知"><a href="#第一種情況變異數已知">第一種情況：變異數已知</a></h3>
+<p>在變異數 [[ <img src="../timg/15c541d17491.jpg" /> ]] 已知的情況之下，應該用常態分配估計 [[ <img src="../timg/b5e8c0f01bda.jpg" /> ]] 的信賴區間。</p>
+<div class="figure">
+<img src="../timg/07b188ead6b7.jpg" />
+</div>
+<p>通常我們將區間的兩邊取平均，得到 [[ <img src="../timg/9845198045ec.jpg" /> ]] 的値</p>
+<p><img src="../timg/3cc8afdf3156.jpg" /> ; 常態分布的信賴區間 <img src="../timg/0cd118f99f28.jpg" /> ; 因為 <img src="../timg/b937d81376a1.jpg" /> 服從常態分布 <img src="../timg/539bd1d9abc5.jpg" /> ; 乘以 <img src="../timg/97dfb0cb7ea9.jpg" /> <img src="../timg/cb79fd9dcca7.jpg" /> ; 減去 <img src="../timg/58c3d0d0ebe0.jpg" /> <img src="../timg/e949fa18e1a4.jpg" /> ; 乘以 -1 並改 <img src="../timg/2d1b2a11ff4a.jpg" /> 為 <img src="../timg/4edc933d28bf.jpg" /> <img src="../timg/ef50846bf7a3.jpg" /> ; 將整個算式反向寫出</p>
+<p>結論：在變異數 [[ <img src="../timg/15c541d17491.jpg" /> ]] 已知的情況之下，[[ <img src="../timg/b5e8c0f01bda.jpg" /> ]] 的信賴區間公式如下。</p>
+<div class="figure">
+<img src="../timg/a12fb1cd8457.jpg" />
+</div>
+<ul>
+<li>用法：L 是滿足 [[ <img src="../timg/59e6e043be3d.jpg" /> ]] 情況的 L 値，我們可以利用「累加常態分布表」查詢出 [[ <img src="../timg/237608d504f3.jpg" /> ]] 的 z 値，該値即為滿足 [[ <img src="../timg/59e6e043be3d.jpg" /> ]] 的 L 値。然後將此 L 値代入上列最後一個算式，即可得到 [[ <img src="../timg/b5e8c0f01bda.jpg" /> ]] 值的信賴區間。</li>
+</ul>
+<h3 id="第二種情況變異數未知"><a href="#第二種情況變異數未知">第二種情況：變異數未知</a></h3>
+<p>在變異數 [[ <img src="../timg/15c541d17491.jpg" /> ]] 未知的情況之下，應該用 T 分配估計 [[ <img src="../timg/b5e8c0f01bda.jpg" /> ]] 的信賴區間。</p>
+<p>說明：因為變異數 [[ <img src="../timg/15c541d17491.jpg" /> ]] 未知，此時必須改用樣本變異數 [[ <img src="../timg/b18dd9969fdd.jpg" /> ]] 對變異數進行估計，因此引入了另一層的誤差，這是為何改用 T 分布的原因。</p>
+<div class="figure">
+<img src="../timg/729d53f9257e.jpg" />
+</div>
+<p>結論：在變異數 [[ <img src="../timg/15c541d17491.jpg" /> ]] 未知的情況之下，[[ <img src="../timg/b5e8c0f01bda.jpg" /> ]] 的信賴區間公式如下。</p>
+<div class="figure">
+<img src="../timg/32c6461721e3.jpg" />
+</div>
+<h2 id="比例的估計"><a href="#比例的估計">比例的估計</a></h2>
+<p>問題：假設 X 為某種 {0,1} 隨機變數，其中 [[ <img src="../timg/f411300d6788.jpg" /> ]]，那麼我們如何根據樣本推估出 p 値呢？</p>
+<p><img src="../timg/3570de0068e5.jpg" /> = 具有某特性的樣本數量/所有樣本數量</p>
+<p>說明：比例 [[ <img src="../timg/dc64b1f498fa.jpg" /> ]] 是一種 {0,1} 的特殊隨機變數之平均，因此根據中央極限定理 [[ <img src="../timg/aabce87e755b.jpg" /> ]] 趨近於常態分配。</p>
+<p>期望値：[[ <img src="../timg/0f4fe9688e8f.jpg" /> ]]</p>
+<p>二級動差：[[ <img src="../timg/a91a57d31793.jpg" /> ]]</p>
+<p>變異數：[[ <img src="../timg/8638a7348d5b.jpg" /> ]]</p>
+<h3 id="比例的信賴區間"><a href="#比例的信賴區間">比例的信賴區間</a></h3>
+<p>根據平均值的估計法，[[ <img src="../timg/0cbcfdb432aa.jpg" /> ]] 會趨近於標準常態分布 Z，套用到比例上後：[[ <img src="../timg/1961d81f042e.jpg" /> ]], [[ <img src="../timg/624c465959d7.jpg" /> ]]，因此下列算式會趨近於 Z。</p>
+<div class="figure">
+<img src="../timg/dc9cd70d981c.jpg" />
+</div>
+<h2 id="變異數的估計"><a href="#變異數的估計">變異數的估計</a></h2>
+<ul>
+<li><p>定理：[[ <img src="../timg/6bb703bf05da.jpg" /> ]]</p></li>
+<li><p>定義：[[ <img src="../timg/a1c233438b21.jpg" /> ]] 的標準差為 [[ <img src="../timg/46abe04be0e5.jpg" /> ]]，稱為平均標準誤。</p></li>
+<li><p>定義：(樣本變異數) [[ <img src="../timg/b18dd9969fdd.jpg" /> ]]</p></li>
+</ul>
+<div class="figure">
+<img src="../timg/e7e0cbe68706.jpg" />
+</div>
+<ul>
+<li><p>定理：[[ <img src="../timg/b18dd9969fdd.jpg" /> ]] 是 [[ <img src="../timg/15c541d17491.jpg" /> ]] 的不偏估計式。</p></li>
+<li><p>定理：以下算式服從自由度 n-1 的卡方分配。</p></li>
+</ul>
+<div class="figure">
+<img src="../timg/edbf9d11b48b.jpg" />
+</div>
+<h3 id="變異數的信賴區間"><a href="#變異數的信賴區間">變異數的信賴區間</a></h3>
+<p>[[ <img src="../timg/15c541d17491.jpg" /> ]] 的信賴區間為：</p>
+<div class="figure">
+<img src="../timg/8f8322d65c3e.jpg" />
+</div>
+<p>也就是：</p>
+<div class="figure">
+<img src="../timg/af14da3fa097.jpg" />
+</div>
+<p>請注意：累積卡方分布通常有分為「右尾累積」與「左尾累積」，本公式中的 [[ <img src="../timg/40c510378c57.jpg" /> ]] 是根據「左尾累積」表所設計的。</p>
+<p>如果按右尾累積表則公式應該改為：[[ <img src="../timg/f83f54718a44.jpg" /> ]]</p>
+<h3 id="r-程式範例平均值的區間估計"><a href="#r-程式範例平均值的區間估計">R 程式範例：平均值的區間估計</a></h3>
+<p>範例：母體的變異數已知的情況</p>
+<pre class="sourceCode R"><code class="sourceCode r">mean.range =<span class="st"> </span>function(x, <span class="dt">alpha=</span><span class="fl">0.05</span>, sigma) {
+    n =<span class="st"> </span><span class="kw">length</span>(x) <span class="co"># n = 樣本數</span>
+    mx =<span class="st"> </span><span class="kw">mean</span>(x) <span class="co"># mx 即為平均值 mu 的點估計</span>
+    r1 =<span class="st"> </span><span class="kw">qnorm</span>(alpha/<span class="dv">2</span>) <span class="co"># 信賴區間，下半截掉 alpha/2</span>
+    r2 =<span class="st"> </span><span class="kw">qnorm</span>(<span class="dv">1</span>-alpha/<span class="dv">2</span>) <span class="co"># 信賴區間，上半截掉 alpha/2</span>
+    L1 =<span class="st"> </span>mx-r2*sigma/<span class="kw">sqrt</span>(n) <span class="co"># 信賴區間下限</span>
+    L2 =<span class="st"> </span>mx-r1*sigma/<span class="kw">sqrt</span>(n) <span class="co"># 信賴區間上限</span>
+    range =<span class="st"> </span><span class="kw">c</span>(L1, mx, L2) <span class="co"># 信賴區間</span>
+}</code></pre>
+<p>以下的母體的標準差為 [[ <img src="../timg/c71de12f0938.jpg" /> ]]，也就是變異數 [[ <img src="../timg/ea362775ea10.jpg" /> ]]</p>
+<pre class="sourceCode R"><code class="sourceCode r"><span class="co"># 常態分布 (標準差為 2, 變異數為 4)</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">3</span>, <span class="dt">sd=</span><span class="dv">2</span>), <span class="dt">sigma=</span><span class="dv">2</span>)
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">1.728047</span> <span class="fl">2.604570</span> <span class="fl">3.481093</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">3</span>, <span class="dt">sd=</span><span class="dv">2</span>), <span class="dt">sigma=</span><span class="dv">2</span>)
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">2.795340</span> <span class="fl">3.671863</span> <span class="fl">4.548385</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">3</span>, <span class="dt">sd=</span><span class="dv">2</span>), <span class="dt">sigma=</span><span class="dv">2</span>)
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">1.720384</span> <span class="fl">2.596906</span> <span class="fl">3.473429</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">3</span>, <span class="dt">sd=</span><span class="dv">2</span>), <span class="dt">sigma=</span><span class="dv">2</span>)
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">2.580179</span> <span class="fl">3.456702</span> <span class="fl">4.333224</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">3</span>, <span class="dt">sd=</span><span class="dv">2</span>), <span class="dt">sigma=</span><span class="dv">2</span>)
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">2.332650</span> <span class="fl">3.209172</span> <span class="fl">4.085695</span>
+&gt;<span class="st"> </span></code></pre>
+<p>範例：母體的變異數未知的情況。</p>
+<pre class="sourceCode R"><code class="sourceCode r">mean.range2 =<span class="st"> </span>function(x, <span class="dt">alpha=</span><span class="fl">0.05</span>) {
+    n =<span class="st"> </span><span class="kw">length</span>(x) <span class="co"># n = 樣本數</span>
+    mx =<span class="st"> </span><span class="kw">mean</span>(x) <span class="co"># mx 即為平均值 mu 的點估計</span>
+    S =<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">var</span>(x)) <span class="co"># S 即為標準差的點估計</span>
+    r1 =<span class="st"> </span><span class="kw">qt</span>(alpha/<span class="dv">2</span>, <span class="dt">df=</span>n<span class="dv">-1</span>) <span class="co"># 信賴區間，下半截掉 alpha/2</span>
+    r2 =<span class="st"> </span><span class="kw">qt</span>(<span class="dv">1</span>-alpha/<span class="dv">2</span>, <span class="dt">df=</span>n<span class="dv">-1</span>) <span class="co"># 信賴區間，上半截掉 alpha/2</span>
+    L1 =<span class="st"> </span>mx-r2*S/<span class="kw">sqrt</span>(n) <span class="co"># 信賴區間下限</span>
+    L2 =<span class="st"> </span>mx-r1*S/<span class="kw">sqrt</span>(n) <span class="co"># 信賴區間上限</span>
+    range =<span class="st"> </span><span class="kw">c</span>(L1, mx, L2)
+}</code></pre>
+<p>執行結果</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="co"># 常態分布 (標準差為 2, 變異數為 4)</span>
+<span class="er">&gt;</span><span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">3</span>, <span class="dt">sd=</span><span class="dv">2</span>))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">2.303155</span> <span class="fl">3.239184</span> <span class="fl">4.175213</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">3</span>, <span class="dt">sd=</span><span class="dv">2</span>))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">2.210444</span> <span class="fl">3.146473</span> <span class="fl">4.082502</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">3</span>, <span class="dt">sd=</span><span class="dv">2</span>))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">1.745906</span> <span class="fl">2.681934</span> <span class="fl">3.617963</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">3</span>, <span class="dt">sd=</span><span class="dv">2</span>))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">1.950239</span> <span class="fl">2.886268</span> <span class="fl">3.822296</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">3</span>, <span class="dt">sd=</span><span class="dv">2</span>))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">2.049205</span> <span class="fl">2.985234</span> <span class="fl">3.921263</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">3</span>, <span class="dt">sd=</span><span class="dv">2</span>))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">2.313619</span> <span class="fl">3.249648</span> <span class="fl">4.185677</span>
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span><span class="co"># 擲骰子</span>
+<span class="er">&gt;</span><span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">1.469286</span> <span class="fl">2.900000</span> <span class="fl">4.330714</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">1.569286</span> <span class="fl">3.000000</span> <span class="fl">4.430714</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">1.969286</span> <span class="fl">3.400000</span> <span class="fl">4.830714</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">2.269286</span> <span class="fl">3.700000</span> <span class="fl">5.130714</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">2.269286</span> <span class="fl">3.700000</span> <span class="fl">5.130714</span>
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span><span class="co"># 丟銅板 10 次</span>
+<span class="er">&gt;</span><span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] -<span class="fl">0.9307138</span>  <span class="fl">0.5000000</span>  <span class="fl">1.9307138</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] -<span class="fl">0.8307138</span>  <span class="fl">0.6000000</span>  <span class="fl">2.0307138</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] -<span class="fl">0.9307138</span>  <span class="fl">0.5000000</span>  <span class="fl">1.9307138</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] -<span class="fl">1.030714</span>  <span class="fl">0.400000</span>  <span class="fl">1.830714</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] -<span class="fl">0.8307138</span>  <span class="fl">0.6000000</span>  <span class="fl">2.0307138</span>
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span><span class="co"># 丟銅板 100 次</span>
+<span class="er">&gt;</span><span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">100</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">0.1131566</span> <span class="fl">0.5100000</span> <span class="fl">0.9068434</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">100</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">0.03315661</span> <span class="fl">0.43000000</span> <span class="fl">0.82684339</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">100</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">0.1631566</span> <span class="fl">0.5600000</span> <span class="fl">0.9568434</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">100</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">0.1231566</span> <span class="fl">0.5200000</span> <span class="fl">0.9168434</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">100</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">0.1631566</span> <span class="fl">0.5600000</span> <span class="fl">0.9568434</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">mean.range2</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">100</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] -<span class="fl">0.01684339</span>  <span class="fl">0.38000000</span>  <span class="fl">0.77684339</span>
+&gt;<span class="st"> </span></code></pre>
+<h3 id="r-程式範例變異數的區間估計"><a href="#r-程式範例變異數的區間估計">R 程式範例：變異數的區間估計</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">var.range =<span class="st"> </span>function(x, <span class="dt">alpha=</span><span class="fl">0.05</span>) {
+    n  =<span class="st"> </span><span class="kw">length</span>(x) <span class="co"># n = 樣本數</span>
+    r1 =<span class="st"> </span><span class="kw">qchisq</span>(alpha/<span class="dv">2</span>, <span class="dt">df=</span>n<span class="dv">-1</span>) <span class="co"># 信賴區間，下半截掉 alpha/2</span>
+    r2 =<span class="st"> </span><span class="kw">qchisq</span>(<span class="dv">1</span>-alpha/<span class="dv">2</span>, <span class="dt">df=</span>n<span class="dv">-1</span>) <span class="co"># 信賴區間，上半截掉 alpha/2</span>
+    S2  =<span class="st"> </span><span class="kw">var</span>(x) <span class="co"># 樣本變異數</span>
+    L1 =<span class="st"> </span>(n<span class="dv">-1</span>)*S2/r2 <span class="co"># 信賴區間下限</span>
+    L2 =<span class="st"> </span>(n<span class="dv">-1</span>)*S2/r1 <span class="co"># 信賴區間上限</span>
+    range =<span class="st"> </span><span class="kw">c</span>(L1, S2, L2) <span class="co"># 信賴區間</span>
+}</code></pre>
+<p>執行結果</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>R=<span class="kw">var.range</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">3</span>))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>]  <span class="fl">7.182354</span> <span class="fl">12.418792</span> <span class="fl">26.492630</span>
+&gt;<span class="st"> </span>R=<span class="kw">var.range</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">3</span>))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>]  <span class="fl">3.783027</span>  <span class="fl">6.541118</span> <span class="fl">13.953967</span>
+&gt;<span class="st"> </span>R=<span class="kw">var.range</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">3</span>))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>]  <span class="fl">4.686703</span>  <span class="fl">8.103637</span> <span class="fl">17.287242</span>
+&gt;<span class="st"> </span>R=<span class="kw">var.range</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">3</span>))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>]  <span class="fl">3.758948</span>  <span class="fl">6.499484</span> <span class="fl">13.865151</span>
+&gt;<span class="st"> </span>R=<span class="kw">var.range</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">3</span>))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>]  <span class="fl">6.451399</span> <span class="fl">11.154920</span> <span class="fl">23.796450</span>
+&gt;<span class="st"> </span>R=<span class="kw">var.range</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">3</span>))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>]  <span class="fl">5.710536</span>  <span class="fl">9.873916</span> <span class="fl">21.063724</span>
+&gt;<span class="st"> </span>R=<span class="kw">var.range</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">3</span>))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>]  <span class="fl">7.84639</span> <span class="fl">13.56696</span> <span class="fl">28.94197</span>
+<span class="co"># 擲骰子</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">var.range</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">20</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">1.607192</span> <span class="fl">2.778947</span> <span class="fl">5.928244</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">var.range</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">20</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">1.940502</span> <span class="fl">3.355263</span> <span class="fl">7.157681</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">var.range</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">20</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">2.319470</span> <span class="fl">4.010526</span> <span class="fl">8.555533</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">var.range</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">20</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">1.246487</span> <span class="fl">2.155263</span> <span class="fl">4.597757</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">var.range</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">20</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">1.637631</span> <span class="fl">2.831579</span> <span class="fl">6.040521</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">var.range</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">20</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">2.502106</span> <span class="fl">4.326316</span> <span class="fl">9.229198</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">var.range</span>(<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">20</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">1.059286</span> <span class="fl">1.831579</span> <span class="fl">3.907252</span>
+&gt;<span class="st"> </span><span class="co"># 丟銅板</span>
+<span class="er">&gt;</span><span class="st"> </span>R =<span class="st"> </span><span class="kw">var.range</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">25</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">0.1524232</span> <span class="fl">0.2500000</span> <span class="fl">0.4838261</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">var.range</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">25</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">0.1381971</span> <span class="fl">0.2266667</span> <span class="fl">0.4386690</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">var.range</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">25</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">0.1564879</span> <span class="fl">0.2566667</span> <span class="fl">0.4967281</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">var.range</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">25</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">0.1524232</span> <span class="fl">0.2500000</span> <span class="fl">0.4838261</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">var.range</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">25</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">0.1463263</span> <span class="fl">0.2400000</span> <span class="fl">0.4644730</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">var.range</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">25</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">0.1524232</span> <span class="fl">0.2500000</span> <span class="fl">0.4838261</span>
+&gt;<span class="st"> </span>R =<span class="st"> </span><span class="kw">var.range</span>(<span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">25</span>, <span class="dt">replace=</span>T))
+&gt;<span class="st"> </span>R
+[<span class="dv">1</span>] <span class="fl">0.1524232</span> <span class="fl">0.2500000</span> <span class="fl">0.4838261</span></code></pre>
+<h1 id="兩組樣本的估計"><a href="#兩組樣本的估計">兩組樣本的估計</a></h1>
+<p>根據兩個母體所抽出的樣本，推論統計可以猜測兩個母體中隨機變數 X, Y 的下列特性：</p>
+<ul>
+<li>比較兩機率 p1, p2 的差值 p1-p2 的檢定</li>
+<li>比較兩平均數 [[ <img src="../timg/8618b5799807.jpg" /> ]] 的差值 [[ <img src="../timg/51e8457caef0.jpg" /> ]] 的檢定</li>
+<li>比較兩變異數 [[ <img src="../timg/1fa6c2dd4645.jpg" /> ]] 的差值 [[ <img src="../timg/53cd6965dd28.jpg" /> ]] 的檢定</li>
+<li>比較兩組中位數 M 的差值 [[ <img src="../timg/80a0162bebf3.jpg" /> ]] 的檢定 (無母數方法)</li>
+</ul>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

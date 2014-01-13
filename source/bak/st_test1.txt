@@ -1,0 +1,200 @@
++ 檢定的參數種類
+
+根據單一母體所抽出的樣本，檢定母體中隨機變數 X 的下列假設是否成立。
+
+# 平均值的檢定？ ([[$\mu = \mu_0 $]])  -- 變異數已知=>Z 檢定; 變異數未知=> T 檢定
+# 變異數的檢定？ ([[$\sigma = \sigma_0 $]]) -- 卡方 [[$ \chi^2 $]] 檢定
+# 比例 p 的檢定？ ([[$ p = p_0 $]])  -- 常態 Z 檢定
+# 中位數 M 的檢定？ ([[$ M = M_0 $]]) -- 無母數方法 Wilcoxon Sign-Rank 檢定
+
+檢定的方式有兩種，第一種稱為假設檢定，第二種稱為顯著性檢定。
+* 假設檢定：設定否決機率，然後用信賴區間進行檢定。
+* 顯著性檢定：利用 P-Value (又稱顯著性 Descriptive level of significance、臨界水準 critical level) 的值，代表假設 H0 的分布會產生樣本 X 的可能程度。
+
++ 平均數 [[$ \mu $]] 的檢定
+
+||     ||~ 右尾檢定 ||~ 左尾檢定 ||~ 雙尾檢定 || 
+||~ H0 || [[$ \mu \le \mu_0 $]]  || [[$ \mu \ge \mu_0 $]] || [[$ \mu = \mu_0 $]] || 
+||~ H1 || [[$ \mu \gt \mu_0 $]]  || [[$ \mu \lt \mu_0 $]] || [[$ \mu \neq \mu_0 $]] || 
+
+* 說明 1：其中的 H0 稱為虛無假說 (null hypothesis)，H1 稱為對立假說 (alternative hypothesis) 或實驗假說。
+* 說明 2：R 軟體中的 alternative 指的就是 H1, 所以：
+ * R 中的 alternative = greater 代表  [[$ \mu \gt \mu_0 $]]，也就是右尾檢定。
+ * R 中的 alternative = less 代表  [[$ \mu \lt \mu_0 $]]，也就是左尾檢定。
+ * R 中的 alternative = two.sided 代表  [[$ \mu \neq \mu_0 $]]，也就是雙尾檢定。 
+
+1. 用平均數 5 標準差 2 的常態分布產生 25 個樣本。
+
+[[code]]
+> x = rnorm(25, mean=5, sd=2)
+> x
+ [1] 7.599226 2.057248 5.129173 4.271475 5.763479
+ [6] 5.319458 7.054393 5.418839 3.976423 7.546185
+[11] 3.539250 3.492808 2.409173 6.605278 7.706612
+[16] 4.807259 5.564582 6.723417 1.370330 7.254400
+[21] 5.713474 6.168794 8.204845 6.011644 4.730742
+
+> sd(x)
+[1] 1.835494
+
+> mean(x)
+[1] 5.37754
+
+[[/code]]
+
+2. 雙尾檢定：用 t.test(x, alternative="two.sided", mu=4.5) 進行  [[$ H1:\mu \neq 4.5 $]] 的雙尾檢定。 
+
+[[code]]
+> t.test(x, alternative="two.sided", mu=4.5)
+
+        One Sample t-test
+
+data:  x 
+t = 2.3905, df = 24, p-value = 0.02503 # 顯著性為 0.02503 代表 mean(X) = 5.37 時，mu 的 2.503% 信賴區間邊緣恰好為 4.5。
+alternative hypothesis: true mean is not equal to 4.5 #  對立假設為 H1:mu 不等於 4.5
+95 percent confidence interval: # 95% 信賴區間為 (4.61 ~ 6.13)，也就是當 mean(X) = 5.37 時，mu 的 95% 信賴區間為 (4.61~6.13)。
+ 4.619886 6.135195 
+sample estimates:
+mean of x  # 平均值為 5.37
+  5.37754 
+[[/code]]
+
+
+3. 左尾檢定：用 t.test(x, alternative="less", mu=4.5) 進行  [[$ H1:\mu \lt 4.5 $]] 的左尾檢定。 
+
+[[code]]
+> t.test(x, alternative="less", mu=4.5)
+
+        One Sample t-test
+
+data:  x 
+t = 2.3905, df = 24, p-value = 0.9875  # 顯著性為 0.9875 代表 mu = 4.5, S=1.83 的分布會產生 mean(X) < 5.37 的機會有 98.75%。
+alternative hypothesis: true mean is less than 4.5 
+95 percent confidence interval: # 95% 信賴區間為 (負無限大 ~ 6.00)，也就是當 mu=6.00 時，會產生 mean(X) < 5.37 的機會為 5%。
+     -Inf 6.005603 
+sample estimates:
+mean of x 
+  5.37754 
+[[/code]]
+
+4. 右尾檢定：用 t.test(x, alternative="greater", mu=4.5) 進行  [[$ H1:\mu \gt 4.5 $]] 的右尾檢定。 
+
+[[code]]
+> t.test(x, alternative="greater", mu=4.5)  
+
+        One Sample t-test
+
+data:  x 
+t = 2.3905, df = 24, p-value = 0.01251 
+# 顯著性為 0.01251 代表 mu = 4.5, S=1.83 的分布會產生 mean(X) > 5.37 的機會只有 1.251%。
+# 由於此可能性很小，所以可以否決 H0 的假設，也就是我們認可對立假設 H1 應該成立。
+alternative hypothesis: true mean is greater than 4.5 
+95 percent confidence interval:
+ 4.749478      Inf # 95% 信賴區間為 (4.74 ~ 無限大)，也就是當 mu=4.74 時，會產生 mean(X) > 5.37 的機會為 5%。
+sample estimates:
+mean of x 
+  5.37754 
+
+> 
+[[/code]]
+
+
++ 變異數 [[$ \sigma $]] 的檢定
+
+||     ||~ 右尾檢定 ||~ 左尾檢定 ||~ 雙尾檢定 || 
+||~ H0 || [[$ \sigma \le \sigma_0 $]]  || [[$ \sigma \ge \sigma_0 $]] || [[$ \sigma = \sigma_0 $]] || 
+||~ H1 || [[$ \sigma \gt \sigma_0 $]]  || [[$ \sigma \lt \sigma_0 $]] || [[$ \sigma \neq \sigma_0 $]] || 
+
+# 參考：https://stat.ethz.ch/pipermail/r-help/2008-September/173418.html
+
+雙尾檢定
+
+> pchisq( var(y)*(length(y)-1)/sigma0, length(y)-1, lower.tail= var(y) < sigma0 ) * 2
+
+chisq.test : 卡方比例檢定  -- http://www2.cmu.edu.tw/~biostat/online/teaching_corner_051-1.pdf
+* (適合度檢定)
+
+
+
++ 機率 p 的檢定
+
+||     ||~ 右尾檢定 ||~ 左尾檢定 ||~ 雙尾檢定 || 
+||~ H0 || [[$ p = p_0 $]]  || [[$ p = p_0 $]] || [[$ p = p_0 $]] || 
+||~ H1 || [[$ p > p_0 $]]  || [[$ p < p_0 $]] || [[$ p \neq p_0 $]] || 
+
+[[code]]
+> prop.test(25, 100, correct=T, p=0.25)
+
+        1-sample proportions test without continuity correction
+
+data:  25 out of 100, null probability 0.25 
+X-squared = 0, df = 1, p-value = 1
+alternative hypothesis: true p is not equal to 0.25 
+95 percent confidence interval:
+ 0.1754521 0.3430446 
+sample estimates:
+   p 
+0.25 
+
+> prop.test(25, 100, correct=T, p=0.01)
+
+        1-sample proportions test with continuity correction
+
+data:  25 out of 100, null probability 0.01 
+X-squared = 557.8283, df = 1, p-value < 2.2e-16
+alternative hypothesis: true p is not equal to 0.01 
+95 percent confidence interval:
+ 0.1711755 0.3483841 
+sample estimates:
+   p 
+0.25 
+
+Warning message:
+In prop.test(25, 100, correct = T, p = 0.01) :
+  Chi-squared approximation may be incorrect
+> prop.test(25, 100, correct=T, p=0.2)
+
+        1-sample proportions test with continuity correction
+
+data:  25 out of 100, null probability 0.2 
+X-squared = 1.2656, df = 1, p-value = 0.2606
+alternative hypothesis: true p is not equal to 0.2 
+95 percent confidence interval:
+ 0.1711755 0.3483841 
+sample estimates:
+   p 
+0.25 
+
+> 
+[[/code]]
+
++ 中位數 M 的檢定 (無母數方法)
+
+方法一： Wilcoxon signed-rank
+
+前提假設：假設 X1, ... Xn 來自於某個 (對稱於中位數) 的連續分配。
+
+||     ||~ 右尾檢定 ||~ 左尾檢定 ||~ 雙尾檢定 || 
+||~ H0 || [[$ M = M_0 $]]  || [[$ M = M_0 $]] || [[$ M = M_0 $]] || 
+||~ H1 || [[$ M > M_0 $]]  || [[$ M < M_0 $]] || [[$ M \neq M_0 $]] || 
+
+檢定統計量：看看 [[$ M_0 $]] 是否夠接近 M，如果差很多那麼 W 應該會很大。
+* 正排名權重：[[$ W_+ = \sum_{R_i>0} R_i $]]
+* 負排名權重：[[$ |W_-| = \sum_{R_i<0} |R_i| ; $]]
+* W = min(W_+, |W_-|)
+
+[[code]]
+> x = rnorm(20, mean=5, sd=2)
+> wilcox.test(x, mu=5.5, conf.int=T)
+
+        Wilcoxon signed rank test
+
+data:  x 
+V = 58, p-value = 0.08255
+alternative hypothesis: true location is not equal to 5.5 
+95 percent confidence interval:
+ 3.870101 5.551453 
+sample estimates:
+(pseudo)median 
+      4.687685 
+[[/code]]

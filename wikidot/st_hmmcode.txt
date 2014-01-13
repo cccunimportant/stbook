@@ -1,0 +1,4 @@
++ 參考文獻
+# Hidden Markov Models in C#, By César de Souza | 30 Mar 2010 | Technical Blog -- http://www.codeproject.com/Articles/69647/Hidden-Markov-Models-in-Csharp.aspx
+# H2M : A set of MATLAB/OCTAVE functions for the EM estimation of mixtures and hidden Markov models -- http://perso.telecom-paristech.fr/~cappe/h2m/
+ * PDF -- http://perso.telecom-paristech.fr/~cappe/h2m/h2m.pdf

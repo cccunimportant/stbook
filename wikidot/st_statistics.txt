@@ -1,0 +1,21 @@
+: 母體 (Population, 翻譯為「母群體」會更適當) : 
+: 樣本 (Sample) : x
+: 抽樣 (Sampling) : x
+: 估計 (Estimation) : x
+: 點估計 (Point Estimation) : x
+: 區間估計 (Interval Estimation) : x
+: 信賴區間 (Confidence interval) : x
+: 最大概似法 (Maximum Likelyhood Estimation, MLE) : 
+: 假設 (Hypothesis) : x
+: 虛無假設 (Null Hypothesis) : x
+: 研究假設 (Research Hypothesis) : (對立假設, Alternative Hypothesis)
+: 檢定 (Hypothesis Testing) : x
+: 迴歸 (Regression) : x
+: 線性迴歸 (Linear Regression Model) : x
+: 複線性迴歸 (Multiple Linear Regression Model) : x
+: 變異數分析 : (ANOVA)
+: 母數 (Parameter) : 
+: 無母數 (Non-Parametric) : 
+: 最小平方法 (Least-Square Procedures) : 
+: 因子 (Factor) : 
+: 因子實驗 (Factorial Experiment) :

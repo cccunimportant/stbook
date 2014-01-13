@@ -1,0 +1,59 @@
++ 蒙地卡羅算法
+
+利用亂數隨機抽樣的方式以計算某種解答的演算法，被稱為蒙地卡羅演算法，其中最簡單的方法是直接取樣算法。
+
+舉例而言，假如我們不知道半徑為 1 的圓形面積，那麼就可以利用亂數隨機取樣 1百萬個 X=random[-1...1], Y=random[-1...1] 之間的的值，然後看看有多少點落在 [[$ x^2 + y^2 <=1 $]] 的範圍之內 P(in circle)。最後利用 4 * P(in circle) 就可以計算出該圓形的面積。
+
+蒙地卡羅法除了用來計算某些曲線或形狀的面積，也可以用來逼近某些聯合隨機變數 [[$ P(x_1, ..., x_n) $]] ，像是利用 Gibbs Sampling 程序計算條件獨立下的聯合分布情況，或者利用 Metropolis Hasting 程序計算貝氏網路當中聯合機率分布的值。
+
++ 貝氏網路 (Bayesian Network)
+
+貝氏網路是用來描述機率因果關係的網路，對於一個已知的貝氏網路 (Bayesian Network)，其中的某個樣本 [[$ (x_1, ..., x_n) $]]  的機率可以用下列算式表示
+
+[[math]]
+P(x_1, ..., x_n) = \prod_{i=1}^{n} P(x_i | parent(X_i))
+[[/math]]
+
+貝氏網路也可以被視為某種隱馬可夫模型，其中某些節點是可觀察節點 (X)，某些節點是隱含節點 (Z) ，我們可以透過蒙地卡羅馬可夫算法計算某個分布 [[$ P(x_1, ..., x_n) $]] 的機率值。
+
++ 以蒙地卡羅馬可夫算法  (Markov Chain Monte Carlo) 計算貝氏網路的聯合機率分布
+簡稱 MCMC 法，此方法透過對前一事件進行隨機改變而產生事件樣本，其演算法如下所示。
+
+[[code]]
+Algorithm MCMC-Ask(X,e,bn, N) returns an estimate of P(X|e)
+  local variables : N[X], a vector of counts over X, initially zero
+                            Z, the nonevidence variables in bn
+                            x, the current state of the network, initially copied from e.
+  initialize x with random values for the variable for the variables in Z
+  for j=1 to N do
+      N[x] = N[x] + 1 where x is the value of X in x
+      for each Zi in Z do
+         sample the value of Zi in x from P(Zi | mb(Zi)) given the value of MB(Zi) in X
+  return Normalize(N[X])
+[[/code]]
+
++ 參考文獻
+# 網路電子書 , [http://fedc.wiwi.hu-berlin.de/xplore/ebooks/html/csa/node1.html Handbook of Computational Statistics], J.E. Gentle et. al.  ISBN-10: 3540404643
+ * [http://fedc.wiwi.hu-berlin.de/xplore/ebooks/html/csa/node24.html 3. Markov Chain Monte Carlo Technology], Siddhartha Chib
+# Persi Diaconis, The Markov Chain Monte Carlo Revolution
+ * http://www-stat.stanford.edu/~cgates/PERSI/papers/MCMCRev.pdf
+# Stuart Russell and Peter Norvig, Artificial Intelligence: A Modern Approach (Second Edition)
+ * http://aima.cs.berkeley.edu/
+
++ Monte Carlo Markov Chain
+
+# http://en.wikipedia.org/wiki/Hidden_Markov_model
+# http://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm
+# http://en.wikipedia.org/wiki/MCMC
+# http://en.wikipedia.org/wiki/Viterbi_algorithm
+
++ Viterbi Algorithm
+# [http://www.cambridge.org/resources/0521882672/7934_kaeslin_dynpro_new.pdf  A Gentle Introduction to Dynamic Programming and the Viterbi Algorithm]
+# [http://www.kanungo.com/software/hmmtut.pdf A tutorial for a Hidden Markov Model toolkit (implemented in C) that contains a description of the Viterbi algorithm]
+# [http://search.cpan.org/dist/Algorithm-Viterbi/ An implementation of the Viterbi algorithm in Perl]
+# [http://www.biais.org/blog/index.php/2007/09/05/52-viterbi-algorithm-variant-in-python An implementation of a variant of the Viterbi algorithm in Python]
+# [http://pcarvalho.com/forward_viterbi/ An implementation of the demonstrated Viterbi algorithm in C#]
+# [http://bozskyfilip.blogspot.com/2009/01/viterbi-algorithm-in-c-and-using-stl.html An implementation of the demonstrated Viterbi algorithm in C++]
+# [http://codingplayground.blogspot.com/2009/02/viterbi-algorithm-in-boost-and-c.html An implementation of the demonstrated Viterbi algorithm in C++ and Boost] 
+# [http://psubi.com/viterbi.html An implementation of the demonstrated Viterbi algorithm in Java]
+# [http://www.ka9q.net/code/fec/ An implementation of the demonstrated Viterbi algorithm in C and assembly]

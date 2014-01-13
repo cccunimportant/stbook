@@ -1,0 +1,262 @@
+檔案下載：[[file Statistics.zip]]
+
++ 簡介
+計算統計學乃是研究如何用電腦程式尋找統計模型的學問，其方法主要是將假說 (hypothesis) 的概念融入到機率分布當中，利用『最大似然法則』(Maximum Likelihood) 或者『最大熵法則』(Maximum Entropy) 進行最佳化的尋找，以便學習出良好的機率模型。這種學習出來的良好機率模型，可以用來預測下一個樣本出現的機率。
+
+當程式找出良好的機率模型之後，就可以利用『最大效用法則』，找出最有利的理性決策。這種方法已經廣泛被用在今仍計算與人工智慧的機器翻譯當中，得到相當好的成果。但是大部分的文獻當中都是以數學的方式闡述計算統計學通的理論，這將不利於程式設計師學習。本文將完全採用程式設計師的觀點，將這些數學落實為 C# 程式。
+
+筆者為此建立了一個程式專案，稱為 CSCS (Computational Statistics in  C Sharp)，以下將描述 CSCS 專案的設計原理。
+
++ CSCS 中的基本機率物件實作
+
+: 樣本點 (Sample Point) : 樣本空間內的一個元素，稱為樣本點，或稱樣本 (Sample)，數學上通常以小寫字母，像是 s, x, y 等符號表示。
+
+__實作__
+[[code]]
+在 C# 中，我們可以用字串 (String) 代表一個樣本。
+例如：假如要代表銅板的正反面，可以用 "0" 代表反面、"1" 代表正面。
+[[/code]]
+
+: 隨機試驗 (Random Experiment) : 舉凡觀察、實驗、調查、檢驗、抽樣等，階可稱為隨機試驗。隨機試驗會產生一連串的樣本點，通常我們用符號 [[$ x_1 x_2 .... x_n $]] 代表這種實驗產生的樣本串列。
+
+__實作__
+[[code]]
+我們可以用下列的 SampleList 儲存隨機試驗所形成的串列，也就是 List<String> 的結構。
+
+public class SampleList : List<String> { }
+[[/code]]
+
+: 樣本空間 (Sample Space) : 一個隨機試驗之各種可能結果的集合，稱為樣本空間，數學上通常以大寫字母，像是 S, X, Y 等符號表示。
+
+__實作__
+[[code]]
+由於使用了字串代表樣本，因此樣本空間將會是字串的集合。
+[[/code]]
+
+: 事件 (Event) : 乃是樣本空間的子集合，包含單一樣本的事件稱為簡單事件，包含兩個以上樣本的事件稱為複合事件。
+
+__實作__
+[[code]]
+由於使用了字串代表樣本，因此簡單事件就是一個字串 String，而複合事件則同樣以 SampleList 表示。
+[[/code]]
+
+: 隨機變數 (Random Variable) : 隨機變數是以樣本空間為定義域的實數值函數，舉例而言，如果我們用隨機變數 X 代表投擲兩次銅板時正面 (1) 出現的次數，那麼隨機變數 X 的函數定義如下 X(00) = 0, X(01) = 1, X(10) = 1, X(11) = 2。
+
+__實作__
+[[code]]
+隨機變數是一個將樣本映射到某值域的函數 f(x)，由於我們用字串代表樣本，也用字串代表值域中的值，
+因此隨機變數可以定義為以字串作為輸出入的一個函數。
+
+    public interface RandomVariable
+    {
+    	String f(String v);
+    }
+[[/code]]
+
+: 機率分布 (Probability Distribution) : 機率分布乃是針對某些隨機變數之可能值，求其機率所得到的機率函數。通常我們用符號 P 代表機率分配，P(x) 代表 x 樣本出現的機率。
+
+說明：機率分布傳回一個實數 (double) 的機率值，像是 p(x), p(x,y), 或 p(x|y) 等，因此我們用字串 p(exp)  代表一個機率分布函數，其中的參數可能是 (x), (x,y), (x|y) 等數學式，在 C# 實作當中以介面 ProbDistribution 表示。
+
+__實作__
+[[code]]
+
+    public interface ProbDistribution
+    {
+    	double p(String exp);
+    }
+[[/code]]
+
+: 機率源 (Probability Source) : 一個產生某隨機變數之樣本點的隨機產生器，稱為機率源，像是我們所生活的世界就是個複雜的機率源，而電腦的亂數產生器也是一種機率源。這是一個從整數領域映射到樣本點的函數 [[$ X(1..n) = [x_1,...,x_n] $]]，代表產生該隨機實驗的系統或函數 (在機率的書籍中我還沒有看過機率源這個名詞，這個名詞是筆者為了方便而定義的)。
+
+__實作__
+[[code]]
+隨機源是一個函數, 會不斷的產生樣本，因此可以用以下的 generate() 函數代表，由於產生的樣本以字串表示，
+因此傳回型態為 String。
+
+    public interface RandomSource
+    {
+    	String generate();
+    }
+[[/code]]
+
+
++ CSCS 中的重要物件實作
+
+: 統計 (Statistics) : 。
+
+__實作__
+[[code]]
+    public class Statistics : ProbDistribution
+    {
+        public Bag bag = new Bag();
+        public int total = 0;
+
+    	public virtual double p(String exp)
+        {
+    	 return (double)bag[exp] / total;
+    	}
+
+        public Statistics addSample(String sample, String spliter)
+        {
+    	 sample = PR.normalize(sample);
+            bag.add(sample, 1);
+            foreach (String v in sample.split(spliter))
+                bag.add(v, 1);
+            total++;
+    	 return this;
+    	}
+
+    	public Statistics addSampleList(SampleList list, String spliter)
+    	{
+    	 foreach (var sample in list) 
+    	 addSample(sample, spliter);
+    	 return this;
+    	}
+
+    	public override String ToString()
+    	{
+    	 var rzStr = new StringBuilder();
+    	 foreach (var pair in bag.sort()) 
+    	 {
+    	 String s = pair.Key as String;
+    	 rzStr.Append(String.Format("{0:F4}:{1}\n", this.p(s), s));
+    	 }
+    	 return rzStr.ToString();
+    	}
+    }
+[[/code]]
+
+: 機率表 : 。
+
+__實作__
+[[code]]
+    public class ProbMap : Map<Object, double>, ProbDistribution
+    {
+    	public ProbMap() {}
+        public virtual double p(String exp) { return this[PR.normalize(exp)]; }
+        public virtual ProbMap p(String exp, double value) { 
+                this[PR.normalize(exp)] = value; return this; 
+        }
+        public virtual ProbMap d(params object[] args)
+        {
+            double psum = 0.0;
+            for (int i = 0; i < args.Length; i += 2)
+            {
+                String exp = (String) args[i];
+                double pi;
+                if (i == args.Length - 1)
+                    pi = 1.0 - psum;
+                else
+                    pi = (double)args[i + 1];
+                p(exp, pi);
+                psum += pi;
+            }
+            Trace.Assert(psum < 1.00001);
+            return this;
+        }
+
+    	public virtual ProbMap normalize()
+    	{
+    	 double psum = this.Sum(pair => pair.Value);
+    	 var keys = this.Keys.ToList();
+    	 foreach (var o in keys)
+    	 this[o] = this[o] / psum;
+    	 return this;
+    	}
+
+    	public void log()
+    	{
+    	 foreach (var pair in this)
+    	 {
+    	 Log.log("{0:F4}:{1}", pair.Value, pair.Key);
+    	 }
+    	}
+    }
+
+[[/code]]
+
+: 機率模型 : 。
+
+__實作__
+[[code]]
+    public class ProbModel : ProbDistribution
+    {
+    	public ProbDistribution d = null;
+
+    	public virtual double p(String exp)	
+    	{
+    	 exp = PR.normalize(exp);
+    	 if (exp == "") return 1.0;
+    	 return d.p(exp);
+    	}
+    }
+[[/code]]
+
+: 機率問題 : 。
+
+__實作__
+[[code]]
+    public class ProbProblem : ProbMap, RandomSource
+    {
+        public virtual String generate() { return ""; }
+
+        public virtual void test(ProbModel model, String expList)
+        {
+            model.d = this;
+            PR.dump(expList, model);
+        }
+    }
+[[/code]]
+
++ 簡單貝氏模型
+
+: 簡單貝氏模型 (Naive Bayes Model) : 。
+
+__實作__
+[[code]]
+    public class NaiveBayesModel : ProbModel
+    {
+    	public HashSet<Object> C = new HashSet<Object>();
+    	public HashSet<Object> X = new HashSet<Object>();
+
+    	public override double p(String exp)
+    	{
+    	 if (exp.IndexOf("|") >= 0)
+    	 {
+    	 String[] x = exp.head("|").split(" ");
+    	 String c = exp.tail("|");
+    	 // p(x1 x2 ... xn | c) = p(x1|c) ... p(xn|c)
+    	 if (x.Length > 1 && X.containsAll(x) && C.Contains(c)) 
+    	 return this.ruleProd(x, c);
+    	 }
+    	 return base.p(exp);
+    	}
+    }
+[[/code]]
+
+: 簡單貝氏模型的測試問題 : 已知類別 C 決定隨機變數 X 的機率，類別 C 有 c1, c2 兩個可能值，X 也有 x1, x2 兩個可能值，但是不知 p(c1), p(x1|c1), p(x1|c2), 請問哪一種假設最符合觀察數據 x1 x2 ... xn，在此模型中，p(c2)=1-p(c1), p(x2|c1)=1-p(x1|c1), p(x2|c2)=1-p(x1,c2)，因此只有三個參數需要學習。
+
+__實作__
+[[code]]
+    public class NaiveBayesProblem1 : ProbProblem
+    {
+        public NaiveBayesProblem1() 
+        {
+            d("c1", 0.3, "c2"); d("x1|c1", 0.7, "x2|c1"); d("x1|c2", 0.5, "x2|c2");
+        }
+
+    	public override String generate()
+    	{
+    	 String c = PR.randomSelect("c1", p("c1"), "c2");
+            String x = PR.randomSelect("x1", p("x1|" + c), "x2");
+    	 return c + "," + x;
+    	}
+
+        public void test()
+        {
+            var model = new NaiveBayesModel();
+            model.C.addAll("c1,c2".split(",")); model.X.addAll("x1,x2".split(","));
+            test(model, "c1;c2;x1|c1;x2|c1;x1|c2;x2|c2;x1 x2 x1 x2|c1");
+        }
+    }
+[[/code]]

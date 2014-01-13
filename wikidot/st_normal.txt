@@ -1,0 +1,58 @@
++ 常態分布 (Normal Distribution)
+
+* 意義：有誤差的對稱性分布形式，中央高兩邊低的形式。
+
+* 繪圖：用 R 繪製標準差為 1, 2, 3, 的常態分布。
+[[code]]
+curve(dnorm(x), -5, 5, col="black")
+curve(dnorm(x, sd=2), -5, 5, col="blue", add=T)
+curve(dnorm(x, sd=3), -5, 5, col="green", add=T)
+[[/code]]
+
+[[=image normal3.jpg]]
+
+* R 函數：[http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Normal.html norm(mean, sd)] 
+
+* 課本公式：
+[[math]]
+\frac{1}{\sqrt{2\pi} \sigma} e^{- \frac{1}{2} [(x-\mu)/\sigma]^2} 
+[[/math]]
+
+* R 的公式：f(x) = 1/(√(2 π) σ) e^-((x - μ)^2/(2 σ^2))
+
++ 重要性：[[[st:centraltheorem | 中央極限定理]]]
+
+[[math type="eqnarray"]]
+x_1+x_2+...+x_n \rightarrow N(\mu, \delta/\sqrt{n})
+[[/math]]
+
++ R 程式範例
+
+[[code]]
+> dnorm(0)
+[1] 0.3989423
+> dnorm(0.5)
+[1] 0.3520653
+> dnorm(2.5)
+[1] 0.0175283
+> curve(dnorm(x), from = -3.5, to = 3.5, ylab="pdf", main="N(0,1)")
+> 
+[[/code]]
+
+[[=image norm_curve.jpg size="medium"]]
+
+[[code]]
+> x = rnorm(100)
+> hist(x, nclass=8)
+> 
+[[/code]]
+
+[[=image norm_hist.jpg size="medium"]]
+
+[[code]]
+> x = rnorm(1000)
+> hist(x, nclass=50)
+> 
+[[/code]]
+
+[[=image norm_hist2.jpg size="medium"]]

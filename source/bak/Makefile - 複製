@@ -1,0 +1,38 @@
+PANDOC = pandoc -s -S --webtex 
+HTML  = course.html book.html forum.html exam.html basic.html rule.html distribution.html descriptive.html inference.html CentralLimitTheorem.html estimation.html estimation1.html regression.html anova.html expdesign.html learning.html bayesnet.html markov.html emalgorithm.html dBinomial.html dNbinomial.html dGeometric.html dHypergeometric.html dPoisson.html dUniform.html dNormal.html dGamma.html dExp.html dChisquare.html dWeibull.html dF.html dBeta.html dT.html 
+MD   = basic.md rule.md distribution.md descriptive.md inference.md CentralLimitTheorem.md estimation.md estimation1.md regression.md anova.md expdesign.md  learning.md bayesnet.md markov.md emalgorithm.md dBinomial.md dNbinomial.md dGeometric.md dHypergeometric.md dPoisson.md dUniform.md dNormal.md dGamma.md dExp.md dChisquare.md dWeibull.md dF.md dBeta.md dT.md 
+HFLAGS = -c ../css/book.css -B header.htm -A footer.htm 
+RM = rm -f
+EOPT = --margin-top=12 --margin-bottom=12 --margin-left=16 --margin-right=16 --base-font-size=9 --font-size-mapping="7, 8, 9, 12, 14, 16, 20, 24"
+EOPT1 = --output-profile=ipad3 --extra-css=../css/book.css --margin-top=12 --margin-bottom=12 --margin-left=12 --margin-right=12 --base-font-size=10 --disable-font-rescaling  --font-size-mapping="7, 8, 10, 12, 14, 16, 20, 24"
+
+.PHONY: all clean
+
+all: $(HTML)
+
+epubA4:
+	$(PANDOC) -S --toc --epub-metadata=metadata.xml --epub-stylesheet=../css/book.css --epub-cover-image=../img/cover_A4.png toc.md $(MD) -o ../book/A4.epub
+
+pdfA4: epubA4
+	ebook-convert ../book/A4.epub ../book/A4.pdf $(EOPT) --paper-size=a4
+	
+epubipad:
+	$(PANDOC) -S --toc --epub-metadata=metadata.xml --epub-stylesheet=../css/book.css --epub-cover-image=../img/cover.png toc.md $(MD) -o ../book/ipad.epub
+
+pdfipad: epubipad
+	ebook-convert ../book/ipad.epub ../book/ipad.pdf $(EOPT) --output-profile=ipad3
+	
+mobi: epub
+	ebook-convert ../book/ipad.epub ../book/ipad3.mobi $(EOPT) --output-profile=ipad3
+	
+html: $(HTML)
+
+shtm: 
+	$(PANDOC) --toc $(MD) -o ../book/book.html $(HFLAGS)
+
+%.html: %.md
+	$(PANDOC) --toc $< -o ../htm/$@ $(HFLAGS)
+	
+clean: 
+	${RM} ../htm/*.*
+

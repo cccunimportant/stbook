@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#抽樣">抽樣</a><ul>
+<li><a href="#抽樣的理論">抽樣的理論</a></li>
+<li><a href="#抽樣的實務">抽樣的實務</a></li>
+<li><a href="#r-軟體實作sample-抽樣函數">R 軟體實作：sample 抽樣函數</a></li>
+<li><a href="#r-軟體實作機率分布的抽樣">R 軟體實作：機率分布的抽樣</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="抽樣"><a href="#抽樣">抽樣</a></h1>
+<h2 id="抽樣的理論"><a href="#抽樣的理論">抽樣的理論</a></h2>
+<p>統計的基礎是抽樣，所謂的抽樣就是從母體 (一大群樣本) 當中抽出一些樣本，而在抽樣的時候，我們通常會盡可能的確保樣本的隨機性，以避免抽到的樣本有所偏差。</p>
+<p>簡單來說，抽樣是從一群東西(母體) 當中隨機抽取出 x1, x2, ...., xn 等 n 個觀察值的過程，表示如下：</p>
+<pre><code>母體 =&gt; (獨立性) X1, X2, .... , Xn 等 n 個隨機變數相互獨立 =&gt; 取出 x1, x2, ...., xn 等 n 個觀察值。</code></pre>
+<p>在電腦上進行抽樣統計非常的容易，只要連續呼叫抽樣函數即可。但是在真實世界當中 (例如作問卷調查等等)，要讓抽樣具備隨機性，就沒有這麼簡單了。</p>
+<h2 id="抽樣的實務"><a href="#抽樣的實務">抽樣的實務</a></h2>
+<p>真實的抽樣上主要的困難是不容易達到獨立性的問題，舉例而言，假如您想要調查台灣人的每日刷牙次數統計，那麼如果真的要進行隨機抽樣，那麼就需要先有一份全台灣人的資料庫 (例如：身份證字號庫)，然後透過電腦或像樂透開獎一樣亂數選取過程，隨機取出 n 個樣本，接著您要真的去對這些人進行問卷調查，而且每個人都要問到，不可以有遺漏，這件事情光是想像就夠困難的了，更何況是真的去做。</p>
+<p>但是如果您無法這樣做，可能就會便宜行事，例如隨機打電話進行訪問，但這樣的抽樣就會有所偏差，因為你抽不到那些沒有電話的人，而那些常常忙碌無法回答的人也通常不會被調查到。甚至有些抽樣者會到街上直接訪談，那這樣就沒有辦法訪問到不上街的人，也訪問不到其他區域的人，於是「隨機抽樣」就有了很大的偏差。</p>
+<h2 id="r-軟體實作sample-抽樣函數"><a href="#r-軟體實作sample-抽樣函數">R 軟體實作：sample 抽樣函數</a></h2>
+<p>在電腦上，我們可以很容易的模擬隨機抽樣，R 軟體中最簡單的抽樣函數是 sample，sample 函數的原型是 <code>sample(x, size, replace = FALSE, prob = NULL)</code>，如果 replace=T 代表抽完放回，否則代表抽完不放回 (不會重複出現)。</p>
+<h3 id="r-操作範例簡易的-sample-抽樣"><a href="#r-操作範例簡易的-sample-抽樣">R 操作範例：簡易的 sample 抽樣</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">100</span>, <span class="dv">10</span>)
+&gt;<span class="st"> </span>x
+ [<span class="dv">1</span>] <span class="dv">12</span> <span class="dv">17</span> <span class="dv">50</span> <span class="dv">33</span> <span class="dv">98</span> <span class="dv">77</span> <span class="dv">39</span> <span class="dv">79</span>  <span class="dv">7</span> <span class="dv">26</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>)
+[<span class="dv">1</span>] <span class="dv">5</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">4</span> <span class="dv">3</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">size=</span><span class="dv">1</span>)
+[<span class="dv">1</span>] <span class="dv">4</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">size=</span><span class="dv">3</span>)
+[<span class="dv">1</span>] <span class="dv">5</span> <span class="dv">2</span> <span class="dv">1</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">size=</span><span class="dv">10</span>, <span class="dt">replace=</span>T)
+ [<span class="dv">1</span>] <span class="dv">3</span> <span class="dv">5</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">5</span> <span class="dv">3</span> <span class="dv">5</span> <span class="dv">4</span> <span class="dv">4</span> <span class="dv">2</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">size=</span><span class="dv">10</span>)
+錯誤在<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">size =</span> <span class="dv">10</span>) :<span class="st"> </span>
+<span class="st">  </span>cannot take a sample larger than the population when <span class="st">&#39;replace = FALSE&#39;</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">size=</span><span class="dv">10</span>, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.1</span>,<span class="fl">0.2</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>))
+錯誤在<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">size =</span> <span class="dv">10</span>, <span class="dt">prob =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>)) :<span class="st"> </span>
+<span class="st">  </span>cannot take a sample larger than the population when <span class="st">&#39;replace = FALSE&#39;</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">size=</span><span class="dv">10</span>, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.1</span>,<span class="fl">0.2</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>), <span class="dt">replace=</span>T)
+ [<span class="dv">1</span>] <span class="dv">3</span> <span class="dv">1</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">1</span> <span class="dv">3</span> <span class="dv">1</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">size=</span><span class="dv">10</span>, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.1</span>,<span class="fl">0.2</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>), <span class="dt">replace=</span>T)
+ [<span class="dv">1</span>] <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">5</span> <span class="dv">5</span> <span class="dv">5</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">4</span> <span class="dv">1</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">size=</span><span class="dv">10</span>, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.1</span>,<span class="fl">0.2</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>), <span class="dt">replace=</span>T)
+ [<span class="dv">1</span>] <span class="dv">2</span> <span class="dv">4</span> <span class="dv">1</span> <span class="dv">5</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span>
+&gt;<span class="st"> </span></code></pre>
+<h3 id="r-操作範例模擬擲銅板"><a href="#r-操作範例模擬擲銅板">R 操作範例：模擬擲銅板</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T)
+ [<span class="dv">1</span>] <span class="dv">4</span> <span class="dv">4</span> <span class="dv">2</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">3</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">52</span>, <span class="dv">13</span>)
+ [<span class="dv">1</span>] <span class="dv">29</span>  <span class="dv">6</span>  <span class="dv">4</span> <span class="dv">40</span> <span class="dv">33</span> <span class="dv">43</span> <span class="dv">52</span> <span class="dv">48</span> <span class="dv">37</span> <span class="dv">21</span>  <span class="dv">3</span> <span class="dv">34</span> <span class="dv">26</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;H&quot;</span>, <span class="st">&quot;T&quot;</span>), <span class="dv">10</span>, <span class="dt">replace=</span>T)
+ [<span class="dv">1</span>] <span class="st">&quot;T&quot;</span> <span class="st">&quot;H&quot;</span> <span class="st">&quot;H&quot;</span> <span class="st">&quot;T&quot;</span> <span class="st">&quot;T&quot;</span> <span class="st">&quot;T&quot;</span> <span class="st">&quot;T&quot;</span> <span class="st">&quot;T&quot;</span> <span class="st">&quot;T&quot;</span> <span class="st">&quot;H&quot;</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;Up&quot;</span>, <span class="st">&quot;Down&quot;</span>), <span class="dv">10</span>, <span class="dt">replace=</span>T, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.7</span>, <span class="fl">0.3</span>))
+ [<span class="dv">1</span>] <span class="st">&quot;Up&quot;</span>   <span class="st">&quot;Up&quot;</span>   <span class="st">&quot;Up&quot;</span>   <span class="st">&quot;Down&quot;</span> <span class="st">&quot;Up&quot;</span>   <span class="st">&quot;Up&quot;</span>   <span class="st">&quot;Up&quot;</span>   <span class="st">&quot;Up&quot;</span>   <span class="st">&quot;Up&quot;</span>  
+[<span class="dv">10</span>] <span class="st">&quot;Up&quot;</span>  
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;成功&quot;</span>, <span class="st">&quot;失敗&quot;</span>), <span class="dv">10</span>, <span class="dt">replace=</span>T, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>))
+ [<span class="dv">1</span>] <span class="st">&quot;失敗&quot;</span> <span class="st">&quot;失敗&quot;</span> <span class="st">&quot;失敗&quot;</span> <span class="st">&quot;失敗&quot;</span> <span class="st">&quot;失敗&quot;</span> <span class="st">&quot;失敗&quot;</span> <span class="st">&quot;失敗&quot;</span> <span class="st">&quot;失敗&quot;</span> <span class="st">&quot;失敗&quot;</span>
+[<span class="dv">10</span>] <span class="st">&quot;失敗&quot;</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;成功&quot;</span>, <span class="st">&quot;失敗&quot;</span>), <span class="dv">10</span>, <span class="dt">replace=</span>T, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>))
+ [<span class="dv">1</span>] <span class="st">&quot;失敗&quot;</span> <span class="st">&quot;失敗&quot;</span> <span class="st">&quot;失敗&quot;</span> <span class="st">&quot;失敗&quot;</span> <span class="st">&quot;失敗&quot;</span> <span class="st">&quot;失敗&quot;</span> <span class="st">&quot;成功&quot;</span> <span class="st">&quot;失敗&quot;</span> <span class="st">&quot;失敗&quot;</span>
+[<span class="dv">10</span>] <span class="st">&quot;失敗&quot;</span>
+&gt;<span class="st"> </span></code></pre>
+<h3 id="r-操作範例模擬擲骰子"><a href="#r-操作範例模擬擲骰子">R 操作範例：模擬擲骰子</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">1</span>)
+[<span class="dv">1</span>] <span class="dv">2</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">5</span>)
+[<span class="dv">1</span>] <span class="dv">4</span> <span class="dv">1</span> <span class="dv">3</span> <span class="dv">2</span> <span class="dv">5</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">10</span>)
+錯誤在<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">10</span>) :<span class="st"> </span>
+<span class="st">  </span>cannot take a sample larger than the population when <span class="st">&#39;replace = FALSE&#39;</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T)
+ [<span class="dv">1</span>] <span class="dv">4</span> <span class="dv">3</span> <span class="dv">2</span> <span class="dv">4</span> <span class="dv">1</span> <span class="dv">6</span> <span class="dv">4</span> <span class="dv">2</span> <span class="dv">5</span> <span class="dv">1</span>
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T)
+ [<span class="dv">1</span>] <span class="dv">4</span> <span class="dv">3</span> <span class="dv">2</span> <span class="dv">4</span> <span class="dv">1</span> <span class="dv">6</span> <span class="dv">4</span> <span class="dv">2</span> <span class="dv">5</span> <span class="dv">1</span>
+&gt;<span class="st"> </span>x &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T)
+&gt;<span class="st"> </span>x
+ [<span class="dv">1</span>] <span class="dv">1</span> <span class="dv">2</span> <span class="dv">5</span> <span class="dv">2</span> <span class="dv">4</span> <span class="dv">1</span> <span class="dv">4</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">5</span>
+&gt;<span class="st"> </span><span class="dt">x=</span><span class="dv">2</span>
+&gt;<span class="st"> </span>x
+[<span class="dv">1</span>] <span class="dv">2</span>
+&gt;<span class="st"> </span>x &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T)
+&gt;<span class="st"> </span>x
+ [<span class="dv">1</span>] <span class="dv">2</span> <span class="dv">4</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">5</span> <span class="dv">4</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">3</span> <span class="dv">2</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(<span class="dt">x=</span><span class="dv">2</span>)
+[<span class="dv">1</span>] <span class="dv">2</span>
+&gt;<span class="st"> </span>x &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T)
+&gt;<span class="st"> </span>x
+ [<span class="dv">1</span>] <span class="dv">4</span> <span class="dv">1</span> <span class="dv">6</span> <span class="dv">2</span> <span class="dv">1</span> <span class="dv">3</span> <span class="dv">5</span> <span class="dv">5</span> <span class="dv">3</span> <span class="dv">6</span>
+&gt;<span class="st"> </span>x==<span class="dv">2</span>
+ [<span class="dv">1</span>] <span class="ot">FALSE</span> <span class="ot">FALSE</span> <span class="ot">FALSE</span>  <span class="ot">TRUE</span> <span class="ot">FALSE</span> <span class="ot">FALSE</span> <span class="ot">FALSE</span> <span class="ot">FALSE</span> <span class="ot">FALSE</span> <span class="ot">FALSE</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(x==<span class="dv">2</span>)
+[<span class="dv">1</span>] <span class="dv">1</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(x==<span class="dv">6</span>)
+[<span class="dv">1</span>] <span class="dv">2</span>
+&gt;<span class="st"> </span></code></pre>
+<h3 id="r-操作範例統計抽樣結果"><a href="#r-操作範例統計抽樣結果">R 操作範例：統計抽樣結果</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">6</span>,<span class="dv">6000</span>,<span class="dt">replace=</span>T)
+&gt;<span class="st"> </span>for (i in <span class="dv">1</span>:<span class="dv">6</span>) <span class="kw">print</span>(<span class="kw">sum</span>(x==i))
+[<span class="dv">1</span>] <span class="dv">996</span>
+[<span class="dv">1</span>] <span class="dv">1047</span>
+[<span class="dv">1</span>] <span class="dv">1043</span>
+[<span class="dv">1</span>] <span class="dv">985</span>
+[<span class="dv">1</span>] <span class="dv">961</span>
+[<span class="dv">1</span>] <span class="dv">968</span></code></pre>
+<h2 id="r-軟體實作機率分布的抽樣"><a href="#r-軟體實作機率分布的抽樣">R 軟體實作：機率分布的抽樣</a></h2>
+<p>對於常用的機率模型而言，都有對應的 R 抽樣函數，以下是一些最常用的機率模型之整理。</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">機率模型</th>
+<th align="left">密度函數</th>
+<th align="left">R 函數名稱</th>
+<th align="left">說明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">二項分布</td>
+<td align="left"><img src="../timg/9474fc44e360.jpg" /></td>
+<td align="left">binom(n:size, p:prob)</td>
+<td align="left">n:樣本數, p:正面機率, <br/> n 次試驗中有 x 個成功的機率</td>
+</tr>
+<tr class="even">
+<td align="left">負二項分布</td>
+<td align="left"><img src="../timg/c77b7e7c5cb0.jpg" /></td>
+<td align="left">nbinom(size, prob)</td>
+<td align="left">x:樣本數, , p:正面機率, <br/> 要得到第 r 次成功所需要的試驗次數</td>
+</tr>
+<tr class="odd">
+<td align="left">布瓦松分布</td>
+<td align="left"><img src="../timg/1960dc6e970a.jpg" /></td>
+<td align="left">pois(lambda)</td>
+<td align="left">k:期望值, <img src="../timg/cc7b6d325f41.jpg" /> , <br/> 在 s 時間內，事件出現平均 k 次</td>
+</tr>
+<tr class="even">
+<td align="left">均勻分布 (Uniform)</td>
+<td align="left"><img src="../timg/d199631f1413.jpg" /></td>
+<td align="left">unif(a:min, b:max)</td>
+<td align="left">a:範圍下限, b: 上限 <br/> 出現機會均等</td>
+</tr>
+<tr class="odd">
+<td align="left">常態分布(Normal)</td>
+<td align="left"><img src="../timg/b0aca724e39e.jpg" /></td>
+<td align="left">norm(mean, sd)</td>
+<td align="left">中央極限定理：x1+x2+...+xk; 當 k 越大就越接近常態分布</td>
+</tr>
+<tr class="even">
+<td align="left">指數分布 (Exponential)</td>
+<td align="left"><img src="../timg/71075ebb0855.jpg" /></td>
+<td align="left">exp(rate)</td>
+<td align="left">伽瑪分布( <img src="../timg/ad965fa877cb.jpg" /> ) <br/> 布瓦松過程中，第一次事件出現的時間 W</td>
+</tr>
+</tbody>
+</table>
+<p>對於每個機率模型，您只要在該函數前若加入 r 這個字，就可以用來產生隨機樣本，以下是一些隨機樣本的產生範例。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">20</span>, <span class="dv">5</span>, <span class="fl">0.5</span>)
+ [<span class="dv">1</span>] <span class="dv">4</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">2</span> <span class="dv">4</span> <span class="dv">3</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">3</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">2</span> <span class="dv">4</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">1</span> <span class="dv">1</span>
+&gt;<span class="st"> </span><span class="kw">rpois</span>(<span class="dv">20</span>, <span class="fl">3.5</span>)
+ [<span class="dv">1</span>] <span class="dv">2</span> <span class="dv">1</span> <span class="dv">4</span> <span class="dv">2</span> <span class="dv">1</span> <span class="dv">6</span> <span class="dv">3</span> <span class="dv">6</span> <span class="dv">1</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">6</span> <span class="dv">6</span> <span class="dv">0</span> <span class="dv">4</span> <span class="dv">2</span> <span class="dv">6</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">2</span>
+&gt;<span class="st"> </span><span class="kw">runif</span>(<span class="dv">20</span>, <span class="dt">min =</span> <span class="dv">3</span>, <span class="dt">max =</span> <span class="dv">8</span>)
+ [<span class="dv">1</span>] <span class="fl">3.933526</span> <span class="fl">3.201883</span> <span class="fl">7.592147</span> <span class="fl">5.207603</span> <span class="fl">4.897806</span> <span class="fl">3.848298</span> <span class="fl">4.521461</span> <span class="fl">4.437873</span>
+ [<span class="dv">9</span>] <span class="fl">3.655640</span> <span class="fl">5.633540</span> <span class="fl">6.557995</span> <span class="fl">5.430671</span> <span class="fl">6.502675</span> <span class="fl">5.637283</span> <span class="fl">7.713699</span> <span class="fl">5.841052</span>
+[<span class="dv">17</span>] <span class="fl">6.859493</span> <span class="fl">5.987991</span> <span class="fl">3.752924</span> <span class="fl">7.480678</span>
+&gt;<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">20</span>, <span class="dt">mean =</span> <span class="fl">5.0</span>, <span class="dt">sd =</span> <span class="fl">2.0</span>)
+ [<span class="dv">1</span>] <span class="fl">6.150209</span> <span class="fl">4.743013</span> <span class="fl">3.328734</span> <span class="fl">5.096294</span> <span class="fl">4.922795</span> <span class="fl">6.272768</span> <span class="fl">4.862825</span> <span class="fl">8.036376</span>
+ [<span class="dv">9</span>] <span class="fl">4.198432</span> <span class="fl">5.467984</span> <span class="fl">2.046450</span> <span class="fl">6.452511</span> <span class="fl">2.088256</span> <span class="fl">5.349187</span> <span class="fl">3.074408</span> <span class="fl">3.628072</span>
+[<span class="dv">17</span>] <span class="fl">3.421388</span> <span class="fl">7.242598</span> <span class="fl">3.125895</span> <span class="fl">9.865341</span>
+&gt;<span class="st"> </span><span class="kw">rexp</span>(<span class="dv">20</span>, <span class="dt">rate=</span><span class="fl">2.0</span>)
+ [<span class="dv">1</span>] <span class="fl">0.17667426</span> <span class="fl">0.49729383</span> <span class="fl">0.12786107</span> <span class="fl">0.13983412</span> <span class="fl">0.44683515</span> <span class="fl">1.30482842</span>
+ [<span class="dv">7</span>] <span class="fl">0.28512544</span> <span class="fl">1.61472266</span> <span class="fl">0.23220649</span> <span class="fl">0.39089780</span> <span class="fl">0.05947224</span> <span class="fl">1.42892610</span>
+[<span class="dv">13</span>] <span class="fl">0.02555552</span> <span class="fl">0.69409186</span> <span class="fl">0.68228242</span> <span class="fl">0.22542362</span> <span class="fl">0.33590791</span> <span class="fl">0.14684937</span>
+[<span class="dv">19</span>] <span class="fl">0.34995146</span> <span class="fl">0.80595369</span></code></pre>
+<p>為了讓讀者能確認這些指令所產生的圖形確實符合分布，讓我們用這些隨機抽樣函數各產生 100,000 個樣本， 然後用 hist() 這個函數繪製統計圖，就能看出這些抽樣函數的效果了，以下是我們的抽樣指令與結果圖形。</p>
+<h3 id="二項分布"><a href="#二項分布">二項分布</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x =<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">100000</span>, <span class="dv">5</span>, <span class="fl">0.5</span>)
+&gt;<span class="st"> </span><span class="kw">hist</span>(x)</code></pre>
+<div class="figure">
+<img src="../img/rbinomHist.jpg" alt="rbinom(100000, 5, 0.5) 的統計圖" /><p class="caption">rbinom(100000, 5, 0.5) 的統計圖</p>
+</div>
+<h3 id="布瓦松分布"><a href="#布瓦松分布">布瓦松分布</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>y =<span class="st"> </span><span class="kw">rpois</span>(<span class="dv">100000</span>, <span class="fl">3.5</span>)
+&gt;<span class="st"> </span><span class="kw">hist</span>(y)</code></pre>
+<div class="figure">
+<img src="../img/rpoisHist.jpg" alt="rpois(100000, 3.5) 的統計圖" /><p class="caption">rpois(100000, 3.5) 的統計圖</p>
+</div>
+<h3 id="均勻分布"><a href="#均勻分布">均勻分布</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>z =<span class="st"> </span><span class="kw">runif</span>(<span class="dv">100000</span>, <span class="dt">min=</span><span class="dv">3</span>, <span class="dt">max=</span><span class="dv">8</span>)
+&gt;<span class="st"> </span><span class="kw">hist</span>(z)</code></pre>
+<div class="figure">
+<img src="../img/runifHist.jpg" alt="runif(100000, min=3, max=8) 的統計圖" /><p class="caption">runif(100000, min=3, max=8) 的統計圖</p>
+</div>
+<h3 id="常態分布"><a href="#常態分布">常態分布</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>w =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100000</span>, <span class="dt">mean=</span><span class="fl">5.0</span>, <span class="dt">sd=</span><span class="fl">2.0</span>)
+&gt;<span class="st"> </span><span class="kw">hist</span>(w)</code></pre>
+<div class="figure">
+<img src="../img/rnormHist.jpg" alt="rnorm(100000, mean=5.0, sd=2.0) 的統計圖" /><p class="caption">rnorm(100000, mean=5.0, sd=2.0) 的統計圖</p>
+</div>
+<h3 id="指數分布"><a href="#指數分布">指數分布</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>v =<span class="st"> </span><span class="kw">rexp</span>(<span class="dv">100000</span>, <span class="dt">rate=</span><span class="fl">2.0</span>)
+&gt;<span class="st"> </span><span class="kw">hist</span>(v)</code></pre>
+<div class="figure">
+<img src="../img/rexpHist.jpg" alt="rexp(100000, rate=2.0) 的統計圖" /><p class="caption">rexp(100000, rate=2.0) 的統計圖</p>
+</div>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

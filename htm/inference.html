@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#推論統計">推論統計</a><ul>
+<li><a href="#統計與推論">統計與推論</a></li>
+<li><a href="#估計-1">估計</a></li>
+<li><a href="#點估計">點估計</a></li>
+<li><a href="#不偏估計式">不偏估計式</a></li>
+<li><a href="#區間估計">區間估計</a></li>
+<li><a href="#檢定-1">檢定</a></li>
+<li><a href="#單組樣本的檢定">單組樣本的檢定</a></li>
+<li><a href="#兩組樣本的檢定">兩組樣本的檢定</a></li>
+<li><a href="#多組樣本的檢定-anova-變異數分析">多組樣本的檢定 (ANOVA 變異數分析）</a></li>
+<li><a href="#無母數統計方法">無母數統計方法</a></li>
+<li><a href="#參考文獻">參考文獻</a></li>
+<li><a href="#習題">習題</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="推論統計"><a href="#推論統計">推論統計</a></h1>
+<h2 id="統計與推論"><a href="#統計與推論">統計與推論</a></h2>
+<p>敘述統計純粹描述樣本的特性，但是推論統計則必須根據樣本去推論出母體的分配情況，然而這種推論並非確定性的推論，而是一種機率性的推論。</p>
+<h3 id="估計"><a href="#估計">估計</a></h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">被估計參數</th>
+<th align="left">推論分布公式</th>
+<th align="left">相關分配</th>
+<th align="left">上下界限</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><img src="../timg/b72bb92668ac.jpg" /> ( <img src="../timg/10e16c6a764d.jpg" /> 已知)</td>
+<td align="left"><img src="../timg/ffefa6a4e56e.jpg" /></td>
+<td align="left">Z:標準常態</td>
+<td align="left"><img src="../timg/afc2d181f520.jpg" /></td>
+</tr>
+<tr class="even">
+<td align="left"><img src="../timg/b72bb92668ac.jpg" /> ( <img src="../timg/10e16c6a764d.jpg" /> 未知)</td>
+<td align="left"><img src="../timg/dc24f78ce257.jpg" /></td>
+<td align="left"><img src="../timg/da464feb6e4c.jpg" /></td>
+<td align="left"><img src="../timg/11f029e3598d.jpg" /></td>
+</tr>
+<tr class="odd">
+<td align="left"><img src="../timg/e82447b9e6f5.jpg" /></td>
+<td align="left"><img src="../timg/71e9468e756f.jpg" /></td>
+<td align="left"><img src="../timg/39a5fdd81677.jpg" /> ]]:卡方分布</td>
+<td align="left"><img src="../timg/cae87b87047e.jpg" /> _ <img src="../timg/8bb757337396.jpg" /></td>
+</tr>
+<tr class="even">
+<td align="left"><img src="../timg/d572956b265c.jpg" /></td>
+<td align="left"><img src="../timg/763e59605268.jpg" /></td>
+<td align="left">Z:標準常態</td>
+<td align="left"><img src="../timg/48d980319c8f.jpg" /></td>
+</tr>
+</tbody>
+</table>
+<p>說明： <img src="../timg/fef7e634a9cf.jpg" /> 其實是一種 0-1 情況的平均值。</p>
+<h3 id="檢定"><a href="#檢定">檢定</a></h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">被檢定參數</th>
+<th align="left">推論分布公式</th>
+<th align="left">相關分配</th>
+<th align="left">上下界限</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><img src="../timg/83065df9f3ee.jpg" /> ( <img src="../timg/10e16c6a764d.jpg" /> 已知)</td>
+<td align="left"><img src="../timg/dcc814ae1353.jpg" /></td>
+<td align="left">Z:標準常態</td>
+<td align="left"><img src="../timg/57072c203af9.jpg" /></td>
+</tr>
+<tr class="even">
+<td align="left"><img src="../timg/83065df9f3ee.jpg" /> ( <img src="../timg/10e16c6a764d.jpg" /> 未知)</td>
+<td align="left"><img src="../timg/6f700de420f7.jpg" /></td>
+<td align="left"><img src="../timg/e50d7dafdbe7.jpg" /></td>
+<td align="left"><img src="../timg/13d68915c406.jpg" /></td>
+</tr>
+<tr class="odd">
+<td align="left"><img src="../timg/d9aa31098562.jpg" /></td>
+<td align="left"><img src="../timg/fa1ffccf1ac6.jpg" /> <img src="../timg/1f53175fc117.jpg" /></td>
+<td align="left"><img src="../timg/9ca61f458c78.jpg" /> :卡方分布</td>
+<td align="left"><img src="../timg/5d51389d532d.jpg" /> <img src="../timg/1031ae472f28.jpg" /></td>
+</tr>
+<tr class="even">
+<td align="left"><img src="../timg/0e27f3ad88bb.jpg" /></td>
+<td align="left"><img src="../timg/f35ac9923ad2.jpg" /> (所有正排名) <br/> <img src="../timg/5e111f6aa212.jpg" /> (所有負排名)</td>
+<td align="left">Wilcoxon Sign Rank</td>
+<td align="left"><img src="../timg/f2d3d41470c4.jpg" /> <br/> <img src="../timg/c3d89cffbdb7.jpg" /></td>
+</tr>
+<tr class="odd">
+<td align="left"><img src="../timg/0fa16a146ccd.jpg" /></td>
+<td align="left"><img src="../timg/b26828a9dacf.jpg" /></td>
+<td align="left">Z:標準常態</td>
+<td align="left"><img src="../timg/7bc18cd0fd9e.jpg" /></td>
+</tr>
+<tr class="even">
+<td align="left"><img src="../timg/f362d170cf3a.jpg" /></td>
+<td align="left"><img src="../timg/86d212f4706c.jpg" /></td>
+<td align="left">Z:標準常態</td>
+<td align="left"><img src="../timg/0faba0f3e76a.jpg" /></td>
+</tr>
+<tr class="odd">
+<td align="left"><img src="../timg/4e60474e0f60.jpg" /></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left"><img src="../timg/01d010c2d7f8.jpg" /></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="估計-1"><a href="#估計-1">估計</a></h2>
+<p>根據單一母體所抽出的樣本，推論統計可以猜測母體中隨機變數 X 的「分布、平均值 <img src="../timg/c9faf6ead2cd.jpg" /> 、變異數 <img src="../timg/10e16c6a764d.jpg" /> 、比例 p 」等等參數值，這種推論的方法稱之為估計。</p>
+<h2 id="點估計"><a href="#點估計">點估計</a></h2>
+<p>進行估計時，如果只估計某參數的最可能值，那就稱為「點估計」，通常點估計必須滿足「不偏估計式」的條件，才是一個好的估計式，以下是不偏估計式的定義。</p>
+<h2 id="不偏估計式"><a href="#不偏估計式">不偏估計式</a></h2>
+<p>若 <img src="../timg/dd2780fae3a4.jpg" /> 則稱估計式 <img src="../timg/0678caa04da3.jpg" /> 為 <img src="../timg/2554a2bb846c.jpg" /> 的不偏估計式。</p>
+<h2 id="區間估計"><a href="#區間估計">區間估計</a></h2>
+<p>進行估計時，如果估計某參數的可能範圍，那就稱為「區間估計」，此種區間乃是在某種機率的確信程度之下所進行的估計，因此被稱為是「信賴區間」，其意義如下。</p>
+<blockquote>
+<p>信賴區間：估計式 <img src="../timg/2554a2bb846c.jpg" /> 的 <img src="../timg/8337d4350e5b.jpg" /> % 信賴區間是一個範圍， <img src="../timg/2554a2bb846c.jpg" /> 在這個範圍之間的機率是 <img src="../timg/8337d4350e5b.jpg" /> %</p>
+<div class="figure">
+<img src="../timg/e7f87fca1ecf.jpg" />
+</div>
+</blockquote>
+<h2 id="檢定-1"><a href="#檢定-1">檢定</a></h2>
+<p>根據某一組樣本，推論統計可以進行實驗的檢定某個假設 H1 是否可能，其方法是透過否定對立假設 H0，看看 H0 是否不太可能發生。</p>
+<ul>
+<li>H1：稱為研究假設 (research hypothesis) 或對立假設 (alternhative hypothesis)</li>
+<li>H0：稱為虛無假設 (null hypothesis)</li>
+</ul>
+<p>透過推論統計，我們可以檢查實驗結果是否具有顯著性 (假設檢定)，也就是實驗的假設 H1 是否要被接受，由於 H0 是H1 的對立假設 (不是 H0 就是 H1，也就是 H1 = not H0)，因此一旦否決了 H0 就代表接受了 H1。</p>
+<p>在進行假設檢定的推論時，我們可能推論正確，也可能推論錯誤，以下是四種可能的推論情況。</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">決策</th>
+<th align="left">H0 為真</th>
+<th align="left">H1 為真</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">拒絕 H0</td>
+<td align="left">型 I 錯誤 (機率是 <img src="../timg/7b7f9dbfea05.jpg" /> )</td>
+<td align="left">正確決策 (機率是檢定力 power)</td>
+</tr>
+<tr class="even">
+<td align="left">無法拒絕 H0</td>
+<td align="left">正確決策</td>
+<td align="left">型 II 錯誤 (機率是 <img src="../timg/b0603860fcff.jpg" /> )</td>
+</tr>
+</tbody>
+</table>
+<p>當然我們會希望正確決策的機會越大越好，而錯誤決策的機會越小越好。推論統計可以告訴我們各類型正確與錯誤決策的機率，以便讓我們知道是否要接受 H1 而拒絕 H0。</p>
+<h2 id="單組樣本的檢定"><a href="#單組樣本的檢定">單組樣本的檢定</a></h2>
+<ul>
+<li>平均值的檢定？ ( <img src="../timg/8d5c16be7d8a.jpg" /> ) -- 學生 T 檢定</li>
+<li>變異數的檢定？ ( <img src="../timg/915e4f07551f.jpg" /> ) -- 卡方 <img src="../timg/9ca61f458c78.jpg" /> 檢定</li>
+<li>比例 p 的檢定？ ( <img src="../timg/6e4083e02d67.jpg" /> ) -- 常態 Z 檢定</li>
+<li>中位數 M 的檢定？ ( <img src="../timg/6ed558249dd0.jpg" /> ) -- 無母數方法 Wilcoxon Sign-Rank 檢定</li>
+</ul>
+<blockquote>
+<p>範例：平均值 <img src="../timg/c9faf6ead2cd.jpg" /> 的檢定</p>
+<p>根據中央極限定理， <img src="../timg/46ff6c4e26d5.jpg" /> 會趨向常態性，因此只要樣本數夠多，我們就可以利用常態分布進行平均值 <img src="../timg/c9faf6ead2cd.jpg" /> 的檢定。</p>
+<p>方法：用 Z 或 T 的統計量，進行常態分配平均的假設檢定。(但常態性如何確保，通常有兩種基本假設，第一種是母體分布為常態性，第二種是樣本數夠大，根據大數法則 <img src="../timg/46ff6c4e26d5.jpg" /> 會趨向常態性)。</p>
+</blockquote>
+<h2 id="兩組樣本的檢定"><a href="#兩組樣本的檢定">兩組樣本的檢定</a></h2>
+<p>根據兩個母體所抽出的樣本，推論統計可以猜測兩個母體中隨機變數 X, Y 的「平均值差異 <img src="../timg/45ddea4c3d62.jpg" /> 、標準差距離 <img src="../timg/ccbb59c61c60.jpg" /> 、比例差異 <img src="../timg/aa1112007f3e.jpg" /> 、中位數差異 <img src="../timg/1e39dec99edc.jpg" /> 」等數值，以檢定兩組樣本是否來自同一母體。</p>
+<ul>
+<li>比較兩平均數 <img src="../timg/52ba63e20126.jpg" /> 的差值 ( <img src="../timg/e18314955b8b.jpg" /> ) 的檢定</li>
+<li>比較兩變異數 <img src="../timg/112884011abb.jpg" /> 的差值 ( <img src="../timg/1848b72fa807.jpg" /> ) 的檢定</li>
+<li>比較兩機率 p1, p2 的差值 ( H0: p1-p2=0 ) 的檢定</li>
+<li>比較兩組中位數 M 的差值 ( <img src="../timg/a6a7779ec296.jpg" /> ) 的檢定 (無母數方法)</li>
+</ul>
+<h2 id="多組樣本的檢定-anova-變異數分析"><a href="#多組樣本的檢定-anova-變異數分析">多組樣本的檢定 (ANOVA 變異數分析）</a></h2>
+<ul>
+<li><img src="../timg/1e4eace18859.jpg" /></li>
+<li><img src="../timg/61522b0458e3.jpg" /> 對於某些 i, j 而言。</li>
+</ul>
+<h2 id="無母數統計方法"><a href="#無母數統計方法">無母數統計方法</a></h2>
+<p>指的是樣本來自某一分配，但不預設這個分配的特性 (分配的參數，稱為母數，通常為未知)，這種情況稱為無母數統計方法</p>
+<h2 id="參考文獻"><a href="#參考文獻">參考文獻</a></h2>
+<ul>
+<li><a href="https://sites.google.com/site/rprojectnotes/introduction/probability_distributions#TOC-2">R 學習筆記/機率分佈/資料分布檢定</a></li>
+<li><a href="https://sites.google.com/site/rprojectnotes/introduction/probability_distributions#TOC-3">R 學習筆記/機率分佈/單樣本與雙樣本檢定</a></li>
+</ul>
+<h2 id="習題"><a href="#習題">習題</a></h2>
+<p>估計 * [[[st:meanIntervalEstEx | 平均值的信賴區間估計 (母體變異數已知)]]] * [[[st:varIntervalEstEx | 變異數的信賴區間估計]]] (常態母體 =&gt; 服從自由度為 n-1 的卡方分配) * [[[st:tTestEx | 平均值的信賴區間估計 (母體變異數未知)]]] (用 S 取代 <img src="../timg/9d43cb8bbcb7.jpg" /> =&gt; 學生 t 分配)</p>
+<p>檢定 * [[[st:meanTestEx | 分配平均的假設檢定]]] ( <img src="../timg/54dcd1ecb3e3.jpg" /> ) * [[[st:varTestEx | 變異數假設檢定]]] ( <img src="../timg/1ac0b218bd8c.jpg" /> ) * [[[st:medianTestEx | 中位數的假設檢定]]] ( <img src="../timg/a774537e5ef0.jpg" /> ) (無母數方法, Wilcoxon Sign-Rank 檢定)</p>
+<p>比例的推論 * [[[st:proportionEstEx | 比例的推論]]] ( <img src="../timg/f58a1e12b791.jpg" /> , 有事前估計與沒有事前估計的推論所需樣本數不同) * [[[st:proportionTestEx | 比例的檢定]]] ( <img src="../timg/98eccb79ec68.jpg" /> ) * [[[st:medianTestEx | 比較兩比例：估計+檢定]]] ( <img src="../timg/853b84742c3e.jpg" /> )</p>
+<p>比較兩平均與變異數 * 練習題1：[[[st:proportionEstEx | 比較兩平均]]] ( <img src="../timg/b8b5b8f55192.jpg" /> ) * 練習題2：[[[st:proportionTestEx | 比較兩變異數]]] ( <img src="../timg/bd13a4066913.jpg" /> , F 分配) * 練習題3：[[[st:proportionTestEx | 比較兩平均 (變異數相等)]]]</p>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

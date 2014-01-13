@@ -1,0 +1,4 @@
++ 參考文獻
+# EM algorithm for Mixture models (test version) -- http://staff.aist.go.jp/s.akaho/MixtureEM.html
+# Mixture Models, EM algorithm -- http://lcn.epfl.ch/tutorial/english/mixtureModel/index.html
+# Wikipedia:Expectation-maximization algorithm -- http://en.wikipedia.org/wiki/Expectation-maximization_algorithm

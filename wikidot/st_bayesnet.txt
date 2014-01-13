@@ -1,0 +1,143 @@
++ 貝氏定理  (Bayes Theorem)
+
+[[math type="eqnarray"]]
+1. && P(b | a) = P(a | b) \frac{P(b)}{P(a)} \\
+2. && P(Y | X) = P(X | Y) \frac{P(Y)}{P(X)} \\
+3. && P(Y | X, e) = P(X | Y,e) \frac{P(Y | e)}{P(X | e)} \\
+[[/math]]
+
++ 原始貝氏模型 (Naive Bayes)
+
+給定隨機變數 Z 後，X 與 Y 條件獨立的定義為
+
+[[math type="eqnarray"]]
+P(X, Y | Z) = P(X | Z) P(Y | Z)
+[[/math]]
+
+範例：
+[[math]]
+P(Toothache, Catch | Cavity) = P(Toothache | Cavity) P(Catch | Cavity)
+[[/math]]
+
+原始貝氏模型 (Naive Bayes, 又被稱為原始貝氏分類器 Naive Bayesian Classifier)
+
+[[math type="eqnarray"]]
+P(Cause, Effect_1, ..., Effect_n) = P(Cause) \prod_{i} P(Effect_i | Cause)
+[[/math]]
+
++ 貝氏網路 (Bayisian Network)
+
+使用貝氏網路計算聯合機率分佈
+
+[[math]]
+P(x_1, ..., x_n) = \prod_{i=1}^{n} P(x_i | parent(X_i))
+[[/math]]
+
+使用貝氏網路計算事後機率分佈 P(X | e)
+
+X:查詢變數
+E 證據變數集 E1, E2, ... Em, e 代表一個觀察到的特定事件
+Y 表示非證據變數集 Y1, Y2, ... Yl.
+
+方法 1. 列舉式推理法 (Enumeration) (較慢)
+[[math]]
+P(X | e) = \alpha P(X,e) = \alpha \sum_{y} P(X,e,y)
+[[/math]]
+
+方法 2. 變數消元演算法 (Variable Elimination Algorithm) (較快 [[$ O(n^2) $]] )
+
+類似動態規畫，不需要重覆計算已知結果
+
+方法 3. 聯合樹演算法 (Joint Tree Algorithm) (最快 [[$ O(n) $]] )
+
++ 在貝氏網路中使用蒙地卡羅法
+
+(1). 使用貝氏網路進行取樣
+
+[[code]]
+Algorithm Prior-Sample(bn) returns an event sampled from the prior specified by Bayes Network (bn)
+  input : bn, a Bayesian network specifying joint distribution [[$ P(X_1, ..., X_n) $]]
+  x = an event with n elements
+  for i=1 to n do 
+    xi = a random sample from [[$ P(X_i | Parent(X_i)) $]]
+  return x
+[[/code]]
+
+(2). 直接取樣演算法 (Direct Sampling Method)
+目標：計算出所有的 [[$ P(x_1, ..., x_n) $]], 也就是 [[$ P(X_1, ..., X_n) $]]
+* 步驟 1. 利用網路架構，從無父節點的變數開始，進行取樣動作，其方法是逐步利用 [[$ P(x_i | parent(X_i)) $]] 的取樣方式，完成一次取樣動作。
+* 步驟 2. 重複 (步驟 1) ，總共取樣 N 次，然後就得到一系列的樣本  [[$ S_1, S_2, ...., S_N $]]
+* 步驟 3. 任一個樣本 [[$ (x_1, ..., x_n) $]] 的出現機率即為  [[$ \frac{N_{ps}(x_1, ..., x_n)}{N} $]]
+
+數學原理
+
+[[math]]
+S_{ps}(x_1, ..., x_n) = \prod_{i=1}^{n} P(x_i | parents(X_i)) = P(x_1,....,x_n)
+[[/math]]
+
+[[math]]
+\lim_{N \rightarrow \infty} \frac{N_{ps}(x_1, ..., x_n)}{N} = S_{ps}(x_1, ..., x_n) = P(x_1,....,x_n)
+[[/math]]
+
+
+[[code]]
+Algorithm Direct-Sampling(X, bn, N)
+  input : X , the query variable
+             bn, a Bayesian network specifying joint distribution [[$ P(X_1, ..., X_n) $]]
+             N, the total number of samples to be generated
+  for i=1 to N do
+      x = Prior-Sampling(bn)
+      N[x] = N[x] + 1
+  return Normalize(N[X])
+[[/code]]
+
+
+(3). 拒絕取樣演算法 (Rejection Sampling)
+
+目標：計算出符合證據 e 的所有機率分布 [[$ P(X | e) $]]
+
+[[code]]
+Algorithm Rejection-Sampling(X, e, bn, N)
+  input : X , the query variable
+             e, evidence spedified as an event
+             bn, a Bayesian network specifying joint distribution [[$ P(X_1, ..., X_n) $]]
+             N, the total number of samples to be generated
+  for i=1 to N do
+      x = Prior-Sampling(bn)
+      if x is consistent with e then
+        N[x] = N[x] + 1 where x is the value of X in x
+  return Normalize(N[X])
+[[/code]]
+
+問題：當 e 事件的發生機率很小時，大部分 Prior-Sampling 的樣本都被拒絕了，因此可能會很浪費時間。
+
+(4). 似然加權演算法 (Likelihood Weighting)
+
+目標：計算出符合證據 e 的所有機率分布 [[$ P(X | e) $]]
+改進：只產生與 e 一致的事件
+
+[[code]]
+Algorithm Likelihood-Weighting(X, e, bn, N) returns an estimate of P(X|e)
+  input : X , the query variable
+             e, evidence spedified as an event
+             bn, a Bayesian network specifying joint distribution [[$ P(X_1, ..., X_n) $]]
+             N, the total number of samples to be generated
+  local variables : W, a vector of weighted counts over X, initially zero.
+  for j=1 to N do
+      x, w = Weighted-Sample(bn)
+      W[x] = W[x] + w;  where x is the value of X in {x}
+  return Normalize(W[x])
+
+Algorithm Weighted-Sample(bn, e) returns an event and a weight
+  x = an event with n elements; w=1;
+  for i = 1 to n do
+       if Xi has a value xi in e
+           then w = w * P(Xi=xi | parent(Xi))
+           else xi = a random sample from P(Xi | parents(Xi))
+  return x,w
+[[/code]]
+
++ 參考文獻
+# 維基百科編者 (2010). 貝氏網路. Wikipedia, . Retrieved 08:58, 1月 11, 2010 from http://zh.wikipedia.org/w/index.php?title=%E8%B2%9D%E6%B0%8F%E7%B6%B2%E8%B7%AF&oldid=12052149.
+#  Stuart Russell and Peter Norvig, Artificial Intelligence: A Modern Approach, [1], Prentice Hall, 2nd ed., 2002. ISBN 0137903952.
+# 人工智慧－現代方法(第二版), 譯者：高超群, 出版社：全華科技, 出版日期：2006年10月12日, 語言：繁體中文, ISBN：9861544038

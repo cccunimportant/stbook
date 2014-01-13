@@ -1,0 +1,6 @@
+# 金門大學資訊工程系100 年上學期機率統計
+ * 期中考：
+  * 考題：[[file 100StatisticsExam1.docx]]
+  * 解答：[[file 100StatisticsExam1Answer.docx]]
+ * 期末考：
+  * 解答：[[file 100StatisticsExamFinalAnswer.docx]]

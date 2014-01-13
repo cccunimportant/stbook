@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#布瓦松分布-poisson-distribution">布瓦松分布 (Poisson distribution)</a></li>
+</ul>
+</div>
+<h2 id="布瓦松分布-poisson-distribution"><a href="#布瓦松分布-poisson-distribution">布瓦松分布 (Poisson distribution)</a></h2>
+<p>意義：在單位時間內，事件出現平均 λ 次的機率分布。</p>
+<p>公式： <img src="../timg/0c930d2788b1.jpg" /></p>
+<p>R 的公式： <img src="../timg/ca43e8b89676.jpg" /></p>
+<p>R 函數：<a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/Poisson.html">pois(λ:事件平均出現次數)</a></p>
+<p>變數意義： <img src="../timg/c049e3fdcead.jpg" /></p>
+<div class="figure">
+<img src="../img/PoissonCurve.jpg" alt="圖、布瓦松分布來源：http://en.wikipedia.org/wiki/Poisson_distribution" /><p class="caption">圖、布瓦松分布<BR/>來源：<a href="http://en.wikipedia.org/wiki/Poisson_distribution">http://en.wikipedia.org/wiki/Poisson_distribution</a></p>
+</div>
+<p>特性：</p>
+<p>布瓦松分布可以與泰勒展開式中的 Maclaurin 級數對映起來，所謂的 Maclaurin 級數就是泰勒展開式在 0 點的展開式。</p>
+<blockquote>
+<p>If the Taylor series is centered at zero, then that series is also called a Maclaurin series, named after the Scottish mathematician Colin Maclaurin, who made extensive use of this special case of Taylor series in the 18th century.</p>
+</blockquote>
+<div class="figure">
+<img src="../timg/1ac4c638a017.jpg" />
+</div>
+<div class="figure">
+<img src="../img/PoissonVsBinomial.jpg" alt="圖、布瓦松分布是二項分布 n 趨近無限大的極限情況來源：http://en.wikipedia.org/wiki/File:Binomial_versus_poisson.svg" /><p class="caption">圖、布瓦松分布是二項分布 n 趨近無限大的極限情況<BR/>來源：<a href="http://en.wikipedia.org/wiki/File:Binomial_versus_poisson.svg">http://en.wikipedia.org/wiki/File:Binomial_versus_poisson.svg</a></p>
+</div>
+<h3 id="布瓦松分配的公式來源"><a href="#布瓦松分配的公式來源">布瓦松分配的公式來源</a></h3>
+<p>布瓦松分配可視為二項分配的極限形式，當 binom(n, p) 當中 n 趨近於無限大，而 p 非常小的時候，就會趨近布瓦松分配。</p>
+<p>關鍵公式： <img src="../timg/f5c44c7b2ec9.jpg" /></p>
+<p>證明過程：</p>
+<p><img src="../timg/c1453b053b73.jpg" /> .</p>
+<p><img src="../timg/6b58c105e8c3.jpg" /> .</p>
+<p><img src="../timg/848edbaea265.jpg" /> .</p>
+<p>其中的 An 趨近於 1 ，證明如下：</p>
+<p><img src="../timg/08ef57551c17.jpg" /> .</p>
+<p>期望值與變異數</p>
+<ol style="list-style-type: decimal">
+<li><img src="../timg/a7ee5299c8dd.jpg" /></li>
+<li><img src="../timg/f6b3e210bca6.jpg" title="fig:" /></li>
+</ol>
+<p>動差生成函數： <img src="../timg/96fa85ea62fa.jpg" /></p>
+<h3 id="習題"><a href="#習題">習題：</a></h3>
+<p>習題：抽血時白血球數量的問題</p>
+<blockquote>
+<p>問題： 假如現在從你身上抽一滴血，請回答下列兩個問題。</p>
+<ol style="list-style-type: decimal">
+<li>請定義一個隨機變數 X 代表那滴血中的白血球數量。</li>
+</ol>
+<p>提示： 樣本空間 S = 此時此刻你身上的所有白血球 = {w1,w2,......,wn}</p>
+<ol start="2" style="list-style-type: decimal">
+<li>請算出一滴血液中有三顆白血球的機率，假設該滴血液占你總血量的 1/1000。</li>
+</ol>
+</blockquote>
+<p>解答 1：</p>
+<blockquote>
+<p>X(A) = |A|</p>
+<p>說明：</p>
+<p>A 是一個事件，也就是白血球的樣本空間 S 的子集合，例如： A = {w1, w5, w9}</p>
+<p>|A| 代表 A 集合的大小，也就是元素個數，舉例而言：</p>
+<p>如果 A = {w1, w5, w9} ，那麼 |A| = 3</p>
+<p>如果 B = {w2, w8}，那麼 |B| = 2</p>
+<p>如果 C = {}，那麼 |C| = 0</p>
+<p>如果 D = S，那麼 |D| = n</p>
+</blockquote>
+<p>解答 2：</p>
+<blockquote>
+<p>P(X=3) = P({A | X(A) = 3}) = P({{w1, w2, w3}) + P({w1, w2, w4}) + ......</p>
+<p>假如任一顆白血球被抽到的機率等於該滴血液佔全身血液的比率，由於該滴血液佔總血量的 1/1000，所以給顆白血球被抽到的機率為 1/1000。</p>
+<p>而且假設這些白血球沒有智慧，也不會聚合在一起，因此相互之間獨立，那麼由於每顆白血球被抽到的機率為 1/1000，因此 P(w1) = P(w2) = .... P(wn) = 1/1000。</p>
+<p>那麼初步想法是 P(w1w3) = P(w1) * P(w3) = 1/1000 * 1/1000 。</p>
+<p>但是上述的想法有個小問題，那就是該情況代表其它白血球都沒被抽到，因此所謂的 P(w1w3) 真正的意思應該是</p>
+<div class="figure">
+<img src="../timg/29e439b8a536.jpg" />
+</div>
+<p>所以 P(X=3) 應該算法如下：</p>
+<div class="figure">
+<img src="../timg/960d1fb7e15e.jpg" />
+</div>
+<p>推而廣之，P(X=k) 的機率之算法如下：</p>
+<div class="figure">
+<img src="../timg/c103f4ae13f5.jpg" />
+</div>
+<p>事實上，這個題目的機率分布就是下一章的二項分布，如下所示：</p>
+<div class="figure">
+<img src="../timg/c9c2c2819c48.jpg" />
+</div>
+<p>而且、當 n 趨近於無限大時，這個分布將會趨近於布瓦松分布，如下所示：</p>
+<div class="figure">
+<img src="../timg/9fde5316116c.jpg" />
+</div>
+<p>其中的 λ 之意義為，在單位時間 (或單位面積、體積) 內，事件的出現次數平均為 λ 次。</p>
+</blockquote>
+<p>習題：假設每 1CC 的血所含的白血球平均為 10 顆，那麼請問你抽 1CC 的血時，抽到 8 顆白血球的機率是多少。</p>
+<p>解答：</p>
+<blockquote>
+<p>λ = 10，因此布瓦松分布為 <img src="../timg/ce3620ab8f85.jpg" /> ，將 x=8 代入，得到 <img src="../timg/bce69f5aeddf.jpg" /></p>
+</blockquote>
+<p>其數值可以用 R 軟體計算，如下所示：</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>?dpois
+&gt;<span class="st"> </span><span class="kw">dpois</span>(<span class="dv">8</span>, <span class="dv">10</span>)
+[<span class="dv">1</span>] <span class="fl">0.112599</span>
+&gt;<span class="st"> </span><span class="dv">10</span>^<span class="dv">8</span>*<span class="kw">exp</span>(-<span class="dv">10</span>)/<span class="kw">prod</span>(<span class="dv">1</span>:<span class="dv">8</span>)
+[<span class="dv">1</span>] <span class="fl">0.112599</span></code></pre>
+<h3 id="r-程式範例曲線圖"><a href="#r-程式範例曲線圖">R 程式範例：曲線圖</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">lambda=<span class="fl">5.0</span>; k=<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">20</span>); 
+<span class="kw">plot</span>(k, <span class="kw">dpois</span>(k, lambda), <span class="dt">type=</span><span class="st">&#39;h&#39;</span>, <span class="dt">main=</span><span class="st">&#39;dpois(lambda=4.0)&#39;</span>, <span class="dt">xlab=</span><span class="st">&#39;k&#39;</span>)</code></pre>
+<div class="figure">
+<img src="../img/dpoisPlot.jpg" />
+</div>
+<h3 id="r-程式範例"><a href="#r-程式範例">R 程式範例：</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r"><span class="kw">require</span>(graphics)
+
+-<span class="kw">log</span>(<span class="kw">dpois</span>(<span class="dv">0</span>:<span class="dv">7</span>, <span class="dt">lambda=</span><span class="dv">1</span>) *<span class="st"> </span><span class="kw">gamma</span>(<span class="dv">1</span>+<span class="st"> </span><span class="dv">0</span>:<span class="dv">7</span>)) <span class="co"># == 1</span>
+Ni &lt;-<span class="st"> </span><span class="kw">rpois</span>(<span class="dv">50</span>, <span class="dt">lambda =</span> <span class="dv">4</span>); <span class="kw">table</span>(<span class="kw">factor</span>(Ni, <span class="dv">0</span>:<span class="kw">max</span>(Ni)))
+
+<span class="dv">1</span> -<span class="st"> </span><span class="kw">ppois</span>(<span class="dv">10</span>*(<span class="dv">15</span>:<span class="dv">25</span>), <span class="dt">lambda=</span><span class="dv">100</span>)  <span class="co"># becomes 0 (cancellation)</span>
+    <span class="kw">ppois</span>(<span class="dv">10</span>*(<span class="dv">15</span>:<span class="dv">25</span>), <span class="dt">lambda=</span><span class="dv">100</span>, <span class="dt">lower.tail=</span><span class="ot">FALSE</span>)  <span class="co"># no cancellation</span>
+
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))
+x &lt;-<span class="st"> </span><span class="kw">seq</span>(-<span class="fl">0.01</span>, <span class="dv">5</span>, <span class="fl">0.01</span>)
+<span class="kw">plot</span>(x, <span class="kw">ppois</span>(x, <span class="dv">1</span>), <span class="dt">type=</span><span class="st">&quot;s&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;F(x)&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Poisson(1) CDF&quot;</span>)
+<span class="kw">plot</span>(x, <span class="kw">pbinom</span>(x, <span class="dv">100</span>, <span class="fl">0.01</span>),<span class="dt">type=</span><span class="st">&quot;s&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;F(x)&quot;</span>,
+     <span class="dt">main=</span><span class="st">&quot;Binomial(100, 0.01) CDF&quot;</span>)</code></pre>
+<p>執行結果：</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">require</span>(graphics)
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span>-<span class="kw">log</span>(<span class="kw">dpois</span>(<span class="dv">0</span>:<span class="dv">7</span>, <span class="dt">lambda=</span><span class="dv">1</span>) *<span class="st"> </span><span class="kw">gamma</span>(<span class="dv">1</span>+<span class="st"> </span><span class="dv">0</span>:<span class="dv">7</span>)) <span class="co"># == 1</span>
+[<span class="dv">1</span>] <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span>
+&gt;<span class="st"> </span>Ni &lt;-<span class="st"> </span><span class="kw">rpois</span>(<span class="dv">50</span>, <span class="dt">lambda =</span> <span class="dv">4</span>); <span class="kw">table</span>(<span class="kw">factor</span>(Ni, <span class="dv">0</span>:<span class="kw">max</span>(Ni)))
+
+ <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">2</span>  <span class="dv">3</span>  <span class="dv">4</span>  <span class="dv">5</span>  <span class="dv">6</span>  <span class="dv">7</span>  <span class="dv">8</span> 
+ <span class="dv">1</span>  <span class="dv">3</span>  <span class="dv">6</span>  <span class="dv">8</span> <span class="dv">11</span> <span class="dv">11</span>  <span class="dv">4</span>  <span class="dv">3</span>  <span class="dv">3</span> 
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span><span class="dv">1</span> -<span class="st"> </span><span class="kw">ppois</span>(<span class="dv">10</span>*(<span class="dv">15</span>:<span class="dv">25</span>), <span class="dt">lambda=</span><span class="dv">100</span>)  <span class="co"># becomes 0 (cancellation)</span>
+ [<span class="dv">1</span>] <span class="fl">1.233094e-06</span> <span class="fl">1.261664e-08</span> <span class="fl">7.085799e-11</span> <span class="fl">2.252643e-13</span> <span class="fl">4.440892e-16</span>
+ [<span class="dv">6</span>] <span class="fl">0.000000e+00</span> <span class="fl">0.000000e+00</span> <span class="fl">0.000000e+00</span> <span class="fl">0.000000e+00</span> <span class="fl">0.000000e+00</span>
+[<span class="dv">11</span>] <span class="fl">0.000000e+00</span>
+&gt;<span class="st">     </span><span class="kw">ppois</span>(<span class="dv">10</span>*(<span class="dv">15</span>:<span class="dv">25</span>), <span class="dt">lambda=</span><span class="dv">100</span>, <span class="dt">lower.tail=</span><span class="ot">FALSE</span>)  <span class="co"># no cancellation</span>
+ [<span class="dv">1</span>] <span class="fl">1.233094e-06</span> <span class="fl">1.261664e-08</span> <span class="fl">7.085800e-11</span> <span class="fl">2.253110e-13</span> <span class="fl">4.174239e-16</span>
+ [<span class="dv">6</span>] <span class="fl">4.626179e-19</span> <span class="fl">3.142097e-22</span> <span class="fl">1.337219e-25</span> <span class="fl">3.639328e-29</span> <span class="fl">6.453883e-33</span>
+[<span class="dv">11</span>] <span class="fl">7.587807e-37</span>
+&gt;<span class="st"> </span>
+<span class="er">&gt;</span><span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))
+&gt;<span class="st"> </span>x &lt;-<span class="st"> </span><span class="kw">seq</span>(-<span class="fl">0.01</span>, <span class="dv">5</span>, <span class="fl">0.01</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(x, <span class="kw">ppois</span>(x, <span class="dv">1</span>), <span class="dt">type=</span><span class="st">&quot;s&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;F(x)&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Poisson(1) CDF&quot;</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(x, <span class="kw">pbinom</span>(x, <span class="dv">100</span>, <span class="fl">0.01</span>),<span class="dt">type=</span><span class="st">&quot;s&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;F(x)&quot;</span>,
++<span class="st">      </span><span class="dt">main=</span><span class="st">&quot;Binomial(100, 0.01) CDF&quot;</span>)
+&gt;<span class="st"> </span></code></pre>
+<div class="figure">
+<img src="../img/poisson.jpg" />
+</div>
+<h3 id="參考文獻"><a href="#參考文獻">參考文獻</a></h3>
+<ul>
+<li><a href="http://zh.wikipedia.org/wiki/%E5%8D%9C%E7%93%A6%E6%9D%BE%E5%88%86%E4%BD%88">Wikipedia:卜瓦松分佈</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Poisson_distribution">Wikipedia:Poisson_distribution</a></li>
+</ul>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

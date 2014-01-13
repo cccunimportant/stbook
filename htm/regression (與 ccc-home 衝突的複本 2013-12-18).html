@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#迴歸分析">迴歸分析</a><ul>
+<li><a href="#簡介">簡介</a></li>
+<li><a href="#r-軟體中的-lm-函數">R 軟體中的 lm() 函數</a></li>
+<li><a href="#單一自變數的迴歸分析完全線性無誤差值">單一自變數的迴歸分析：完全線性，無誤差值</a></li>
+<li><a href="#單一自變數的迴歸分析有誤差值">單一自變數的迴歸分析：有誤差值</a></li>
+<li><a href="#兩組自變數的迴歸分析完全線性無誤差值">兩組自變數的迴歸分析：完全線性，無誤差值</a></li>
+<li><a href="#兩組自變數的迴歸分析有誤差值">兩組自變數的迴歸分析：有誤差值</a></li>
+<li><a href="#結語">結語</a></li>
+<li><a href="#參考文獻">參考文獻</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="迴歸分析"><a href="#迴歸分析">迴歸分析</a></h1>
+<h2 id="簡介"><a href="#簡介">簡介</a></h2>
+<p>在「點估計」與「區間估計」當中，被估計的對象是一個點的座落點或區域。但是、如果我們想要找尋的是， 兩個以上變數之間的「運算式」關係，那麼就不能只用「估計」了，而必須採用「迴歸分析」的方法。</p>
+<p>迴歸分析是在尋找這些變數之間的關係，通常是尋找「線性關係」，舉例而言，假如我們認為 y 與 x 之間具有線性關係，也就是 y 是 x 的線性函數，那麼我們可以將兩者之間的關係寫成 y= a + b * x ，其中 a 與 b 都是某個未知的常數。</p>
+<p>當我們取得了很多組 (x,y) 的樣本 (x1, y1) (x2, y2) ..... (xk, yk) 時，我們就可以透過迴歸分析來尋找出這些未知的常數， 進而建立變數之間的線性方程關係式。</p>
+<h2 id="r-軟體中的-lm-函數"><a href="#r-軟體中的-lm-函數">R 軟體中的 lm() 函數</a></h2>
+<p>在 R 軟體當中，用來做迴歸分析的是 lm() 函數，其函數原型如下：</p>
+<ul>
+<li>lm(formula, data, subset, weights, na.action, method = &quot;qr&quot;, model = TRUE, x = FALSE, y = FALSE, qr = TRUE, singular.ok = TRUE, contrasts = NULL, offset, ...)</li>
+</ul>
+<p>通常，我們只要用到 formula 與 data 兩個參數就可以進行迴歸運算了，舉例而言，假如我們有 25 個樣本 xy = (x1, y1) (x2, y2) .... (x25, y25)，那麼我們就 可以用下列 lm 函數找出 x, y 之間的線性關係式。</p>
+<ul>
+<li>lm(y~x, xy)</li>
+</ul>
+<p>當然、如果自變數不只一個，例如我們想尋找的是 y = a + b1 * x1 + b2 * x2 的話，那麼就可以用下列函數去計算出 a, b1, b2 等係數，以建立迴歸模型。</p>
+<ul>
+<li>lm(y~x1+x2, xy)</li>
+</ul>
+<h2 id="單一自變數的迴歸分析完全線性無誤差值"><a href="#單一自變數的迴歸分析完全線性無誤差值">單一自變數的迴歸分析：完全線性，無誤差值</a></h2>
+<p>現在、就讓我們用 R 軟體來示範「迴歸分析」的做法，</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">10</span>, <span class="dv">25</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>) <span class="co"># 從 1 到 10 之中可重複的隨機抽出 25 個樣本</span>
+&gt;<span class="st"> </span>x
+ [<span class="dv">1</span>]  <span class="dv">7</span>  <span class="dv">1</span>  <span class="dv">9</span>  <span class="dv">4</span>  <span class="dv">1</span>  <span class="dv">2</span> <span class="dv">10</span>  <span class="dv">6</span>  <span class="dv">3</span>  <span class="dv">3</span> <span class="dv">10</span>  <span class="dv">9</span>  <span class="dv">5</span>  <span class="dv">9</span>  <span class="dv">5</span> <span class="dv">10</span>  <span class="dv">2</span>  <span class="dv">1</span>  <span class="dv">8</span>  <span class="dv">4</span>  <span class="dv">8</span>  <span class="dv">7</span>  <span class="dv">4</span>  <span class="dv">6</span>
+[<span class="dv">25</span>]  <span class="dv">9</span>
+&gt;<span class="st"> </span>y =<span class="st"> </span><span class="dv">1+3</span>*x　 <span class="co"># 用這些 x 樣本透過線性關係式產生 y 樣本，這是完美的線性關係，完全沒有誤差。</span>
+&gt;<span class="st"> </span>y
+ [<span class="dv">1</span>] <span class="dv">22</span>  <span class="dv">4</span> <span class="dv">28</span> <span class="dv">13</span>  <span class="dv">4</span>  <span class="dv">7</span> <span class="dv">31</span> <span class="dv">19</span> <span class="dv">10</span> <span class="dv">10</span> <span class="dv">31</span> <span class="dv">28</span> <span class="dv">16</span> <span class="dv">28</span> <span class="dv">16</span> <span class="dv">31</span>  <span class="dv">7</span>  <span class="dv">4</span> <span class="dv">25</span> <span class="dv">13</span> <span class="dv">25</span> <span class="dv">22</span> <span class="dv">13</span> <span class="dv">19</span>
+[<span class="dv">25</span>] <span class="dv">28</span>
+&gt;<span class="st"> </span><span class="kw">plot</span>(x,y)　<span class="co"># 畫出 (x,y) 的圖形，您會發現所有點都分布在一條斜率為 3 的斜線上</span></code></pre>
+<div class="figure">
+<img src="../img/regression1.jpg" alt="圖、y=1+3*x 的完全線性 plot(x,y) 圖形結果" /><p class="caption">圖、y=1+3*x 的完全線性 plot(x,y) 圖形結果</p>
+</div>
+<pre><code>&gt; xy = data.frame(x, y)　# 讓 (x,y) 的配對形成 frame 變數，這樣才能做為 lm(formula, data) 中的 data 參數。
+&gt; xy
+    x  y
+1   7 22
+2   1  4
+3   9 28
+4   4 13
+5   1  4
+6   2  7
+7  10 31
+8   6 19
+9   3 10
+10  3 10
+11 10 31
+12  9 28
+13  5 16
+14  9 28
+15  5 16
+16 10 31
+17  2  7
+18  1  4
+19  8 25
+20  4 13
+21  8 25
+22  7 22
+23  4 13
+24  6 19
+25  9 28
+&gt; model = lm(y~x, data=xy) # 開始作線性迴歸分析
+&gt; model
+
+Call:
+lm(formula = y ~ x, data = xy)
+
+Coefficients:
+(Intercept)            x  
+          1            3  </code></pre>
+<p>上述的線性回歸函數 lm，果真找到的原來的關係式，也就是「截距 =1、x 係數 =3 」的 「y=1+3*x」的算式，完整的還原了 y 與 x 之間的關係。</p>
+<h2 id="單一自變數的迴歸分析有誤差值"><a href="#單一自變數的迴歸分析有誤差值">單一自變數的迴歸分析：有誤差值</a></h2>
+<p>上述的範例雖然很完美，但是卻很不真實，因為在機率統計的世界中，通常有很多難以捕捉的「隨機性誤差」，反應在樣本上面。</p>
+<p>現在、就讓我們再度進行一次迴歸分析，只不過這次我們將加入一些常態分布的誤差值進去。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">10</span>, <span class="dv">25</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>)  <span class="co"># 從 1 到 10 之中可重複的隨機抽出 25 個樣本</span>
+&gt;<span class="st"> </span>x
+ [<span class="dv">1</span>] <span class="dv">10</span>  <span class="dv">1</span>  <span class="dv">9</span>  <span class="dv">9</span>  <span class="dv">4</span>  <span class="dv">3</span>  <span class="dv">5</span>  <span class="dv">6</span>  <span class="dv">4</span>  <span class="dv">5</span>  <span class="dv">9</span>  <span class="dv">4</span>  <span class="dv">6</span>  <span class="dv">8</span>  <span class="dv">8</span>  <span class="dv">1</span>  <span class="dv">8</span>  <span class="dv">3</span>  <span class="dv">5</span>  <span class="dv">4</span>  <span class="dv">8</span>  <span class="dv">2</span>  <span class="dv">5</span>  <span class="dv">4</span>
+[<span class="dv">25</span>]  <span class="dv">3</span>
+&gt;<span class="st"> </span>y =<span class="st"> </span><span class="dv">1</span> +<span class="st"> </span><span class="dv">3</span>*x +<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>) <span class="co"># 用這些 x 樣本透過線性關係式產生 y 樣本，其中的誤差是用 rnorm() 產生的。</span>
+&gt;<span class="st"> </span>y
+ [<span class="dv">1</span>] <span class="fl">32.084945</span>  <span class="fl">2.594432</span> <span class="fl">26.981934</span> <span class="fl">29.395315</span> <span class="fl">11.737131</span> <span class="fl">11.347425</span> <span class="fl">14.292503</span>
+ [<span class="dv">8</span>] <span class="fl">18.543848</span> <span class="fl">12.025822</span> <span class="fl">15.848780</span> <span class="fl">27.211809</span> <span class="fl">13.063985</span> <span class="fl">19.708064</span> <span class="fl">24.161863</span>
+[<span class="dv">15</span>] <span class="fl">25.271777</span>  <span class="fl">4.317383</span> <span class="fl">25.694476</span>  <span class="fl">9.167196</span> <span class="fl">15.871665</span> <span class="fl">14.244046</span> <span class="fl">24.165393</span>
+[<span class="dv">22</span>]  <span class="fl">5.994046</span> <span class="fl">16.639490</span> <span class="fl">12.682938</span> <span class="fl">10.978489</span>
+&gt;<span class="st"> </span><span class="kw">plot</span>(x,y)</code></pre>
+<div class="figure">
+<img src="../img/regression2.jpg" alt="圖、y = 1 + 3*x + rnorm(25, mean=0, sd=1) 的有誤差 plot(x,y) 圖形結果" /><p class="caption">圖、y = 1 + 3*x + rnorm(25, mean=0, sd=1) 的有誤差 plot(x,y) 圖形結果</p>
+</div>
+<blockquote>
+<p>xy = data.frame(x,y)　# 讓 (x,y) 的配對形成 frame 變數，這樣才能做為 lm(formula, data) 中的 data 參數。 xy x y 1 10 32.084945 2 1 2.594432 3 9 26.981934 4 9 29.395315 5 4 11.737131 6 3 11.347425 7 5 14.292503 8 6 18.543848 9 4 12.025822 10 5 15.848780 11 9 27.211809 12 4 13.063985 13 6 19.708064 14 8 24.161863 15 8 25.271777 16 1 4.317383 17 8 25.694476 18 3 9.167196 19 5 15.871665 20 4 14.244046 21 8 24.165393 22 2 5.994046 23 5 16.639490 24 4 12.682938 25 3 10.978489 model2 = lm(y~x, xy, x=T) # 開始作線性迴歸分析 model2 # 顯示分析結果，發現 截距 intercept 為　0.5345, 且 x 的係數為 3.1447，也就是 y=0.5345+3.1447<em>x，這與原產生式「y = 1 + 3</em>x + 誤差」有些差異，但還不錯。</p>
+</blockquote>
+<p>Call: lm(formula = y ~ x, data = xy, x = T)</p>
+<p>Coefficients: (Intercept) x<br /> 0.5345 3.1447</p>
+<blockquote>
+<p>model2$x (Intercept) x 1 1 5 2 1 7 3 1 8 4 1 4 5 1 3 6 1 2 7 1 3 8 1 4 9 1 5 10 1 4 11 1 7 12 1 7 13 1 2 14 1 4 15 1 2 16 1 10 17 1 7 18 1 3 19 1 3 20 1 2 21 1 7 22 1 5 23 1 10 24 1 7 25 1 10 attr(,&quot;assign&quot;) [1] 0 1 plot(x,y) abline(model2, additive=T) ```</p>
+</blockquote>
+<div class="figure">
+<img src="../img/regression3.jpg" alt="圖、樣本點與迴歸線 abline" /><p class="caption">圖、樣本點與迴歸線 abline</p>
+</div>
+<h2 id="兩組自變數的迴歸分析完全線性無誤差值"><a href="#兩組自變數的迴歸分析完全線性無誤差值">兩組自變數的迴歸分析：完全線性，無誤差值</a></h2>
+<p>當然、我們不只可以做單一自變數的迴歸，也可以做多組自變數的迴歸，以下讓我們用 R 軟體來示範 <code>y=a + b1 * x1 + b2 * x2</code> 迴歸式的分析。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x1 =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">10</span>, <span class="dv">25</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>) <span class="co"># 產生第一個自變數的 25 個樣本值</span>
+&gt;<span class="st"> </span>x2 =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">8</span>, <span class="dv">25</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>) <span class="co"># 產生第二個自變數的 25 個樣本值</span>
+&gt;<span class="st"> </span>y =<span class="st"> </span><span class="dv">5</span> +<span class="st"> </span><span class="dv">3</span> *<span class="st"> </span>x1 -<span class="st"> </span><span class="dv">2</span> *<span class="st"> </span>x2 <span class="co"># 用這些 (x1, x2) 樣本透過線性關係式產生 y 樣本，這是完美的線性關係，完全沒有誤差。</span>
+&gt;<span class="st"> </span>x1
+ [<span class="dv">1</span>]  <span class="dv">8</span>  <span class="dv">8</span>  <span class="dv">8</span>  <span class="dv">2</span>  <span class="dv">6</span>  <span class="dv">3</span>  <span class="dv">4</span>  <span class="dv">1</span>  <span class="dv">5</span>  <span class="dv">4</span>  <span class="dv">2</span>  <span class="dv">1</span>  <span class="dv">6</span>  <span class="dv">4</span>  <span class="dv">2</span>  <span class="dv">4</span>  <span class="dv">1</span>  <span class="dv">5</span>  <span class="dv">7</span>  <span class="dv">2</span>  <span class="dv">9</span>  <span class="dv">2</span> <span class="dv">10</span>  <span class="dv">4</span>
+[<span class="dv">25</span>]  <span class="dv">5</span>
+&gt;<span class="st"> </span>x2
+ [<span class="dv">1</span>] <span class="dv">7</span> <span class="dv">7</span> <span class="dv">1</span> <span class="dv">8</span> <span class="dv">5</span> <span class="dv">5</span> <span class="dv">5</span> <span class="dv">2</span> <span class="dv">6</span> <span class="dv">8</span> <span class="dv">5</span> <span class="dv">7</span> <span class="dv">4</span> <span class="dv">6</span> <span class="dv">8</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">8</span> <span class="dv">2</span> <span class="dv">5</span> <span class="dv">7</span> <span class="dv">2</span> <span class="dv">7</span> <span class="dv">6</span> <span class="dv">5</span>
+&gt;<span class="st"> </span>y
+ [<span class="dv">1</span>] <span class="dv">15</span> <span class="dv">15</span> <span class="dv">27</span> -<span class="dv">5</span> <span class="dv">13</span>  <span class="dv">4</span>  <span class="dv">7</span>  <span class="dv">4</span>  <span class="dv">8</span>  <span class="dv">1</span>  <span class="dv">1</span> -<span class="dv">6</span> <span class="dv">15</span>  <span class="dv">5</span> -<span class="dv">5</span>  <span class="dv">7</span> -<span class="dv">4</span>  <span class="dv">4</span> <span class="dv">22</span>  <span class="dv">1</span> <span class="dv">18</span>  <span class="dv">7</span> <span class="dv">21</span>  <span class="dv">5</span>
+[<span class="dv">25</span>] <span class="dv">10</span>
+&gt;<span class="st"> </span>yx12 =<span class="st"> </span><span class="kw">data.frame</span>(y, x1, x2)　<span class="co"># 讓 (y, x1, x2) 的配對形成 frame 變數，這樣才能做為 lm(formula, data) 中的 data 參數。</span>
+&gt;<span class="st"> </span>yx12.model =<span class="st"> </span><span class="kw">lm</span>(y~x1+x2, yx12) <span class="co"># 開始作線性迴歸分析</span>
+&gt;<span class="st"> </span>yx12.model <span class="co"># 顯示分析結果，發現 截距 intercept 為　5, 且 x1 的係數為 3，x2 的係數為 -2 也就是 y=5+3*x1-2*x2，正確找出我們產生資料用的算式。</span>
+
+Call:
+<span class="kw">lm</span>(<span class="dt">formula =</span> y ~<span class="st"> </span>x1 +<span class="st"> </span>x2, <span class="dt">data =</span> yx12)
+
+Coefficients:
+(Intercept)           x1           x2  
+          <span class="dv">5</span>            <span class="dv">3</span>           -<span class="dv">2</span>  
+
+&gt;<span class="st"> </span></code></pre>
+<h2 id="兩組自變數的迴歸分析有誤差值"><a href="#兩組自變數的迴歸分析有誤差值">兩組自變數的迴歸分析：有誤差值</a></h2>
+<p>同樣的，對於兩組或多組自變數的情況，我們也可以加入「隨機誤差值」，來讓整個資料集更有真實感，以下是我們的「資料產生」與「迴歸分析」的過程。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x1 =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">10</span>, <span class="dv">25</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>) <span class="co"># 產生第一個自變數的 25 個樣本值</span>
+&gt;<span class="st"> </span>x2 =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">8</span>, <span class="dv">25</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>) <span class="co"># 產生第二個自變數的 25 個樣本值</span>
+&gt;<span class="st"> </span>y2 =<span class="st"> </span><span class="dv">5</span> +<span class="st"> </span><span class="dv">3</span>*x1<span class="dv">-2</span>*x2 +<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">25</span>, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">5</span>)
+&gt;<span class="st"> </span>y2x12 =<span class="st"> </span><span class="kw">data.frame</span>(y2, x1, x2)　<span class="co"># 讓 (y, x1, x2) 的配對形成 frame 變數，這樣才能做為 lm(formula, data) 中的 data 參數。</span>
+&gt;<span class="st"> </span>y2x12
+           y2 x1 x2
+<span class="dv">1</span>  <span class="fl">10.2069412</span>  <span class="dv">8</span>  <span class="dv">7</span>
+<span class="dv">2</span>  <span class="fl">11.5760467</span>  <span class="dv">8</span>  <span class="dv">7</span>
+<span class="dv">3</span>  <span class="fl">24.8724883</span>  <span class="dv">8</span>  <span class="dv">1</span>
+<span class="dv">4</span>  -<span class="fl">3.4406110</span>  <span class="dv">2</span>  <span class="dv">8</span>
+<span class="dv">5</span>   <span class="fl">9.0650415</span>  <span class="dv">6</span>  <span class="dv">5</span>
+<span class="dv">6</span>   <span class="fl">8.2621227</span>  <span class="dv">3</span>  <span class="dv">5</span>
+<span class="dv">7</span>  <span class="fl">18.7755635</span>  <span class="dv">4</span>  <span class="dv">5</span>
+<span class="dv">8</span>  -<span class="fl">5.1753518</span>  <span class="dv">1</span>  <span class="dv">2</span>
+<span class="dv">9</span>  <span class="fl">14.1795708</span>  <span class="dv">5</span>  <span class="dv">6</span>
+<span class="dv">10</span> -<span class="fl">2.9588236</span>  <span class="dv">4</span>  <span class="dv">8</span>
+<span class="dv">11</span>  <span class="fl">4.4931402</span>  <span class="dv">2</span>  <span class="dv">5</span>
+<span class="dv">12</span> -<span class="fl">9.1706740</span>  <span class="dv">1</span>  <span class="dv">7</span>
+<span class="dv">13</span> <span class="fl">15.7826413</span>  <span class="dv">6</span>  <span class="dv">4</span>
+<span class="dv">14</span> <span class="fl">11.1684672</span>  <span class="dv">4</span>  <span class="dv">6</span>
+<span class="dv">15</span> -<span class="fl">4.2108325</span>  <span class="dv">2</span>  <span class="dv">8</span>
+<span class="dv">16</span> <span class="fl">14.0557877</span>  <span class="dv">4</span>  <span class="dv">5</span>
+<span class="dv">17</span>  <span class="fl">2.9787818</span>  <span class="dv">1</span>  <span class="dv">6</span>
+<span class="dv">18</span>  <span class="fl">0.2277253</span>  <span class="dv">5</span>  <span class="dv">8</span>
+<span class="dv">19</span> <span class="fl">31.3466157</span>  <span class="dv">7</span>  <span class="dv">2</span>
+<span class="dv">20</span> <span class="fl">11.2311146</span>  <span class="dv">2</span>  <span class="dv">5</span>
+<span class="dv">21</span> <span class="fl">17.9397316</span>  <span class="dv">9</span>  <span class="dv">7</span>
+<span class="dv">22</span>  <span class="fl">6.1773147</span>  <span class="dv">2</span>  <span class="dv">2</span>
+<span class="dv">23</span> <span class="fl">17.5177323</span> <span class="dv">10</span>  <span class="dv">7</span>
+<span class="dv">24</span>  <span class="fl">1.1189083</span>  <span class="dv">4</span>  <span class="dv">6</span>
+<span class="dv">25</span> <span class="fl">15.5696626</span>  <span class="dv">5</span>  <span class="dv">5</span>
+&gt;<span class="st"> </span>y2x12.model =<span class="st"> </span><span class="kw">lm</span>(y~<span class="st"> </span>x1+x2, y2x12) <span class="co"># 開始作線性迴歸分析</span>
+&gt;<span class="st"> </span>y2x12.model <span class="co"># 顯示分析結果，發現 截距 intercept 為　5.315, 且 x1 的係數為 2.886，x2 的係數為 -1.997，也就是 y=5.315+2.886*x1-1.997x2，這與原產生式 「y = 5 + 3*x1-2*x2+誤差」有些差異，但還不錯。</span>
+
+Call:
+<span class="kw">lm</span>(<span class="dt">formula =</span> y ~<span class="st"> </span>x1 +<span class="st"> </span>x2, <span class="dt">data =</span> y2x12)
+
+Coefficients:
+(Intercept)           x1           x2  
+      <span class="fl">5.315</span>        <span class="fl">2.886</span>       -<span class="fl">1.997</span>  
+
+&gt;<span class="st"> </span></code></pre>
+<h2 id="結語"><a href="#結語">結語</a></h2>
+<p>透過上述的實驗，我們可以發現在沒有誤差的情況下，線性迴歸函數 lm() 都可以找出正確的模型，得到正確的「截距」與「係數值」， 而在有隨機誤差的情況下，線性迴歸函數 lm() 雖然沒有辦法完全環原正確的模型，但是也找到還算不錯的結果，這正是「迴歸分析」 這個工具的威力之所在阿！</p>
+<h2 id="參考文獻"><a href="#參考文獻">參考文獻</a></h2>
+<ul>
+<li><a href="https://dl.dropboxusercontent.com/u/101584453/pmag/201306/htm/article3.html">R 統計軟體(4) – 平均值的估計與檢定</a></li>
+<li><a href="http://programmermagazine.github.io/201307/htm/article3.html">R 統計軟體(5) – 再探檢定</a></li>
+<li>陳鍾誠的網站/免費電子書/R 統計軟體 -- <a href="http://ccckmit.wikidot.com/r:main">http://ccckmit.wikidot.com/r:main</a></li>
+<li>陳鍾誠的網站/免費電子書/機率與統計 (使用 R 軟體) -- <a href="http://ccckmit.wikidot.com/st:main">http://ccckmit.wikidot.com/st:main</a></li>
+</ul>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

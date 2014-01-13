@@ -1,0 +1,117 @@
++ 聯合密度函數
+
+定義：離散聯合密度函數
+
+[[math]]
+f_{XY}(x,y) = P[X=x, Y=y] \\
+[[/math]]
+
+必要條件：
+[[math type="eqnarray"]]
+1. && f_{XY}(x,y) \ge 0 \\
+2. && \sum_{\forall x} \sum_{\forall y} f_{XY}(x,y) = 1
+[[/math]]
+
+定義：連續聯合密度函數
+
+[[math type="eqnarray"]]
+1. && f_{XY}(x,y) \ge 0; \\
+2. && \int_{-\infty}^{\infty} \int_{-\infty}^{\infty}  f_{XY}(x,y) dy dx = 1 \\
+3. && P[a \le X \le b, c \le Y \le d,] = \int_{a}^{b} \int_{c}^{d}  f_{XY}(x,y) dy dx \\
+[[/math]]
+
+範圍：[[$ \quad -\infty < x < \infty;-\infty < y < \infty; $]]
+
++ 邊際密度函數
+
+定義：離散邊際密度函數
+
+[[math]]
+1. && f_{X}(x) = \sum_{\forall y} f_{XY}(x,y) \\
+2. && f_{Y}(y) = \sum_{\forall x} f_{XY}(x,y) \\
+[[/math]]
+
+定義：連續邊際密度函數
+
+[[math type="eqnarray"]]
+1. && f_{X}(x) = \int_{-\infty}^{\infty} f_{XY}(x,y) dy \\
+2. && f_{Y}(y) = \int_{-\infty}^{\infty} f_{XY}(x,y) dx \\
+[[/math]]
+
++ 隨機變數之間的獨立性
+
+定義：如果 X,Y 滿足下列條件，則稱 X, Y 兩者之間獨立：
+
+[[math type="eqnarray"]]
+f_{XY}(x,y) = f_{X}(x) f_{Y}(y)
+[[/math]]
+
++ 聯合分配的期望值
+
+定義：聯合分配的期望值 E[H(X,Y)]
+
+[[math type="eqnarray"]]
+1. 離散的情況：&& E[H(X,Y)] = \sum_{\forall x} \sum_{\forall y} H(x,y) f_{XY}(x,y) \\
+2. 連續的情況：&& E[H(X,Y)] = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty}  H(x,y) f_{XY}(x,y) dy dx \\
+[[/math]]
+
+定義：聯合分配中單一變數的期望值
+
+[[math type="eqnarray"]]
+1. 離散：&& E[X] = \sum_{\forall x} \sum_{\forall y} x f_{XY}(x,y) \\
+2. 離散：&& E[Y] = \sum_{\forall x} \sum_{\forall x} x f_{XY}(x,y) \\
+3. 連續：&& E[X] = \int_{-\infty}^{\infty} x f_{XY}(x,y) dy dx \\
+4. 連續：&& E[Y] = \int_{-\infty}^{\infty} y f_{XY}(x,y) dy dx \\
+[[/math]]
+
+
++ 共變異數 (Covariance, 協方差)
+
+定義：共變異數 Cov(X,Y)
+
+[[math]]
+\sigma_{XY} = Cov(X, Y) = E[(X - \mu_X)(Y - \mu_Y)]
+[[/math]]
+
+定理：[[$ Cov(X, Y) = E[X Y] - E[X] E[Y] $]]
+
+定理：如果 X, Y 相互獨立 ，則 [[$ E[X Y] = E[X] E[Y] $]] 。
+
++ 相關係數 (Correlation)
+
+定義：相關係數 [[$ Cor(X,Y) = \rho_{X Y} $]]
+
+[[math]]
+Cor(X,Y) =  \rho_{X Y} = \frac{Cov(X,Y)}{\sqrt{Var(X) Var(Y)}}
+[[/math]]
+
+定理：[[$ -1 \le \rho_{XY} \le 1 $]]
+
+定理：[[$ |\rho_{X Y}| = 1 \Leftrightarrow y = \beta_0 + \beta_1 X $]]
+
++ R 程式：相關係數
+
+[[code]]
+> cor(x, x+1)
+[1] 1
+> cor(x, -x)
+[1] -1
+> cor(x, 0.5x)
+錯誤: unexpected symbol in "cor(x, 0.5x"
+> cor(x, 0.5*x)
+[1] 1
+> 0.5*x
+ [1]  6.0  8.5 25.0 16.5 49.0 38.5 19.5 39.5  3.5 13.0
+> cor(x, 0.5*x+1)
+[1] 1
+> cor(x, -0.5*x+1)
+[1] -1
+> y=sample(1:100, 10)
+> y
+ [1] 53 69 57 93 27 37 60 83 77 55
+> 
+> cor(x,y)
+[1] -0.4683468
+[[/code]]
+
+[[/code]]

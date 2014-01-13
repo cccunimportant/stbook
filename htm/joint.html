@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#聯合分布">聯合分布</a><ul>
+<li><a href="#聯合密度函數">聯合密度函數</a></li>
+<li><a href="#邊際密度函數">邊際密度函數</a></li>
+<li><a href="#聯合分配的期望值">聯合分配的期望值</a></li>
+<li><a href="#共變異數-covariance-協方差">共變異數 (Covariance, 協方差)</a></li>
+<li><a href="#相關係數-correlation">相關係數 (Correlation)</a></li>
+<li><a href="#多變數聯合分布的情況">多變數聯合分布的情況</a></li>
+<li><a href="#結語">結語</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="聯合分布"><a href="#聯合分布">聯合分布</a></h1>
+<h2 id="聯合密度函數"><a href="#聯合密度函數">聯合密度函數</a></h2>
+<p>定義：離散聯合密度函數</p>
+<blockquote>
+<p>表示符號： <img src="../timg/23c11b5457be.jpg" /></p>
+<p>必要條件：</p>
+<ol style="list-style-type: decimal">
+<li><p><img src="../timg/022dd0cb7b81.jpg" /> ;</p></li>
+<li><p><img src="../timg/2b8440b2f634.jpg" /> ;</p></li>
+</ol>
+</blockquote>
+<p>定義 2：連續聯合密度函數</p>
+<blockquote>
+<p>表示符號： <img src="../timg/aa236e008600.jpg" /> (範圍： <img src="../timg/94c803b94de4.jpg" /> )</p>
+<p>必要條件：</p>
+<ol style="list-style-type: decimal">
+<li><p><img src="../timg/022dd0cb7b81.jpg" /> ;</p></li>
+<li><p><img src="../timg/b3a153a4d7be.jpg" /> ;</p></li>
+<li><p><img src="../timg/00d5a6a88bff.jpg" /> ;</p></li>
+</ol>
+</blockquote>
+<h2 id="邊際密度函數"><a href="#邊際密度函數">邊際密度函數</a></h2>
+<p>定義：離散邊際密度函數</p>
+<blockquote>
+<ol style="list-style-type: decimal">
+<li>只有 X 的情況： <img src="../timg/c193358b7cbe.jpg" /></li>
+<li>只有 Y 的情況： <img src="../timg/49b164a3dea5.jpg" /></li>
+</ol>
+</blockquote>
+<p>定義：連續邊際密度函數</p>
+<blockquote>
+<ol style="list-style-type: decimal">
+<li>只有 X 的情況： <img src="../timg/e1c2b6cb1090.jpg" /></li>
+<li>只有 Y 的情況： <img src="../timg/4317afe39561.jpg" /></li>
+</ol>
+</blockquote>
+<h2 id="聯合分配的期望值"><a href="#聯合分配的期望值">聯合分配的期望值</a></h2>
+<p>定義：聯合分配的期望值 E[H(X,Y)]</p>
+<blockquote>
+<ol style="list-style-type: decimal">
+<li><p>離散的情況： <img src="../timg/1344dfc48b41.jpg" /></p></li>
+<li><p>連續的情況： <img src="../timg/4e9de1550265.jpg" /></p></li>
+</ol>
+</blockquote>
+<p>定義：聯合分配中單一變數的期望值</p>
+<blockquote>
+<ol style="list-style-type: decimal">
+<li><p>離散： <img src="../timg/0026e0af4742.jpg" /></p></li>
+<li><p>離散： <img src="../timg/eae5786e38ba.jpg" /></p></li>
+<li><p>連續： <img src="../timg/32fdb311c073.jpg" /></p></li>
+<li><p>連續： <img src="../timg/0d18b1de1083.jpg" /></p></li>
+</ol>
+</blockquote>
+<h2 id="共變異數-covariance-協方差"><a href="#共變異數-covariance-協方差">共變異數 (Covariance, 協方差)</a></h2>
+<p>定義：共變異數 Cov(X,Y)</p>
+<blockquote>
+<div class="figure">
+<img src="../timg/aa03e7b871bd.jpg" />
+</div>
+</blockquote>
+<p>定理：共變異數與期望值之關係</p>
+<blockquote>
+<div class="figure">
+<img src="../timg/b26db689fc5e.jpg" />
+</div>
+</blockquote>
+<p>定理：相互獨立時的期望值</p>
+<blockquote>
+<p>如果 X, Y 相互獨立 ，則 E[X Y] = E[X] E[Y] 。</p>
+</blockquote>
+<h2 id="相關係數-correlation"><a href="#相關係數-correlation">相關係數 (Correlation)</a></h2>
+<p>定義：</p>
+<blockquote>
+<p>相關係數 <img src="../timg/9e92ade7433b.jpg" /></p>
+<div class="figure">
+<img src="../timg/d66c94b9aba2.jpg" />
+</div>
+</blockquote>
+<p>定理：</p>
+<blockquote>
+<div class="figure">
+<img src="../timg/6ca29846577f.jpg" />
+</div>
+</blockquote>
+<p>定理：</p>
+<blockquote>
+<div class="figure">
+<img src="../timg/cf9dbc0f8dc3.jpg" />
+</div>
+</blockquote>
+<p>實作：相關係數的R 程式</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>x =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">10</span>, <span class="dv">10</span>)
+&gt;<span class="st"> </span>x
+ [<span class="dv">1</span>]  <span class="dv">1</span>  <span class="dv">8</span> <span class="dv">10</span>  <span class="dv">5</span>  <span class="dv">3</span>  <span class="dv">7</span>  <span class="dv">9</span>  <span class="dv">4</span>  <span class="dv">2</span>  <span class="dv">6</span>
+&gt;<span class="st"> </span><span class="kw">cor</span>(x, x<span class="dv">+1</span>)
+[<span class="dv">1</span>] <span class="dv">1</span>
+&gt;<span class="st"> </span><span class="kw">cor</span>(x, -x)
+[<span class="dv">1</span>] -<span class="dv">1</span>
+&gt;<span class="st"> </span><span class="kw">cor</span>(x, <span class="fl">0.5</span>*x)
+[<span class="dv">1</span>] <span class="dv">1</span>
+&gt;<span class="st"> </span><span class="kw">cor</span>(x, <span class="fl">0.5</span>*x<span class="dv">+1</span>)
+[<span class="dv">1</span>] <span class="dv">1</span>
+&gt;<span class="st"> </span><span class="kw">cor</span>(x, -<span class="fl">0.5</span>*x<span class="dv">+1</span>)
+[<span class="dv">1</span>] -<span class="dv">1</span>
+&gt;<span class="st"> </span>y=<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">100</span>, <span class="dv">10</span>)
+&gt;<span class="st"> </span>y
+ [<span class="dv">1</span>]  <span class="dv">4</span> <span class="dv">53</span> <span class="dv">20</span> <span class="dv">68</span> <span class="dv">29</span> <span class="dv">74</span> <span class="dv">17</span> <span class="dv">49</span> <span class="dv">78</span> <span class="dv">62</span>
+&gt;<span class="st"> </span><span class="kw">cor</span>(x,y)
+[<span class="dv">1</span>] -<span class="fl">0.06586336</span>
+&gt;<span class="st"> </span></code></pre>
+<h2 id="多變數聯合分布的情況"><a href="#多變數聯合分布的情況">多變數聯合分布的情況</a></h2>
+<h3 id="聯合分布與條件機率"><a href="#聯合分布與條件機率">聯合分布與條件機率</a></h3>
+<blockquote>
+<p>定義：如果 X,Y 滿足下列條件，則稱 X, Y 兩者之間獨立：</p>
+<div class="figure">
+<img src="../timg/ff003c91254e.jpg" />
+</div>
+</blockquote>
+<h3 id="多個變數的貝氏定理"><a href="#多個變數的貝氏定理">多個變數的貝氏定理</a></h3>
+<blockquote>
+<ol style="list-style-type: decimal">
+<li><p><img src="../timg/2cd6ef25fb48.jpg" /> ;</p></li>
+<li><p><img src="../timg/a03cc3c83a3d.jpg" /> ;</p></li>
+<li><p><img src="../timg/aa4192b1dff5.jpg" /> ;</p></li>
+</ol>
+</blockquote>
+<p>其他情況可以類推，只要能正確改寫 A , B 為任何隨機變數序列都行。</p>
+<h3 id="條件獨立與貝氏定理"><a href="#條件獨立與貝氏定理">條件獨立與貝氏定理</a></h3>
+<p>假如 A 與 B 在給定 C 的情況下條件獨立，那麼以下算式成立：</p>
+<blockquote>
+<div class="figure">
+<img src="../timg/385d8cb47193.jpg" />
+</div>
+</blockquote>
+<h2 id="結語"><a href="#結語">結語</a></h2>
+<p>兩個位於樣本空間 S 的聯合隨機行為，會導致樣本空間變成其迪卡兒乘積 S×S，其樣本空間大小變成 <img src="../timg/0fa9b9fc8ae9.jpg" /> 。</p>
+<p>而 k 個位於樣本空間 S 的聯合隨機行為，會導致樣本空間變成其迪卡兒乘積 S×S×...×S ，其樣本空間大小變成 <img src="../timg/80a4b19424f8.jpg" /> 。</p>
+<p>如果兩個位於不同樣本空間 <img src="../timg/28b539f1eb77.jpg" /> 的聯合隨機行為，則會導致樣本空間變成 <img src="../timg/4edb769bd248.jpg" /> ，其樣本空間大小變為 <img src="../timg/befbd1c71673.jpg" /> 。</p>
+<p>此時 X, Y 的機率密度函數將會採用以下的「邊際機率密度函數」之算法，以便將聯合樣本空間 <img src="../timg/28b539f1eb77.jpg" /> 中的機率與單一樣本空間 <img src="../timg/ad30194f40fc.jpg" /> 或 <img src="../timg/d7f8bb33070e.jpg" /> 中的機率關聯起來。</p>
+<blockquote>
+<div class="figure">
+<img src="../timg/2acc890d9f1f.jpg" />
+</div>
+<div class="figure">
+<img src="../timg/d7ebe9c754ed.jpg" />
+</div>
+</blockquote>
+<p>最後我們必須強調的是，樣本空間的選擇並沒有一定的標準，您可以視問題的需要來定義樣本空間，通常我們會盡量利用獨立的特性，讓樣本空間越小越好，否則將會很難計算。</p>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>

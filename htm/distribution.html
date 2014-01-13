@@ -1,0 +1,498 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../css/book.css" type="text/css" />
+</head>
+<body>
+<div id="header_wrap">
+  <h1><a href="book.html">機率統計-使用 R 軟體實作</a></h1>
+  <table id="bar" border="0" style="border:0;"><tr style="border:0;">
+    <td style="text-align:left;border:0;"> <a href="book.html">目錄</a> | <a href="download.html">下載</a> | <a href="course.html">課程</a> | <a href="forum.html">討論</a> | <a href="exam.html">測驗</a></td>
+    <td style="text-align:right;border:0;"><a href="http://ccckmit.wikidot.com/">陳鍾誠</a> 於 <a href="http://www.nqu.edu.tw/">金門大學</a></td>
+  </tr></table>
+</div>
+<div id="content">
+<div id="TOC">
+<ul>
+<li><a href="#機率分布">機率分布</a><ul>
+<li><a href="#簡介">簡介</a></li>
+<li><a href="#伯努力試驗-bernoulli-trial">伯努力試驗 (Bernoulli trial)</a></li>
+<li><a href="#二項分布-binomial-distribution">二項分布 (Binomial distribution)</a></li>
+<li><a href="#幾何分布-geometric-distribution">幾何分布 (Geometric distribution)</a></li>
+<li><a href="#負二項分布">負二項分布</a></li>
+<li><a href="#布瓦松分布-poisson-distribution">布瓦松分布 (Poisson distribution)</a></li>
+<li><a href="#均勻分布-uniform-distribution">均勻分布 (Uniform distribution)</a></li>
+<li><a href="#常態分布-normal-distribution">常態分布 (Normal Distribution)</a></li>
+<li><a href="#附件離散型機率分布表格整理">附件：離散型機率分布表格整理</a></li>
+<li><a href="#附件連續型機率分布表格整理">附件：連續型機率分布表格整理</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="機率分布"><a href="#機率分布">機率分布</a></h1>
+<h2 id="簡介"><a href="#簡介">簡介</a></h2>
+<p>在程式設計領域，「設計模式」是一些經常被使用到的物件樣式，而在數學領域，也同樣存在著某些「常見模式」，在機率統計領域，這些「常見模式」就是機率分布。</p>
+<p>機率分布可以分為「離散型」與「連續型」兩類，離散型的機率分布通常只會有整數型的值，而連續型的機率分布則在整個實數軸上都可能產生樣本。</p>
+<h2 id="伯努力試驗-bernoulli-trial"><a href="#伯努力試驗-bernoulli-trial">伯努力試驗 (Bernoulli trial)</a></h2>
+<p>所有的離散型機率分布，幾乎都是從「伯努力試驗」這個概念開始的，讓我們先來瞭解一下何謂「伯努力試驗」。</p>
+<p>伯努利試驗是一項只有兩種可能結果的隨機試驗，可以用下列機率分布描述：</p>
+<div class="figure">
+<img src="../timg/d13f10f0dd92.jpg" />
+</div>
+<p>換句話說、伯努力試驗是一種 YES or NO (1 or 0) 的試驗。舉例而言，像是「丟銅版、生男生女、一地區某天最高溫是否超過 30 度、擲骰子是否超過 2 點」等等，都可以用伯努力實驗描述。</p>
+<p>伯努力試驗的概念很簡單，以下是一些範例：</p>
+<p>範例 1 :</p>
+<blockquote>
+<p>丟一個公正銅板，用隨機變數 X 將正面映射為 1 ，反面映射為 0，那麼就可以用 P[X=1]=0.5, P[X=0]=0.5 表示這個機率模型。</p>
+</blockquote>
+<p>在 R 軟體中， Sample 函數可以用來模仿柏努力試驗。</p>
+<p>舉例而言，以下是範例一的丟銅板試驗，指令 sample(0:1, 10, replace=T, prob=c(0.5,0.5)) 代表連續進行 10 次柏努力試驗，成功失敗機率各為 0.5。</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">10</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>))
+ [<span class="dv">1</span>] <span class="dv">1</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">0</span> <span class="dv">1</span>
+&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T)
+ [<span class="dv">1</span>] <span class="dv">0</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">0</span></code></pre>
+<p>說明：X(反面)=0, X(正面)=1, 第一個參數 0:1 分別代表 {反面、正面} 的映射結果，而第二個參數代表只投擲一次，第三個參數 replace 代表樣本取後是否放回，這在頭銅板的範例必須用 replace=TRUE, 因為這次投正面之後不代表下次不能再出現正面，而 prob 則是指定的機率分布，如果不指定則代表採用平分的機率分布，以這個例子就是各為 0.5 的方式。</p>
+<p>範例 2 :</p>
+<blockquote>
+<p>假如用機率描述生男生女這件事， X({生男})=1, X({生女})=0, 且生男生的機率為 0.53, 生女生的機率為 0.47，那麼就可以用 P[X=1]=0.53, P[X=0]=0.47 表示這個機率模型。</p>
+</blockquote>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span>:<span class="dv">1</span>, <span class="dv">10</span>, <span class="dt">replace=</span>T, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.47</span>, <span class="fl">0.53</span>))
+ [<span class="dv">1</span>] <span class="dv">0</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">0</span></code></pre>
+<h2 id="二項分布-binomial-distribution"><a href="#二項分布-binomial-distribution">二項分布 (Binomial distribution)</a></h2>
+<p>如果我們進行 n 次的伯努力試驗，每一次的實驗都可以用隨機變數描述， P(ti=1) = p, P(ti=0)=1-p ，而且這些試驗 {t1, t2, ...., tn} 之間是獨立的，那麼我們就可以用二項分布來描述 n 次實驗的可能機率分布。</p>
+<p>由於這 n 次實驗相互獨立，假如 (t1 t2 ... tn) 代表這個實驗的一個可能出像，因此 P(t1 t2 .... tn) = P(t1) P(t2) .... P(tn)。</p>
+<p>令 X 代表一個可以將 (t1 t2 ... tn) 映射到伯努力試驗成功 (Yes) 次數的函數，那麼、n 次實驗中出現 k 次 1 的機會，可以用以下算式表示。</p>
+<div class="figure">
+<img src="../timg/caf280e86ba3.jpg" />
+</div>
+<p>舉例而言，投擲公正銅板 5 次，得到 3 次正面的機率為 <img src="../timg/ccd492ad234f.jpg" /> ，其中 p=0.5。</p>
+<p>範例：</p>
+<blockquote>
+<p>假如生男生的機率為 0.53, 生女生的機率為 0.47，而且每位母親生男生女的事件之間都是獨立的。</p>
+<p>某母親 A 想要生 3 個小孩，請問至少有一個男生的機會為多少。</p>
+<p>用機率描述生男生女這件事， X({生男})=1, X({生女})=0, 那麼可以計算至少生一個男生的機率如下：</p>
+<p><img src="../timg/f2f255758208.jpg" /> ，其中 p = 0.53, (1-p) = 0.47。</p>
+</blockquote>
+<p>讓我們用 R 軟體計算一下</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">dbinom</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="fl">0.53</span>)+<span class="kw">dbinom</span>(<span class="dv">2</span>,<span class="dv">3</span>, <span class="fl">0.53</span>)+<span class="kw">dbinom</span>(<span class="dv">3</span>,<span class="dv">3</span>,<span class="fl">0.53</span>)
+[<span class="dv">1</span>] <span class="fl">0.896177</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), <span class="dv">3</span>, <span class="fl">0.53</span>))
+[<span class="dv">1</span>] <span class="fl">0.896177</span>
+&gt;<span class="st"> </span>x=<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)
+&gt;<span class="st"> </span>x
+[<span class="dv">1</span>] <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span>
+&gt;<span class="st"> </span>p=<span class="kw">dbinom</span>(x, <span class="dv">3</span>, <span class="fl">0.53</span>)
+&gt;<span class="st"> </span>p
+[<span class="dv">1</span>] <span class="fl">0.351231</span> <span class="fl">0.396069</span> <span class="fl">0.148877</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(p)
+[<span class="dv">1</span>] <span class="fl">0.896177</span></code></pre>
+<h3 id="二項分布的圖形"><a href="#二項分布的圖形">二項分布的圖形</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
+&gt;<span class="st"> </span>x =<span class="st"> </span><span class="dv">0</span>:<span class="dv">5</span>
+&gt;<span class="st"> </span>b5 =<span class="st"> </span><span class="kw">dbinom</span>(x, <span class="dv">5</span>, <span class="fl">0.5</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(x, b5, <span class="dt">type=</span><span class="st">&quot;h&quot;</span>)
+&gt;<span class="st"> </span>b3 =<span class="st"> </span><span class="kw">dbinom</span>(x, <span class="dv">5</span>, <span class="fl">0.3</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(x, b3, <span class="dt">type=</span><span class="st">&quot;h&quot;</span>)
+&gt;<span class="st"> </span>b7 =<span class="st"> </span><span class="kw">dbinom</span>(x, <span class="dv">5</span>, <span class="fl">0.7</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(x, b7, <span class="dt">type=</span><span class="st">&quot;h&quot;</span>)
+&gt;<span class="st"> </span>b1 =<span class="st"> </span><span class="kw">dbinom</span>(x, <span class="dv">5</span>, <span class="fl">0.1</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(x, b1, <span class="dt">type=</span><span class="st">&quot;h&quot;</span>)</code></pre>
+<div class="figure">
+<img src="../img/plotBinom.jpg" />
+</div>
+<h3 id="習題"><a href="#習題">習題</a></h3>
+<ol style="list-style-type: decimal">
+<li>請問丟 10 個公平的銅板，有三個正面的機會是多少？</li>
+<li>請問丟 n 個公平的銅板，正面次數 &lt;= k 的機率是多少？</li>
+<li>請問丟 10 個公平的銅板，得到正面次數的期望值為何？</li>
+</ol>
+<h2 id="幾何分布-geometric-distribution"><a href="#幾何分布-geometric-distribution">幾何分布 (Geometric distribution)</a></h2>
+<p>如果我們連續進行一系列的伯努力試驗，直到成功才停止，那麼我們需要進行多少次實驗呢？</p>
+<p>關於這種「直到成功才停止」的問題，可以用幾何分布來描述，以下是幾何分布的定義。</p>
+<div class="figure">
+<img src="../timg/9ff5b7c8b2b5.jpg" />
+</div>
+<p>舉例而言，假如我們連續投擲公正銅版，直到出現正面才停止，那麼我們需要投擲 k 次才會得到第一個正面的機率，就會是 <img src="../timg/8e6c6a1c01e1.jpg" /> ，其中的 p=0.5。</p>
+<p>範例：</p>
+<blockquote>
+<p>假如生男生的機率為 0.53, 生女生的機率為 0.47，而且每位母親生男生女的事件之間都是獨立的。</p>
+<p>某位母親決定要一直生小孩，直到有一個女孩為止，請問她在生小孩個數不大於三個就能完成任務的機率為多少？</p>
+<p>用機率描述生男生女這件事， X({生女})=1, X({生男})=0, 那麼就可以累加下列算式以計算結果。</p>
+<div class="figure">
+<img src="../timg/1ffe2e755a44.jpg" />
+</div>
+</blockquote>
+<p>讓我們用 R 軟體計算一下，必須注意的是，R 軟體中的幾何分布 dgeom 的定義為 <img src="../timg/0d77b33676f5.jpg" /> ，也就是用失敗次數當 x，因此其公式與上面的有所不同，必須修改如下：(其中的 x 代表失敗次數)。</p>
+<div class="figure">
+<img src="../timg/de498aade9e6.jpg" />
+</div>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">dgeom</span>(<span class="dv">0</span>, <span class="fl">0.47</span>)
+[<span class="dv">1</span>] <span class="fl">0.47</span>
+&gt;<span class="st"> </span><span class="kw">dgeom</span>(<span class="dv">1</span>, <span class="fl">0.47</span>)
+[<span class="dv">1</span>] <span class="fl">0.2491</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(<span class="kw">dgeom</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>), <span class="fl">0.47</span>))
+[<span class="dv">1</span>] <span class="fl">0.851123</span></code></pre>
+<h3 id="習題-1"><a href="#習題-1">習題</a></h3>
+<ol style="list-style-type: decimal">
+<li><p>請問丟公平的銅板時，得到第 1 次正面時投擲次數 k 的機率分布為何？該分布的期望值為何？</p></li>
+<li><p>請問丟公正的骰子時，得到第 1 次 6 點時投擲次數 k 的機率分布為何？該分布的期望值為何？</p></li>
+</ol>
+<h2 id="負二項分布"><a href="#負二項分布">負二項分布</a></h2>
+<p>如果我們對「幾何分布」進行擴充，改成「持續進行試驗直到取得 r 次成功為止」，那麼其機率分布又該如何描述呢？</p>
+<p>這樣的機率分布就稱為負二項分布，其公式如下：</p>
+<div class="figure">
+<img src="../timg/b7b3eb3c2c87.jpg" />
+</div>
+<p>舉例而言，假如我們連續投擲公正銅版，直到出現三次正面才停止，那麼我們需要投擲 k 次才會得到第一個正面的機率，就會是 <img src="../timg/bd9c8ad370de.jpg" /> ，其中的 p=0.5。</p>
+<p>讓我們用 R 軟體計算一下，必須注意的是，R 軟體中的負二項分布 dbinom 的定義為 Γ(x+n)/(Γ(n) x!) p^n (1-p)^x ，也就是用 n=r, x=k-r-1 的代換方式。</p>
+<p>其中的 x 同樣代表失敗次數，而 n 代表成功次數，Γ(n) 代表排列數，所以 Γ(x+n)/(Γ(n) x!) 其實也就是 (x+n-1)!/((n-1)! x!) ，也就是 <img src="../timg/cf848d4afb68.jpg" /> 的意思。</p>
+<p>R 的操作範例</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">dnbinom</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="fl">0.5</span>)
+[<span class="dv">1</span>] <span class="fl">0.125</span>
+&gt;<span class="st"> </span><span class="kw">dnbinom</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="fl">0.5</span>)
+[<span class="dv">1</span>] <span class="fl">0.1875</span>
+&gt;<span class="st"> </span><span class="kw">dnbinom</span>(<span class="dv">0</span>:<span class="dv">10</span>, <span class="dv">3</span>, <span class="fl">0.5</span>)
+ [<span class="dv">1</span>] <span class="fl">0.125000000</span> <span class="fl">0.187500000</span> <span class="fl">0.187500000</span> <span class="fl">0.156250000</span> <span class="fl">0.117187500</span> <span class="fl">0.082031250</span>
+ [<span class="dv">7</span>] <span class="fl">0.054687500</span> <span class="fl">0.035156250</span> <span class="fl">0.021972656</span> <span class="fl">0.013427734</span> <span class="fl">0.008056641</span>
+&gt;<span class="st"> </span>n=<span class="dv">3</span>
+&gt;<span class="st"> </span>x=<span class="dv">1</span> 
+&gt;<span class="st"> </span>p=<span class="fl">0.5</span>
+&gt;<span class="st"> </span><span class="kw">gamma</span>(x+n)/(<span class="kw">gamma</span>(n)*<span class="kw">prod</span>(<span class="dv">1</span>:x)) *<span class="st"> </span>p^n *<span class="st"> </span>(<span class="dv">1</span>-p)^x
+[<span class="dv">1</span>] <span class="fl">0.1875</span>
+&gt;<span class="st"> </span><span class="kw">choose</span>(x+n, n) *<span class="st"> </span>p^n *<span class="st"> </span>(<span class="dv">1</span>-p)^x
+[<span class="dv">1</span>] <span class="fl">0.25</span>
+&gt;<span class="st"> </span><span class="kw">choose</span>(x+n<span class="dv">-1</span>, x) *<span class="st"> </span>p^n *<span class="st"> </span>(<span class="dv">1</span>-p)^x
+[<span class="dv">1</span>] <span class="fl">0.1875</span></code></pre>
+<p>範例：</p>
+<blockquote>
+<p>假如生男生的機率為 0.53, 生女生的機率為 0.47，而且每位母親生男生女的事件之間都是獨立的。</p>
+<p>某位母親決定要一直生小孩，直到有三個女孩為止，請問她在生小孩個數不大於 5 個就能完成任務的機率為多少？</p>
+<p>用機率描述生男生女這件事， X({生女})=1, X({生男})=0, 那麼就可以累加下列算式以計算結果。</p>
+<p><img src="../timg/d6c5556feae1.jpg" /> , 其中 p=0.47, r=3。</p>
+</blockquote>
+<p>但是由於 R 是用失敗次數</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">dnbinom</span>(<span class="dv">3</span>, <span class="dv">3</span>, <span class="fl">0.47</span>)
+[<span class="dv">1</span>] <span class="fl">0.1545686</span>
+&gt;<span class="st"> </span><span class="kw">dnbinom</span>(<span class="dv">4</span>, <span class="dv">3</span>, <span class="fl">0.47</span>)
+[<span class="dv">1</span>] <span class="fl">0.122882</span>
+&gt;<span class="st"> </span>p=<span class="kw">dnbinom</span>(<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dv">3</span>, <span class="fl">0.47</span>)
+&gt;<span class="st"> </span>p
+[<span class="dv">1</span>] <span class="fl">0.15456857</span> <span class="fl">0.12288201</span> <span class="fl">0.09117845</span>
+&gt;<span class="st"> </span><span class="kw">sum</span>(p)
+[<span class="dv">1</span>] <span class="fl">0.368629</span></code></pre>
+<h3 id="負二項分布的圖形"><a href="#負二項分布的圖形">負二項分布的圖形</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
+&gt;<span class="st"> </span>nb5 =<span class="st"> </span><span class="kw">dnbinom</span>(x, <span class="dv">5</span>, <span class="fl">0.5</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(nb5, <span class="dt">type=</span><span class="st">&quot;h&quot;</span>)
+&gt;<span class="st"> </span>nb7 =<span class="st"> </span><span class="kw">dnbinom</span>(x, <span class="dv">5</span>, <span class="fl">0.7</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(nb7, <span class="dt">type=</span><span class="st">&quot;h&quot;</span>)
+&gt;<span class="st"> </span>nb2 =<span class="st"> </span><span class="kw">dnbinom</span>(x, <span class="dv">5</span>, <span class="fl">0.2</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(nb2, <span class="dt">type=</span><span class="st">&quot;h&quot;</span>)
+&gt;<span class="st"> </span>nb9 =<span class="st"> </span><span class="kw">dnbinom</span>(x, <span class="dv">5</span>, <span class="fl">0.9</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(nb9, <span class="dt">type=</span><span class="st">&quot;h&quot;</span>)</code></pre>
+<div class="figure">
+<img src="../img/plotNbinom.jpg" />
+</div>
+<h2 id="布瓦松分布-poisson-distribution"><a href="#布瓦松分布-poisson-distribution">布瓦松分布 (Poisson distribution)</a></h2>
+<p>在離散機率分布當中，布瓦松分布算是相當特別的一個，因為「布瓦松分布」是描述「連續區域內出現幾個樣本」的分布。舉例而言，像是舀一瓢水會撈到的草履蟲數量，或者抽一滴血會抽到的白血球數量等等。</p>
+<p>布瓦松分布的公式如下所示，其中的 <img src="../timg/c6a6eb61fd9c.jpg" /> 代表每單位區域內會出現的樣本平均數。</p>
+<div class="figure">
+<img src="../timg/9fde5316116c.jpg" />
+</div>
+<p>要瞭解布瓦松分布，得從二項分布的極限開始想起，以下是三種不同 <img src="../timg/c6a6eb61fd9c.jpg" /> 參數的布瓦松分布圖：</p>
+<div class="figure">
+<img src="../img/PoissonCurve.jpg" alt="圖、布瓦松分布來源：http://en.wikipedia.org/wiki/Poisson_distribution" /><p class="caption">圖、布瓦松分布<BR/>來源：<a href="http://en.wikipedia.org/wiki/Poisson_distribution">http://en.wikipedia.org/wiki/Poisson_distribution</a></p>
+</div>
+<p>事實上、布瓦松分布是二項分布在 n 趨近無限大的極限情況。</p>
+<div class="figure">
+<img src="../img/PoissonVsBinomial.jpg" alt="圖、布瓦松分布是二項分布 n 趨近無限大的極限情況來源：http://en.wikipedia.org/wiki/File:Binomial_versus_poisson.svg" /><p class="caption">圖、布瓦松分布是二項分布 n 趨近無限大的極限情況<BR/>來源：<a href="http://en.wikipedia.org/wiki/File:Binomial_versus_poisson.svg">http://en.wikipedia.org/wiki/File:Binomial_versus_poisson.svg</a></p>
+</div>
+<p>為了說明布瓦松分布與二項分布之間的關係，讓我們用以下的白血球範例來看看隱藏在這兩個分布背後的關係：</p>
+<p>範例：抽血時白血球數量的問題</p>
+<blockquote>
+<p>問題： 假如現在從你身上抽一滴血，請回答下列兩個問題。</p>
+<ol style="list-style-type: decimal">
+<li>請定義一個隨機變數 X 代表那滴血中的白血球數量。</li>
+</ol>
+<p>提示： 樣本空間 S = 此時此刻你身上的所有白血球 = {w1,w2,......,wn}</p>
+<ol start="2" style="list-style-type: decimal">
+<li>請算出一滴血液中有三顆白血球的機率，假設該滴血液占你總血量的 1/1000。</li>
+</ol>
+</blockquote>
+<p>解答 1：</p>
+<blockquote>
+<p>X(A) = |A|</p>
+<p>說明：</p>
+<p>A 是一個事件，也就是白血球的樣本空間 S 的子集合，例如： A = {w1, w5, w9}</p>
+<p>|A| 代表 A 集合的大小，也就是元素個數，舉例而言：</p>
+<p>如果 A = {w1, w5, w9} ，那麼 |A| = 3</p>
+<p>如果 B = {w2, w8}，那麼 |B| = 2</p>
+<p>如果 C = {}，那麼 |C| = 0</p>
+<p>如果 D = S，那麼 |D| = n</p>
+</blockquote>
+<p>解答 2：</p>
+<blockquote>
+<p>P(X=3) = P({A | X(A) = 3}) = P({{w1, w2, w3}) + P({w1, w2, w4}) + ......</p>
+<p>假如任一顆白血球被抽到的機率等於該滴血液佔全身血液的比率，由於該滴血液佔總血量的 1/1000，所以給顆白血球被抽到的機率為 1/1000。</p>
+<p>而且假設這些白血球沒有智慧，也不會聚合在一起，因此相互之間獨立，那麼由於每顆白血球被抽到的機率為 1/1000，因此 P(w1) = P(w2) = .... P(wn) = 1/1000。</p>
+<p>那麼初步想法是 P(w1w3) = P(w1) * P(w3) = 1/1000 * 1/1000 。</p>
+<p>但是上述的想法有個小問題，那就是該情況代表其它白血球都沒被抽到，因此所謂的 P(w1w3) 真正的意思應該是</p>
+<div class="figure">
+<img src="../timg/29e439b8a536.jpg" />
+</div>
+<p>所以 P(X=3) 應該算法如下：</p>
+<div class="figure">
+<img src="../timg/960d1fb7e15e.jpg" />
+</div>
+<p>推而廣之，P(X=k) 的機率之算法如下：</p>
+<div class="figure">
+<img src="../timg/c103f4ae13f5.jpg" />
+</div>
+<p>事實上，這個題目的機率分布就是下一章的二項分布，如下所示：</p>
+<div class="figure">
+<img src="../timg/c9c2c2819c48.jpg" />
+</div>
+<p>而且、當 n 趨近於無限大時，這個分布將會趨近於布瓦松分布，如下所示：</p>
+<div class="figure">
+<img src="../timg/9fde5316116c.jpg" />
+</div>
+<p>其中的 λ 之意義為，在單位時間 (或單位面積、體積) 內，事件的出現次數平均為 λ 次。</p>
+</blockquote>
+<h3 id="習題-2"><a href="#習題-2">習題</a></h3>
+<p>習題：假設每 1CC 的血所含的白血球平均為 10 顆，那麼請問你抽 1CC 的血時，抽到 8 顆白血球的機率是多少。</p>
+<p>解答：</p>
+<blockquote>
+<p>λ = 10，因此布瓦松分布為 <img src="../timg/ce3620ab8f85.jpg" /> ，將 x=8 代入，得到 <img src="../timg/bce69f5aeddf.jpg" /></p>
+</blockquote>
+<p>其數值可以用 R 軟體計算，如下所示：</p>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>?dpois
+&gt;<span class="st"> </span><span class="kw">dpois</span>(<span class="dv">8</span>, <span class="dv">10</span>)
+[<span class="dv">1</span>] <span class="fl">0.112599</span>
+&gt;<span class="st"> </span><span class="dv">10</span>^<span class="dv">8</span>*<span class="kw">exp</span>(-<span class="dv">10</span>)/<span class="kw">prod</span>(<span class="dv">1</span>:<span class="dv">8</span>)
+[<span class="dv">1</span>] <span class="fl">0.112599</span></code></pre>
+<h3 id="布瓦松分布的圖形"><a href="#布瓦松分布的圖形">布瓦松分布的圖形</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
+&gt;<span class="st"> </span>x =<span class="st"> </span><span class="dv">0</span>:<span class="dv">10</span>
+&gt;<span class="st"> </span>p3 =<span class="st"> </span><span class="kw">dpois</span>(x, <span class="dt">lambda=</span><span class="dv">3</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(p3, <span class="dt">type=</span><span class="st">&quot;h&quot;</span>)
+&gt;<span class="st"> </span>p7 =<span class="st"> </span><span class="kw">dpois</span>(x, <span class="dt">lambda=</span><span class="dv">7</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(p7, <span class="dt">type=</span><span class="st">&quot;h&quot;</span>)
+&gt;<span class="st"> </span>p1 =<span class="st"> </span><span class="kw">dpois</span>(x, <span class="dt">lambda=</span><span class="dv">1</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(p1, <span class="dt">type=</span><span class="st">&quot;h&quot;</span>)
+&gt;<span class="st"> </span>p5 =<span class="st"> </span><span class="kw">dpois</span>(x, <span class="dt">lambda=</span><span class="dv">5</span>)
+&gt;<span class="st"> </span><span class="kw">plot</span>(p5, <span class="dt">type=</span><span class="st">&quot;h&quot;</span>)</code></pre>
+<div class="figure">
+<img src="../img/plotPoisson.jpg" />
+</div>
+<h2 id="均勻分布-uniform-distribution"><a href="#均勻分布-uniform-distribution">均勻分布 (Uniform distribution)</a></h2>
+<h3 id="均勻分布的圖形"><a href="#均勻分布的圖形">均勻分布的圖形</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">dunif</span>(<span class="fl">0.5</span>)
+[<span class="dv">1</span>] <span class="dv">1</span>
+&gt;<span class="st"> </span><span class="kw">dunif</span>(<span class="fl">0.9</span>)
+[<span class="dv">1</span>] <span class="dv">1</span>
+&gt;<span class="st"> </span><span class="kw">dunif</span>(<span class="dv">2</span>)
+[<span class="dv">1</span>] <span class="dv">0</span>
+&gt;<span class="st"> </span><span class="kw">dunif</span>(-<span class="dv">1</span>)
+[<span class="dv">1</span>] <span class="dv">0</span>
+&gt;<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
+&gt;<span class="st"> </span>x=<span class="dv">0</span>:<span class="dv">10</span>
+&gt;<span class="st"> </span><span class="kw">curve</span>(<span class="kw">dunif</span>(x, <span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">1</span>), <span class="dt">from=</span>-<span class="dv">1</span>, <span class="dt">to=</span><span class="dv">11</span>)
+&gt;<span class="st"> </span><span class="kw">curve</span>(<span class="kw">dunif</span>(x, <span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">10</span>), <span class="dt">from=</span>-<span class="dv">1</span>, <span class="dt">to=</span><span class="dv">11</span>)
+&gt;<span class="st"> </span><span class="kw">curve</span>(<span class="kw">dunif</span>(x, <span class="dt">min=</span><span class="dv">3</span>, <span class="dt">max=</span><span class="dv">6</span>), <span class="dt">from=</span>-<span class="dv">1</span>, <span class="dt">to=</span><span class="dv">11</span>)
+&gt;<span class="st"> </span><span class="kw">curve</span>(<span class="kw">dunif</span>(x, <span class="dt">min=</span><span class="dv">2</span>, <span class="dt">max=</span><span class="dv">9</span>), <span class="dt">from=</span>-<span class="dv">1</span>, <span class="dt">to=</span><span class="dv">11</span>)</code></pre>
+<div class="figure">
+<img src="../img/curveUnif22.jpg" />
+</div>
+<h2 id="常態分布-normal-distribution"><a href="#常態分布-normal-distribution">常態分布 (Normal Distribution)</a></h2>
+<h3 id="常態分布的圖形"><a href="#常態分布的圖形">常態分布的圖形</a></h3>
+<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>)
+[<span class="dv">1</span>] <span class="fl">0.3989423</span>
+&gt;<span class="st"> </span><span class="kw">dnorm</span>(<span class="fl">0.5</span>)
+[<span class="dv">1</span>] <span class="fl">0.3520653</span>
+&gt;<span class="st"> </span><span class="kw">dnorm</span>(<span class="fl">2.5</span>)
+[<span class="dv">1</span>] <span class="fl">0.0175283</span>
+&gt;<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
+&gt;<span class="st"> </span><span class="kw">curve</span>(<span class="kw">dnorm</span>(x, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>), <span class="dt">from=</span>-<span class="dv">10</span>, <span class="dt">to=</span><span class="dv">10</span>)
+&gt;<span class="st"> </span><span class="kw">curve</span>(<span class="kw">dnorm</span>(x, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">5</span>), <span class="dt">from=</span>-<span class="dv">10</span>, <span class="dt">to=</span><span class="dv">10</span>)
+&gt;<span class="st"> </span><span class="kw">curve</span>(<span class="kw">dnorm</span>(x, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="dv">1</span>), <span class="dt">from=</span>-<span class="dv">10</span>, <span class="dt">to=</span><span class="dv">10</span>)
+&gt;<span class="st"> </span><span class="kw">curve</span>(<span class="kw">dnorm</span>(x, <span class="dt">mean=</span>-<span class="dv">3</span>, <span class="dt">sd=</span><span class="dv">3</span>), <span class="dt">from=</span>-<span class="dv">10</span>, <span class="dt">to=</span><span class="dv">10</span>)</code></pre>
+<div class="figure">
+<img src="../img/curveNorm22.jpg" />
+</div>
+<h2 id="附件離散型機率分布表格整理"><a href="#附件離散型機率分布表格整理">附件：離散型機率分布表格整理</a></h2>
+<p>以下是離散型機率分布的匯總表格，讀者現在還看不懂的話沒有關係，我們在後文中會解說其中較重要的幾個分布。</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">離散機率模型</th>
+<th align="left">密度函數</th>
+<th align="left">R 函數名稱</th>
+<th align="left">說明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">二項分布</td>
+<td align="left"><img src="../timg/9474fc44e360.jpg" /></td>
+<td align="left">binom(n:size, p:prob)</td>
+<td align="left">n:樣本數, p:正面機率, <br/> n 次試驗中有 x 個成功的機率</td>
+</tr>
+<tr class="even">
+<td align="left">多項分布</td>
+<td align="left"><img src="../timg/8a0544157d79.jpg" /></td>
+<td align="left">multinom(n:size, p(1..k):prob)</td>
+<td align="left">n:樣本數, p[1..n]:各項的機率</td>
+</tr>
+<tr class="odd">
+<td align="left">負二項分布</td>
+<td align="left"><img src="../timg/c77b7e7c5cb0.jpg" /></td>
+<td align="left">nbinom(size, prob)</td>
+<td align="left">x:樣本數, , p:正面機率, <br/> 要得到第 r 次成功所需要的試驗次數</td>
+</tr>
+<tr class="even">
+<td align="left">幾何分布</td>
+<td align="left"><img src="../timg/5659648f10e2.jpg" /></td>
+<td align="left">geom(p:prob)</td>
+<td align="left">p: 成功機率, 第一次成功所需要的試驗次數</td>
+</tr>
+<tr class="odd">
+<td align="left">超幾何分布</td>
+<td align="left"><img src="../timg/e0b0e13f6298.jpg" /></td>
+<td align="left">hyper(N:m,n:n,r:k)</td>
+<td align="left">m:白球數量, n:黑球數量, k:抽出球數, <br/> 同二項分布，但取樣後不放回</td>
+</tr>
+<tr class="even">
+<td align="left">布瓦松分布</td>
+<td align="left"><img src="../timg/1960dc6e970a.jpg" /></td>
+<td align="left">pois(lambda)</td>
+<td align="left">k:期望值, <img src="../timg/cc7b6d325f41.jpg" /> , <br/> 在 s 時間內，事件出現平均 k 次</td>
+</tr>
+</tbody>
+</table>
+<h2 id="附件連續型機率分布表格整理"><a href="#附件連續型機率分布表格整理">附件：連續型機率分布表格整理</a></h2>
+<p>以下是連續型機率分布的匯總表格，讀者現在還看不懂的話沒有關係，我們在後文中會解說其中較重要的幾個分布。</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">連續機率模型</th>
+<th align="left">密度函數</th>
+<th align="left">R 函數</th>
+<th align="left">說明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">均勻分布 (Uniform)</td>
+<td align="left"><img src="../timg/d199631f1413.jpg" /></td>
+<td align="left">unif(a:min, b:max)</td>
+<td align="left">a:範圍下限, b: 上限 <br/> 出現機會均等</td>
+</tr>
+<tr class="even">
+<td align="left">常態分布(Normal)</td>
+<td align="left"><img src="../timg/b0aca724e39e.jpg" /></td>
+<td align="left">norm(mean, sd)</td>
+<td align="left">中央極限定理：x1+x2+...+xk; 當 k 越大就越接近常態分布</td>
+</tr>
+<tr class="odd">
+<td align="left">伽瑪分布 (Gamma)</td>
+<td align="left"><img src="../timg/7a2f5a287065.jpg" /></td>
+<td align="left">gamma(shape, rate = 1, scale = 1/rate)</td>
+<td align="left"><img src="../timg/c63269e21148.jpg" /> <br/> 指數分布與卡方分布都是 Gamma 分布的特例</td>
+</tr>
+<tr class="even">
+<td align="left">指數分布 (Exponential)</td>
+<td align="left"><img src="../timg/71075ebb0855.jpg" /></td>
+<td align="left">exp(rate)</td>
+<td align="left">伽瑪分布( <img src="../timg/ad965fa877cb.jpg" /> ) <br/> 布瓦松過程中，第一次事件出現的時間 W</td>
+</tr>
+<tr class="odd">
+<td align="left">卡方分布 (Chi-Square)</td>
+<td align="left"><img src="../timg/1c1902be8fc6.jpg" /></td>
+<td align="left">chisq(df, ncp)</td>
+<td align="left">伽瑪分布( <img src="../timg/10fe70a365dc.jpg" /> ) <br/> 利用樣本推斷母體變異數</td>
+</tr>
+<tr class="even">
+<td align="left">柯西分布 (Cauchy)</td>
+<td align="left"><img src="../timg/868c8083bf08.jpg" /></td>
+<td align="left">cauchy(b:location, a:scale)</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">威布爾分布 (Weibull)</td>
+<td align="left"><img src="../timg/d1d29714916b.jpg" /></td>
+<td align="left">weibull(a:shape, b:scale)</td>
+<td align="left"><img src="../timg/787bf9141c33.jpg" /> <br/> 可靠度工程：f(x) 失敗時間, R(t) 可靠度, <img src="../timg/5cba230c35b4.jpg" /> 失敗率</td>
+</tr>
+<tr class="even">
+<td align="left">T 分布 (T)</td>
+<td align="left"><img src="../timg/47685e30d909.jpg" /></td>
+<td align="left">t(df, ncp)</td>
+<td align="left">估計變異數時使用的分布</td>
+</tr>
+<tr class="odd">
+<td align="left">F 分布 (F)</td>
+<td align="left"><img src="../timg/984c910d56d9.jpg" /></td>
+<td align="left">f(df1, df2, ncp)</td>
+<td align="left">等變異數 F 檢定時使用</td>
+</tr>
+<tr class="even">
+<td align="left">貝塔分布 (Beta)</td>
+<td align="left"></td>
+<td align="left">beta(a:shape1, b:shape2, ncp)</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">對數常態分布 (Log Normal)</td>
+<td align="left"></td>
+<td align="left">lnorm(meanlog, sdlog)</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">邏輯分布</td>
+<td align="left"></td>
+<td align="left">logis(location, scale)</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Signrank</td>
+<td align="left"></td>
+<td align="left">signrank(n)</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">威爾斯</td>
+<td align="left"></td>
+<td align="left">wilcox(m, n)</td>
+<td align="left">a,b 為兩組樣本</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="footer">
+<a href="http://ccckmit.wikidot.com">陳鍾誠</a>衍生自<a href="http://zh.wikipedia.org/">維基百科</a>之作品：採用 <a href="http://creativecommons.org/licenses/by-sa/3.0/tw/ ">創作共用：姓名標示、相同方式分享</a> 的 <a href="license.html">授權方式</a>。
+</div>
+</body>
+</html>
